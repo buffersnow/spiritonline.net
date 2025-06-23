@@ -1,0 +1,17 @@
+**/.idea
+configs/*.yaml
+src/**/*.exe
+src/**/*.lxb
+bin/**/*.*
+**/*.sublime-workspace
+**/*.css.map
+node_modules/
+dist/
+**/console.log
+**/*.zip
+src/web/app/app
+**/pnpm-lock.yaml
+**/package-lock.json
+certs/
+src/helper/project-gen.*
+launch.json

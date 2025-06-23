@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "parthr2031.colorful-comments",
+    "golang.go",
+    "jinliming2.vscode-go-template",
+    "redhat.vscode-yaml",
+    "a-h.templ",
+    "nefrob.vscode-just-syntax",
+    "bradlc.vscode-tailwindcss"
+  ]
+}

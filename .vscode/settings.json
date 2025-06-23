@@ -1,0 +1,98 @@
+{
+  "vsicons.associations.folders": [
+    { "icon": "config", "extensions": ["cfg"] },
+    { "icon": "sass", "extensions": ["styles"] },
+    { "icon": "interfaces", "extensions": ["protocol"] },
+    { "icon": "e2e", "extensions": ["messages"] },
+    { "icon": "mysql", "extensions": ["sql"] },
+    { "icon": "trunk", "extensions": ["core"] },
+    { "icon": "helper", "extensions": ["vendor"] },
+    { "icon": "fonts", "extensions": ["ttf"] },
+    { "icon": "template", "extensions": ["layouts"] },
+    { "icon": "sso", "extensions": ["oidc"] },
+    { "icon": "controller", "extensions": ["endpoints"] },
+    { "icon": "db", "extensions": ["store"] },
+    { "icon": "public", "extensions": ["static"] },
+    { "icon": "private", "extensions": ["internal"] },
+    { "icon": "www", "extensions": ["webapi"] },
+    { "icon": "temp", "extensions": ["version"] },
+    { "icon": "composer", "extensions": ["pd"] },
+    { "icon": "api", "extensions": ["framework", "net"] },
+    { "icon": "paket", "extensions": ["pkg"] },
+    { "icon": "certificate", "extensions": ["security"] }
+  ],
+  "colorful-comments.tags": [
+    {
+      "tag": "!",
+      "color": "#FF2D00",
+      "strikethrough": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "?",
+      "color": "#0076FF",
+      "strikethrough": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "//",
+      "color": "#474747",
+      "strikethrough": true,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "%",
+      "color": "#EAF622",
+      "strikethrough": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "*",
+      "color": "#28FF00",
+      "strikethrough": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "&",
+      "color": "#FF06A0",
+      "strikethrough": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "~",
+      "color": "#BE00FF",
+      "strikethrough": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "@",
+      "color": "#FF8C00",
+      "strikethrough": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    }
+  ],
+  "css.lint.unknownAtRules": "ignore",
+  "css.lint.unknownProperties": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "typescript.tsdk": "./src/client/node_modules/typescript/lib",
+  "terminal.integrated.defaultProfile.windows": "Git Bash"
+}
