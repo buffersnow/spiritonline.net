@@ -6,7 +6,7 @@
     { "icon": "e2e", "extensions": ["messages"] },
     { "icon": "mysql", "extensions": ["sql"] },
     { "icon": "trunk", "extensions": ["core"] },
-    { "icon": "helper", "extensions": ["vendor"] },
+    { "icon": "helper", "extensions": ["di"] },
     { "icon": "fonts", "extensions": ["ttf"] },
     { "icon": "template", "extensions": ["layouts"] },
     { "icon": "sso", "extensions": ["oidc"] },

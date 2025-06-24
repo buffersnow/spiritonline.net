@@ -40,3 +40,7 @@ func PrettyBytes(slice []byte) string {
 	}
 	return fmt.Sprintf("[ %s]", hexString)
 }
+
+func CastMessage[T any](body any) T {
+	return body.(T)
+}
