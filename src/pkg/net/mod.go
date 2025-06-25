@@ -1,6 +1,9 @@
 package net
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type NetConnection interface {
 	AcceptIncoming() error
@@ -12,4 +15,12 @@ type NetConnection interface {
 	ReadTextEx(timeout time.Time) (data string, err error)
 	WriteBytes(data []byte) error
 	WriteText(data string) error
+}
+
+func prettyBytes(slice []byte) string {
+	var hexString string
+	for _, b := range slice {
+		hexString += fmt.Sprintf("%02x ", b)
+	}
+	return fmt.Sprintf("[ %s]", hexString)
 }

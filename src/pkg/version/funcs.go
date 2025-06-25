@@ -5,6 +5,12 @@ import (
 	"slices"
 )
 
+func PrintBuildInfo() {
+	buffer := "- Welcome to spiritonline.net -> " + GetService() + " v" + GetVersion() + "\n"
+	buffer += "Build Tag: " + GetPartialTag()
+	fmt.Printf("\033[38;5;61m%s\033[0m\n", buffer)
+}
+
 func GetFullTag() string {
 	return fmt.Sprintf("%s.%s.%s.%s",
 		GetVersion(),

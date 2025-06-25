@@ -1,6 +1,7 @@
-package util
+package settings
 
 import (
+	"fmt"
 	"os"
 
 	"buffersnow.com/spiritonline/pkg/version"
@@ -27,17 +28,18 @@ type CommonConfiguration struct {
 	MySQL  MySQLConfiguration
 }
 
-func (settings utilSettings) loadConfig(config any) {
+// @ TODO: Maybe make a standardized config instead?
+func (settings Options) loadConfig(config any) error {
 
-	Log.Info("Config", "Loading configuration file...")
-
-	yamlFile, err := os.ReadFile(*settings.ConfigFolder + version.GetService() + ".yaml")
+	yamlFile, err := os.ReadFile(*settings.ConfigFolder + "/" + version.GetService() + ".yaml")
 	if err != nil {
-		Log.Panic("Config", "Failed to read config file!", err)
+		return fmt.Errorf("settings: %w", err)
 	}
 
 	err = yaml.Unmarshal(yamlFile, config)
 	if err != nil {
-		Log.Panic("Config", "Failed to unmarshal config file!", err)
+		return fmt.Errorf("settings: %w", err)
 	}
+
+	return nil
 }

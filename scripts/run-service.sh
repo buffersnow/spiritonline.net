@@ -132,7 +132,7 @@ fi
 # Dev Fingerprint
 DNT_BUILD_IDEN_DEVFINGERPRINT="0"
 if [ "$DO_FINGERPRINT" == "true" ]; then
-  FINGERPRINT_SRC= "${DNT_BUILD_SERVICE}-${DNT_BUILD_VERSION_MAJOR}-"
+  FINGERPRINT_SRC="${DNT_BUILD_SERVICE}-${DNT_BUILD_VERSION_MAJOR}-"
   FINGERPRINT_SRC+="${DNT_BUILD_VERSION_MINOR}-${DNT_BUILD_VERSION_HOTFIX}-"
   FINGERPRINT_SRC+="${DNT_BUILD_VERSION_COMMIT}-${DNT_BUILD_CFG_OSARCH}-"
   FINGERPRINT_SRC+="${DNT_BUILD_CFG_BLDMODE}-${DNT_BUILD_CFG_OSNAME}-"
@@ -142,7 +142,7 @@ if [ "$DO_FINGERPRINT" == "true" ]; then
 fi
 
 MODULE_PATH="buffersnow.com/spiritonline/pkg/version"
-LDFLAGS= " -X '${MODULE_PATH}.DoNotTouch_Build_Service=${DNT_BUILD_SERVICE}'"
+LDFLAGS=" -X '${MODULE_PATH}.DoNotTouch_Build_Service=${DNT_BUILD_SERVICE}'"
 LDFLAGS+=" -X '${MODULE_PATH}.DoNotTouch_Build_Version_Major=${DNT_BUILD_VERSION_MAJOR}'"
 LDFLAGS+=" -X '${MODULE_PATH}.DoNotTouch_Build_Version_Minor=${DNT_BUILD_VERSION_MINOR}'"
 LDFLAGS+=" -X '${MODULE_PATH}.DoNotTouch_Build_Version_HotFix=${DNT_BUILD_VERSION_HOTFIX}'"
@@ -182,11 +182,11 @@ if [ "$ACTION" == "build_and_run" ]; then
   RUN_ARGS=()
 
   # If -d or -r (run dev or prod) add config file arg
-  RUN_ARGS+=("-config" "configs/${$REL_PATH}.yaml")
+  RUN_ARGS+=("-config" "configs")
 
   # If dev run (-d), add debug and nologcmpr flags
   if [ "$MODE" == "dev" ]; then
-    RUN_ARGS+=("-debug" "-nologcmpr")
+    RUN_ARGS+=("-debug" "-noarchive")
   elif [ "$MODE" == "test" ]; then 
     RUN_ARGS+=("-debug")
   fi

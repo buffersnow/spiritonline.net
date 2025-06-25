@@ -17,9 +17,10 @@
     { "icon": "www", "extensions": ["webapi"] },
     { "icon": "temp", "extensions": ["version"] },
     { "icon": "composer", "extensions": ["pd"] },
-    { "icon": "api", "extensions": ["framework", "net"] },
+    { "icon": "api", "extensions": ["net"] },
     { "icon": "paket", "extensions": ["pkg"] },
-    { "icon": "certificate", "extensions": ["security"] }
+    { "icon": "certificate", "extensions": ["security"] },
+    { "icon": "notification", "extensions": ["lifecycle"] }
   ],
   "colorful-comments.tags": [
     {

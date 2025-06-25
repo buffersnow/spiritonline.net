@@ -1,14 +1,14 @@
-package util
+package settings
 
 import (
 	"flag"
 )
 
-func (settings *utilSettings) scanFlags() {
+func (settings *Options) scanFlags() {
 
 	settings.TestNoDb = flag.Bool("nodb", false, "Run without a database (early-stage testing!)")
 	settings.MigrateDB = flag.Bool("migrate", false, "Apply SQL migrations to database (run once!)")
-	settings.NoLogCompression = flag.Bool("nologcmpr", false, "Disables logfile daily archive and compressions")
+	settings.NoLogArchival = flag.Bool("noarchive", false, "Disables logfile daily archive and compressions")
 	settings.ShowServerDebug = flag.Bool("debug", false, "Show all debug/developer log")
 	settings.ConfigFolder = flag.String("config", "configs", "Server configuration folder")
 	settings.CertsFolder = flag.String("certs", "certs", "ECDSA public and private key directory")

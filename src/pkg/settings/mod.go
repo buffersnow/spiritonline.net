@@ -1,14 +1,13 @@
-package util
+package settings
 
 import (
-	"sync"
 	"time"
 )
 
-type utilSettings struct {
+type Options struct {
 	TestNoDb           *bool
 	MigrateDB          *bool
-	NoLogCompression   *bool
+	NoLogArchival      *bool
 	LogFileName        *string
 	CompressionJobTime *time.Duration
 	ShowServerDebug    *bool
@@ -18,12 +17,13 @@ type utilSettings struct {
 	ReconnectDelay     *int
 }
 
-var Settings *utilSettings = &utilSettings{}
-var settingsWg = sync.WaitGroup{}
+func New(config any) func() (*Options, error) {
+	return func() (*Options, error) {
+		settings := &Options{}
 
-func (s utilSettings) Initialize(config any) {
-	s.scanFlags()
-	s.loadConfig(config)
-	Settings = &s
-	settingsWg.Done()
+		settings.scanFlags()
+		err := settings.loadConfig(config)
+
+		return settings, err
+	}
 }

@@ -6,7 +6,7 @@ import (
 	"reflect"
 )
 
-func (c *Container) Provide(provider any) error {
+func (c *Container) provide(provider any) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -29,7 +29,7 @@ func (c *Container) Provide(provider any) error {
 	return nil
 }
 
-func (c *Container) Invoke(fn any) error {
+func (c *Container) invoke(fn any) error {
 	val := reflect.ValueOf(fn)
 
 	args, err := c.invokeWithDeps(val)
@@ -56,14 +56,18 @@ func (c *Container) invokeWithDeps(fn reflect.Value) ([]reflect.Value, error) {
 			if !hasProvider {
 				return nil, fmt.Errorf("missing dependency of type %v", argType)
 			}
+
 			// Recursively resolve the provider
-			instance, err := c.invokeProvider(provider)
+			newInstance, err := c.invokeProvider(provider)
 			if err != nil {
 				return nil, fmt.Errorf("failed to invoke provider for %v: %w", argType, err)
 			}
+
 			c.mu.Lock()
-			c.instances[argType] = instance
+			c.instances[argType] = newInstance
 			c.mu.Unlock()
+
+			instance = newInstance
 		}
 
 		args[i] = instance

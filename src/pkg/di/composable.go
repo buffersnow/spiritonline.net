@@ -16,12 +16,12 @@ func (c *Container) Run() error {
 
 func Provide(provider any) func(*Container) error {
 	return func(c *Container) error {
-		return c.Provide(provider)
+		return c.provide(provider)
 	}
 }
 
 func Invoke(fn any) func(*Container) error {
 	return func(c *Container) error {
-		return c.Invoke(fn)
+		return c.invoke(fn)
 	}
 }
