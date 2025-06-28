@@ -2,67 +2,57 @@ package version
 
 import (
 	"fmt"
-	"slices"
 )
 
-func PrintBuildInfo() {
-	buffer := "- Welcome to spiritonline.net -> " + GetService() + " v" + GetVersion() + "\n"
-	buffer += "Build Tag: " + GetPartialTag()
-	fmt.Printf("\033[38;5;61m%s\033[0m\n", buffer)
-}
-
-func GetFullTag() string {
+func (bi BuildTag) GetFullTag() string {
 	return fmt.Sprintf("%s.%s.%s.%s",
-		GetVersion(),
-		GetConfig(),
-		GetLab(),
-		GetIdentifier(),
+		bi.GetVersion(),
+		bi.GetConfig(),
+		bi.GetLab(),
+		bi.GetIdentifier(),
 	)
 }
 
-func GetPartialTag() string {
+func (bi BuildTag) GetPartialTag() string {
 	return fmt.Sprintf("%s.%s.%s",
-		GetConfig(),
-		GetLab(),
-		GetIdentifier(),
+		bi.GetConfig(),
+		bi.GetLab(),
+		bi.GetIdentifier(),
 	)
 }
 
-func GetService() string {
-	return DoNotTouch_Build_Service
+func (bi BuildTag) GetService() string {
+	return bi.service
 }
 
-func GetVersion() string {
+func (bi BuildTag) GetVersion() string {
 	return fmt.Sprintf("%s.%s.%s.%s",
-		DoNotTouch_Build_Version_Major,
-		DoNotTouch_Build_Version_Minor,
-		DoNotTouch_Build_Version_HotFix,
-		DoNotTouch_Build_Version_Commit,
+		bi.version.major,
+		bi.version.minor,
+		bi.version.hotfix,
+		bi.version.commit,
 	)
 }
 
-func GetConfig() string {
+func (bi BuildTag) GetConfig() string {
 	return fmt.Sprintf("%s%s.%s",
-		DoNotTouch_Build_Cfg_OSArch,
-		DoNotTouch_Build_Cfg_BldMode,
-		DoNotTouch_Build_Cfg_OSName,
+		bi.cfg.os_arch,
+		bi.cfg.build_mode,
+		bi.cfg.os_name,
 	)
 }
 
-func GetLab() string {
-	labIden := ""
-	if !slices.Contains(whitelistedBuildAccounts, DoNotTouch_Build_Lab_Username) {
-		labIden = "(" + DoNotTouch_Build_Lab_Host + "\\" + DoNotTouch_Build_Lab_Username + ")"
-	}
-
-	return fmt.Sprintf("%s%s",
-		DoNotTouch_Build_Lab_Name, labIden,
-	)
+func (bi BuildTag) GetLab() string {
+	return bi.lab.name
 }
 
-func GetIdentifier() string {
+func (bi BuildTag) GetCISlave() string {
+	return bi.lab.host + "\\" + bi.lab.username
+}
+
+func (bi BuildTag) GetIdentifier() string {
 	return fmt.Sprintf("%s.%s",
-		DoNotTouch_Build_Iden_Timestamp,
-		DoNotTouch_Build_Iden_DevFingerprint,
+		bi.iden.timestamp,
+		bi.iden.dev_fingerprint,
 	)
 }

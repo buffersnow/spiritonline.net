@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Router",
+      "type": "go",
+      "request": "launch",
+      "mode": "exec",
+      "program": "${workspaceFolder}/bin/router.exe",
+      "args": ["-debug", "-noarchive"],
+      "preLaunchTask": "build-router"
+    }
+  ]
+}

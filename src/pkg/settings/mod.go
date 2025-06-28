@@ -1,29 +1,40 @@
 package settings
 
-import (
-	"time"
-)
+import "buffersnow.com/spiritonline/pkg/util"
 
-type Options struct {
-	TestNoDb           *bool
-	MigrateDB          *bool
-	NoLogArchival      *bool
-	LogFileName        *string
-	CompressionJobTime *time.Duration
-	ShowServerDebug    *bool
-	ConfigFolder       *string
-	CertsFolder        *string
-	Standalone         *bool
-	ReconnectDelay     *int
+type runtimeOptions struct {
+	DisableDB   bool
+	DBMigration bool
+	LogArchival bool
+	EnableDebug bool
+	CertsFolder string
 }
 
-func New(config any) func() (*Options, error) {
-	return func() (*Options, error) {
-		settings := &Options{}
+type Options struct {
+	Runtime runtimeOptions
 
-		settings.scanFlags()
-		err := settings.loadConfig(config)
+	MySQL struct {
+		Host     string `env:"HOST,required"`
+		Port     int    `env:"PORT" envDefault:"3306"`
+		Username string `env:"USERNAME,required"`
+		Password string `env:"PASSWORD,required"`
+		Database string `env:"DATABASE" envDefault:"spiritonline"`
+	} `envPrefix:"MYSQL_"`
 
-		return settings, err
+	Spirit struct {
+	} `envPrefix:"SPIRIT_"`
+
+	Router struct {
+	} `envPrefix:"ROUTER_"`
+}
+
+func New() (*Options, error) {
+	settings := &Options{}
+
+	tasks := []func() error{
+		settings.loadEnv, // needs to be loaded first to avoid overriding flags
+		settings.loadFlags,
 	}
+
+	return settings, util.Batch(tasks)
 }

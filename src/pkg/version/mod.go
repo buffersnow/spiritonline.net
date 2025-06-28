@@ -1,5 +1,7 @@
 package version
 
+import "fmt"
+
 /*
 	This file only exists for ldflags version settings in run-service.sh
 */
@@ -21,24 +23,70 @@ var (
 	DoNotTouch_Build_Iden_DevFingerprint string
 )
 
-var whitelistedBuildAccounts = []string{
-	"witsbla", /*Windows Test-Slave Build Account*/
-	"lxmcbld", /*Linux Master Central Build Account*/
+//% Whitelisted Build Acounts
+//% witsbla - Windows Test-Slave Build Account
+//% lxmcbld - Linux Master Central Build Account
+
+type buildTagVersion struct {
+	major  string
+	minor  string
+	hotfix string
+	commit string
+}
+
+type buildTagCfg struct {
+	os_arch    string
+	os_name    string
+	build_mode string
+}
+
+type buildTagLab struct {
+	name     string
+	host     string
+	username string
+}
+
+type buildTagIden struct {
+	timestamp       string
+	dev_fingerprint string
 }
 
 type BuildTag struct {
-	Program_Name        string
-	Program_Service     string
-	Version_Major       string
-	Version_Minor       string
-	Version_HotFix      string
-	Version_Commit      string
-	Cfg_OSArch          string
-	Cfg_BldMode         string
-	Cfg_OSName          string
-	Lab_Name            string
-	Lab_Host            string
-	Lab_Username        string
-	Iden_Timestamp      string
-	Iden_DevFingerprint string
+	service string
+	version buildTagVersion
+	cfg     buildTagCfg
+	lab     buildTagLab
+	iden    buildTagIden
+}
+
+func New() (*BuildTag, error) {
+	bi := &BuildTag{
+		service: DoNotTouch_Build_Service,
+		version: buildTagVersion{
+			major:  DoNotTouch_Build_Version_Major,
+			minor:  DoNotTouch_Build_Version_Minor,
+			hotfix: DoNotTouch_Build_Version_HotFix,
+			commit: DoNotTouch_Build_Version_Commit,
+		},
+		cfg: buildTagCfg{
+			os_arch:    DoNotTouch_Build_Cfg_OSArch,
+			os_name:    DoNotTouch_Build_Cfg_OSName,
+			build_mode: DoNotTouch_Build_Cfg_BldMode,
+		},
+		lab: buildTagLab{
+			name:     DoNotTouch_Build_Lab_Name,
+			host:     DoNotTouch_Build_Lab_Host,
+			username: DoNotTouch_Build_Lab_Username,
+		},
+		iden: buildTagIden{
+			timestamp:       DoNotTouch_Build_Iden_Timestamp,
+			dev_fingerprint: DoNotTouch_Build_Iden_DevFingerprint,
+		},
+	}
+
+	buffer := "- Welcome to spiritonline.net -> " + bi.GetService() + " v" + bi.GetVersion() + "\n"
+	buffer += "Build Tag: " + bi.GetPartialTag()
+	fmt.Printf("\033[38;5;61m%s\033[0m\n", buffer)
+
+	return bi, nil
 }

@@ -181,9 +181,6 @@ echo "Build complete: $BIN_PATH"
 if [ "$ACTION" == "build_and_run" ]; then
   RUN_ARGS=()
 
-  # If -d or -r (run dev or prod) add config file arg
-  RUN_ARGS+=("-config" "configs")
-
   # If dev run (-d), add debug and nologcmpr flags
   if [ "$MODE" == "dev" ]; then
     RUN_ARGS+=("-debug" "-noarchive")

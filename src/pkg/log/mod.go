@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"os"
 	"sync"
+	"time"
 
 	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/util"
+	"buffersnow.com/spiritonline/pkg/version"
 )
 
 type Logger struct {
@@ -19,17 +21,22 @@ type Logger struct {
 
 var instance = &Logger{fileName: "console.log", mu: &sync.Mutex{}}
 
-func New(opt *settings.Options) (*Logger, error) {
+func New(ver *version.BuildTag, opt *settings.Options) (*Logger, error) {
 	log := instance // this is only a pointer for convinence
 
 	tasks := []func() error{}
 
-	log.debug = *opt.ShowServerDebug
+	log.debug = opt.Runtime.EnableDebug
 
-	if *opt.NoLogArchival {
-		log.Warning("Log Provider", "Logfile archival disabled!")
-	} else {
+	log.ToFile("SpiritOnline! Build Tag: %s", ver.GetFullTag())
+	log.ToFile("Runtime Options: %+v", opt.Runtime)
+	log.ToFile("CI by Build Slave: %s", ver.GetCISlave())
+	log.ToFile("Start Time: %v", time.Now())
+
+	if opt.Runtime.LogArchival {
 		tasks = append(tasks, log.archiveLog)
+	} else {
+		log.Warning("Log Provider", "Logfile archival disabled!")
 	}
 
 	tasks = append(tasks, log.openLogFile)
@@ -37,7 +44,7 @@ func New(opt *settings.Options) (*Logger, error) {
 
 	log.reconsileLogs()
 
-	if !*opt.NoLogArchival {
+	if opt.Runtime.LogArchival {
 		go log.archiveLogJob()
 	}
 

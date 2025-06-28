@@ -56,7 +56,7 @@
       "italic": false
     },
     {
-      "tag": "*",
+      "tag": "?",
       "color": "#28FF00",
       "strikethrough": false,
       "backgroundColor": "transparent",
@@ -95,5 +95,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "typescript.tsdk": "./src/client/node_modules/typescript/lib",
-  "terminal.integrated.defaultProfile.windows": "Git Bash"
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "files.associations": {
+    ".env.*": "properties"
+  }
 }
