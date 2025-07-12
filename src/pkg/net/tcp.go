@@ -1,6 +1,7 @@
 package net
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"strings"
@@ -9,59 +10,79 @@ import (
 	"buffersnow.com/spiritonline/pkg/log"
 )
 
+type TcpServer struct {
+	conn *net.TCPListener
+	log  log.LoggingFactory
+}
+
 type TcpConnection struct {
 	server *net.TCPListener
 	client *net.TCPConn
-	Log    *log.LoggingFactory
+	Log    log.LoggingFactory
 }
 
-func CreateTcpListener(port int) (*TcpConnection, error) {
+func CreateTcpListener(port int) (TcpServer, error) {
 	tcpAddr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("0.0.0.0:%d", port))
 	if err != nil {
-		return nil, fmt.Errorf("net: %w", err)
+		return TcpServer{}, fmt.Errorf("net: %w", err)
 	}
 
 	tcpListener, err := net.ListenTCP("tcp", tcpAddr)
 	if err != nil {
+		return TcpServer{}, fmt.Errorf("net: %w", err)
+	}
+
+	log.Global().Info("TCP Listener", "Listening on 0.0.0.0:%d", port)
+	return TcpServer{
+		conn: tcpListener,
+		log:  log.Factory("TCP"),
+	}, nil
+}
+
+// func CreateTcpConnection(server string, port int) (*TcpConnection, error) {
+// 	serverAddr := fmt.Sprintf("%s:%d", server, port)
+// 	tcpAddr, err := net.ResolveTCPAddr("tcp", serverAddr)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("net: %w", err)
+// 	}
+//
+// 	tcpConn, err := net.DialTCP("tcp", nil, tcpAddr)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("net: %w", err)
+// 	}
+//
+// 	iLog := log.FactoryWithPostfix("TCP",
+// 		fmt.Sprintf("<IP: %s>", tcpConn.RemoteAddr().String()),
+// 	)
+//
+// 	iLog.
+//
+// 	return &TcpConnection{
+// 		client: tcpConn,
+// 		Log:    iLog,
+// 	}, nil
+// }
+
+func (tcp *TcpServer) Accept() (*TcpConnection, error) {
+
+	if tcp.conn == nil {
+		return nil, errors.New("net: invalid call to accept incoming from tcp server")
+	}
+
+	lst, err := tcp.conn.AcceptTCP()
+	if err != nil {
 		return nil, fmt.Errorf("net: %w", err)
 	}
 
-	iLog := log.Factory("TCP")
-	iLog.Info("Listener", "Listening on 0.0.0.0:%d", port)
-
-	return &TcpConnection{
-		server: tcpListener,
-		Log:    iLog,
-	}, nil
-}
-
-func CreateTcpConnection(server string, port int) (*TcpConnection, error) {
-	serverAddr := fmt.Sprintf("%s:%d", server, port)
-	tcpAddr, err := net.ResolveTCPAddr("tcp", serverAddr)
-	if err != nil {
-		return nil, err
+	cli := &TcpConnection{
+		server: tcp.conn,
+		client: lst,
+		Log:    tcp.log,
 	}
 
-	tcpConn, err := net.DialTCP("tcp", nil, tcpAddr)
-	if err != nil {
-		return nil, err
-	}
+	cli.Log.ChangePostfix("<IP: %s>", cli.GetRemoteAddress())
 
-	iLog := log.FactoryWithPostfix("TCP",
-		fmt.Sprintf("<IP: %s>", tcpConn.RemoteAddr().String()),
-	)
-
-	return &TcpConnection{
-		client: tcpConn,
-		Log:    iLog,
-	}, nil
-}
-
-func (tcp *TcpConnection) AcceptIncoming() error {
-	lst, err := tcp.server.AcceptTCP()
-	tcp.client = lst
-	tcp.Log.ChangePostfix("<IP: %s>", tcp.GetRemoteAddress())
-	return err
+	return cli, nil
 }
 
 func (tcp TcpConnection) GetRemoteAddress() string {
@@ -70,11 +91,16 @@ func (tcp TcpConnection) GetRemoteAddress() string {
 
 func (tcp TcpConnection) WriteText(data string) error {
 	_, err := tcp.client.Write([]byte(data))
+	if err != nil {
+		return fmt.Errorf("net: %w", err)
+	}
+
 	tcp.Log.Debug(log.DEBUG_TRAFFIC,
 		"WriteText", "Data Length: %d, Data Stream: %s",
 		len(data), strings.TrimRight(data, "\r\n"),
 	)
-	return err
+
+	return nil
 }
 
 func (tcp TcpConnection) ReadText() (data string, err error) {
@@ -88,7 +114,7 @@ func (tcp TcpConnection) ReadTextEx(timeout time.Time) (data string, err error) 
 	length, err := tcp.client.Read(buf)
 
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("net: %w", err)
 	}
 
 	ret := make([]byte, length)
@@ -100,16 +126,21 @@ func (tcp TcpConnection) ReadTextEx(timeout time.Time) (data string, err error) 
 		len(ret), retstr,
 	)
 
-	return retstr, err
+	return retstr, nil
 }
 
 func (tcp TcpConnection) WriteBytes(data []byte) error {
 	_, err := tcp.client.Write(data)
+	if err != nil {
+		return fmt.Errorf("net: %w", err)
+	}
+
 	tcp.Log.Debug(log.DEBUG_TRAFFIC,
 		"WriteBytes", "Data Length: %d, Data Stream: %s",
 		len(data), prettyBytes(data),
 	)
-	return err
+
+	return nil
 }
 
 func (tcp TcpConnection) ReadBytes() (data []byte, err error) {
@@ -123,7 +154,7 @@ func (tcp TcpConnection) ReadBytesEx(timeout time.Time) (data []byte, err error)
 	length, err := tcp.client.Read(buf)
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("net: %w", err)
 	}
 
 	ret := make([]byte, length)
@@ -134,9 +165,14 @@ func (tcp TcpConnection) ReadBytesEx(timeout time.Time) (data []byte, err error)
 		len(ret), prettyBytes(ret),
 	)
 
-	return ret, err
+	return ret, nil
 }
 
 func (tcp *TcpConnection) Close() error {
-	return tcp.client.Close()
+	err := tcp.client.Close()
+	if err != nil {
+		return fmt.Errorf("net: %w", err)
+	}
+
+	return nil
 }

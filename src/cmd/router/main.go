@@ -16,7 +16,7 @@ func main() {
 		red.Provide(version.New),
 		red.Provide(settings.New),
 		red.Provide(log.New),
-		red.Invoke(lifecycle.AwaitInterrupt),
+		red.Invoke(lifecycle.Await),
 	)
 
 	if err := app.Run(); err != nil {

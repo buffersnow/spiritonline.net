@@ -1,6 +1,9 @@
 package settings
 
-import "buffersnow.com/spiritonline/pkg/util"
+import (
+	"buffersnow.com/spiritonline/pkg/util"
+	"buffersnow.com/spiritonline/pkg/version"
+)
 
 type runtimeOptions struct {
 	DisableDB   bool
@@ -22,17 +25,24 @@ type Options struct {
 	} `envPrefix:"MYSQL_"`
 
 	Spirit struct {
+		AuthorizationToken string `env:"AUTH_TOKEN,required"`
+		HeadunitHost       string `env:"HEADUNIT_HOST,required"`
+		HeadunitPort       int    `env:"HEADUNIT_PORT" envDefault:"1390"`
+		ServiceTag         string `env:"SERVICE_TAG" envDefault:"ww-global-unknown-1"`
 	} `envPrefix:"SPIRIT_"`
 
-	Router struct {
-	} `envPrefix:"ROUTER_"`
+	Service struct {
+		ProtocolPort int             `env:"PROTOCOL_PORT,required"`
+		HttpPort     int             `env:"HTTP_PORT" envDefault:"9999"`
+		Features     map[string]bool `env:"FEATURES,required"`
+	} `envPrefix:"SERVICE_"`
 }
 
-func New() (*Options, error) {
+func New(ver *version.BuildTag) (*Options, error) {
 	settings := &Options{}
 
 	tasks := []func() error{
-		settings.loadEnv, // needs to be loaded first to avoid overriding flags
+		settings.loadEnv(ver), // needs to be loaded first to avoid overriding flags
 		settings.loadFlags,
 	}
 

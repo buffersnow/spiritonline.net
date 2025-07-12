@@ -15,4 +15,4 @@ src/web/app/app
 certs/
 src/helper/project-gen.*
 **/vendor/
-.env
+/.env.*

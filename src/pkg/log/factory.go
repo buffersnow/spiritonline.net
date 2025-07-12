@@ -7,12 +7,12 @@ type LoggingFactory struct {
 	postfix string
 }
 
-func Factory(prefix string) *LoggingFactory {
-	return &LoggingFactory{prefix: prefix}
+func Factory(prefix string) LoggingFactory {
+	return LoggingFactory{prefix: prefix}
 }
 
-func FactoryWithPostfix(prefix, postfix string) *LoggingFactory {
-	return &LoggingFactory{prefix: prefix, postfix: postfix}
+func FactoryWithPostfix(prefix, postfix string) LoggingFactory {
+	return LoggingFactory{prefix: prefix, postfix: postfix}
 }
 
 func (l *LoggingFactory) ChangePrefix(prefix string, a ...any) {
