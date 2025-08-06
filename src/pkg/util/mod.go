@@ -30,4 +30,4 @@ func Batch(funcs []func() error) error {
 //~ Rants, personal stuff, etc etc
 //& Explanations and links to our resources
 //$ Links to external stuff and also misc highlights
-//- Deprecated stuff, only there because yeah forgot
+//§ Deprecated stuff, only there because yeah forgot
