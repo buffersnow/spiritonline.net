@@ -21,3 +21,13 @@ func Batch(funcs []func() error) error {
 	}
 	return nil
 }
+
+/// Comment Colors
+//! Urgent, Important and perchance rants
+//% Notes, Infos, Useful stuff
+//@ TODOs, Stuff to remember for later
+//? Question all your life choices
+//~ Rants, personal stuff, etc etc
+//& Explanations and links to our resources
+//$ Links to external stuff and also misc highlights
+//- Deprecated stuff, only there because yeah forgot

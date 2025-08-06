@@ -3,6 +3,7 @@ package main
 import (
 	"buffersnow.com/spiritonline/pkg/lifecycle"
 	"buffersnow.com/spiritonline/pkg/log"
+	"buffersnow.com/spiritonline/pkg/security"
 	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/version"
 
@@ -16,6 +17,7 @@ func main() {
 		red.Provide(version.New),
 		red.Provide(settings.New),
 		red.Provide(log.New),
+		red.Provide(security.New),
 		red.Invoke(lifecycle.Await),
 	)
 
