@@ -3,16 +3,17 @@ package log
 import "fmt"
 
 type LoggingFactory struct {
+	log     *Logger
 	prefix  string
 	postfix string
 }
 
-func Factory(prefix string) LoggingFactory {
-	return LoggingFactory{prefix: prefix}
+func (l *Logger) Factory(prefix string) LoggingFactory {
+	return LoggingFactory{log: l, prefix: prefix + " "}
 }
 
-func FactoryWithPostfix(prefix, postfix string) LoggingFactory {
-	return LoggingFactory{prefix: prefix, postfix: postfix}
+func (l *Logger) FactoryWithPostfix(prefix, postfix string) LoggingFactory {
+	return LoggingFactory{log: l, prefix: prefix + " ", postfix: postfix + " "}
 }
 
 func (l *LoggingFactory) ChangePrefix(prefix string, a ...any) {
@@ -24,33 +25,33 @@ func (l *LoggingFactory) ChangePostfix(postfix string, a ...any) {
 }
 
 func (l LoggingFactory) Info(prefix string, format string, a ...any) {
-	instance.Info(l.prefix+prefix, l.postfix+format, a...)
+	l.log.Info(l.prefix+prefix, l.postfix+format, a...)
 }
 
 func (l LoggingFactory) Action(prefix string, format string, a ...any) {
-	instance.Action(l.prefix+prefix, l.postfix+format, a...)
+	l.log.Action(l.prefix+prefix, l.postfix+format, a...)
 }
 
 func (l LoggingFactory) Event(prefix string, format string, a ...any) {
-	instance.Event(l.prefix+prefix, l.postfix+format, a...)
+	l.log.Event(l.prefix+prefix, l.postfix+format, a...)
 }
 
 func (l LoggingFactory) Warning(prefix string, format string, a ...any) {
-	instance.Warning(l.prefix+prefix, l.postfix+format, a...)
+	l.log.Warning(l.prefix+prefix, l.postfix+format, a...)
 }
 
 func (l LoggingFactory) Error(prefix string, format string, a ...any) {
-	instance.Error(l.prefix+prefix, l.postfix+format, a...)
+	l.log.Error(l.prefix+prefix, l.postfix+format, a...)
 }
 
 func (l LoggingFactory) Panic(prefix string, format string, err error, a ...any) {
-	instance.Panic(l.prefix+prefix, l.postfix+format, err, a...)
+	l.log.Panic(l.prefix+prefix, l.postfix+format, err, a...)
 }
 
 func (l LoggingFactory) Debug(component int, prefix string, format string, a ...any) {
-	instance.Debug(component, l.prefix+prefix, l.postfix+format, a...)
+	l.log.Debug(component, l.prefix+prefix, l.postfix+format, a...)
 }
 
 func (l LoggingFactory) Trace(component int, prefix string, format string, a ...any) {
-	instance.Trace(component, l.prefix+prefix, l.postfix+format, a...)
+	l.log.Trace(component, l.prefix+prefix, l.postfix+format, a...)
 }

@@ -26,7 +26,7 @@ func New(ver *version.BuildTag, opt *settings.Options) (*Logger, error) {
 
 	tasks := []func() error{}
 
-	log.debug = opt.Runtime.EnableDebug
+	log.debug = opt.Development.EnableDebug
 
 	log.ToFile("SpiritOnline! Build Tag: %s", ver.GetFullTag())
 	log.ToFile("Runtime Options: %+v", opt.Runtime)

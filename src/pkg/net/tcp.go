@@ -21,7 +21,7 @@ type TcpConnection struct {
 	Log    log.LoggingFactory
 }
 
-func CreateTcpListener(port int) (TcpServer, error) {
+func CreateTcpListener(port int, log *log.Logger) (TcpServer, error) {
 	tcpAddr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("0.0.0.0:%d", port))
 	if err != nil {
 		return TcpServer{}, fmt.Errorf("net: %w", err)
@@ -32,7 +32,7 @@ func CreateTcpListener(port int) (TcpServer, error) {
 		return TcpServer{}, fmt.Errorf("net: %w", err)
 	}
 
-	log.Global().Info("TCP Listener", "Listening on 0.0.0.0:%d", port)
+	log.Info("TCP Listener", "Listening on 0.0.0.0:%d", port)
 	return TcpServer{
 		conn: tcpListener,
 		log:  log.Factory("TCP"),
