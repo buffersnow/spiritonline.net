@@ -87,7 +87,7 @@ fi
 
 # Determine file extension based on OS
 EXT=".lxb"
-if uname | grep -iq 'mingw\|msys\|cygwin'; then
+if uname | grep -iq 'mingw\|msys\|cygwin|windows_nt'; then
   EXT=".exe"
 fi
 
