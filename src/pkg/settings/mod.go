@@ -5,46 +5,50 @@ import (
 	"buffersnow.com/spiritonline/pkg/version"
 )
 
-type runtimeOptions struct {
-	DisableDB   bool
-	DBMigration bool
-	LogArchival bool
-	EnableDebug bool
-	CertsFolder string
-}
-
 type Options struct {
-	Runtime runtimeOptions
+	Runtime struct {
+		DBMigration bool   `arg:"-m,--migrate-db" help:"Apply SQL migrations to database (run once!)"`
+		LogArchival bool   `arg:"--no-archive" help:"Disables logfile daily archive and compressions"` // gets inverted after
+		CertsFolder string `arg:"--certs-folder" default:"certs" help:"ECDSA public and private key directory"`
+	}
+
+	Development struct {
+		EnableDev   bool `arg:"--devel" help:"Enable development mode"`
+		DisableDB   bool `arg:"--no-database" help:"Run without a database for development"`
+		EnableDebug bool `arg:"-v,--debug" help:"Show all debug/developer log prints"`
+	}
 
 	MySQL struct {
-		Host     string `env:"HOST,required"`
-		Port     int    `env:"PORT" envDefault:"3306"`
-		Username string `env:"USERNAME,required"`
-		Password string `env:"PASSWORD,required"`
-		Database string `env:"DATABASE" envDefault:"spiritonline"`
+		Host     string `env:"HOST,required" help:"MySQL database server IP/Hostname"`
+		Port     int    `env:"PORT" envDefault:"3306" help:"MySQL database server port"`
+		Username string `env:"USERNAME,required" help:"MySQL database account username"`
+		Password string `env:"PASSWORD,required" help:"MySQL database account Password"`
+		Database string `env:"DATABASE" envDefault:"spiritonline" help:"MySQL database for services"`
 	} `envPrefix:"MYSQL_"`
 
 	Spirit struct {
-		AuthorizationToken string `env:"AUTH_TOKEN,required"`
-		HeadunitHost       string `env:"HEADUNIT_HOST,required"`
-		HeadunitPort       int    `env:"HEADUNIT_PORT" envDefault:"1390"`
-		ServiceTag         string `env:"SERVICE_TAG" envDefault:"ww-global-unknown-1"`
-	} `envPrefix:"SPIRIT_"`
+		AuthorizationToken string `env:"AUTH_TOKEN,required" help:"Microservice network auth token"`
+		HeadunitHost       string `env:"HEADUNIT_HOST,required" help:"Microservice headunit/router server IP/Hostname"`
+		HeadunitPort       int    `env:"HEADUNIT_PORT" envDefault:"1390" help:"Microservice Headunit server port"`
+		ServiceTag         string `env:"SERVICE_TAG" envDefault:"ww-global-unknown-1" help:"Microservice identification service-tag/id"`
+	} `envPrefix:"SPIRIT_" section:"Spirit/Microservice"`
 
 	Service struct {
-		ProtocolPort int             `env:"PROTOCOL_PORT,required"`
-		HttpPort     int             `env:"HTTP_PORT" envDefault:"9999"`
-		Features     map[string]bool `env:"FEATURES,required"`
+		ProtocolPort  int             `env:"PROTOCOL_PORT,required" help:"Service-specific protocol port"`
+		AlternatePort int             `env:"ALTERNATE_PORT" envDefault:"8888" help:"Alternative/Secondary service-specific protocol port"`
+		HttpPort      int             `env:"HTTP_PORT" envDefault:"9999" help:"Service-specific HTTP(s) API port"`
+		Features      map[string]bool `env:"FEATURES,required" help:"Service-specific feature configuration list"`
 	} `envPrefix:"SERVICE_"`
 }
 
 func New(ver *version.BuildTag) (*Options, error) {
-	settings := &Options{}
+	options := &Options{}
 
 	tasks := []func() error{
-		settings.loadEnv(ver), // needs to be loaded first to avoid overriding flags
-		settings.loadFlags,
+		// needs to be loaded first to avoid overriding flags
+		func() error { return options.loadEnv(ver) },
+		func() error { return options.loadArgs(ver) },
 	}
 
-	return settings, util.Batch(tasks)
+	return options, util.Batch(tasks)
 }

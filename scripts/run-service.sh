@@ -183,9 +183,9 @@ if [ "$ACTION" == "build_and_run" ]; then
 
   # If dev run (-d), add debug and nologcmpr flags
   if [ "$MODE" == "dev" ]; then
-    RUN_ARGS+=("-debug" "-noarchive")
+    RUN_ARGS+=("--devel" "--no-archive" "-v")
   elif [ "$MODE" == "test" ]; then 
-    RUN_ARGS+=("-debug")
+    RUN_ARGS+=("--no-archive" "-v")
   fi
 
   # Append any extra user-provided args
