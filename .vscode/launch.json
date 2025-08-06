@@ -9,6 +9,15 @@
       "program": "${workspaceFolder}/bin/router.exe",
       "args": ["-debug", "-noarchive"],
       "preLaunchTask": "build-router"
+    },
+    {
+      "name": "Debug MySpace",
+      "type": "go",
+      "request": "launch",
+      "mode": "exec",
+      "program": "${workspaceFolder}/bin/myspace.exe",
+      "args": ["-debug", "-noarchive"],
+      "preLaunchTask": "build-myspace"
     }
   ]
 }

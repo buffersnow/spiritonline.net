@@ -11,6 +11,17 @@
         "isDefault": true
       },
       "problemMatcher": []
+    },
+    {
+      "label": "build-myspace",
+      "type": "shell",
+      "command": "scripts/run-service.sh",
+      "args": ["-d", "myspace"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
     }
   ]
 }

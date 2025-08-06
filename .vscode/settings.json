@@ -2,7 +2,7 @@
   "vsicons.associations.folders": [
     { "icon": "config", "extensions": ["cfg"] },
     { "icon": "sass", "extensions": ["styles"] },
-    { "icon": "interfaces", "extensions": ["protocol"] },
+    { "icon": "interfaces", "extensions": ["protocol", "com"] },
     { "icon": "e2e", "extensions": ["messages"] },
     { "icon": "mysql", "extensions": ["sql"] },
     { "icon": "trunk", "extensions": ["core"] },
@@ -10,11 +10,14 @@
     { "icon": "fonts", "extensions": ["ttf"] },
     { "icon": "template", "extensions": ["layouts"] },
     { "icon": "sso", "extensions": ["oidc"] },
-    { "icon": "controller", "extensions": ["endpoints"] },
+    { "icon": "services", "extensions": ["endpoints"] },
+    { "icon": "plugin", "extensions": ["handlers"] },
+    { "icon": "helper", "extensions": ["controllers"] },
     { "icon": "db", "extensions": ["store"] },
     { "icon": "public", "extensions": ["static"] },
     { "icon": "private", "extensions": ["internal"] },
     { "icon": "www", "extensions": ["webapi"] },
+    { "icon": "azurepipelines", "extensions": ["gateway"] },
     { "icon": "temp", "extensions": ["version"] },
     { "icon": "composer", "extensions": ["pd"] },
     { "icon": "api", "extensions": ["net"] },
@@ -40,7 +43,7 @@
       "italic": false
     },
     {
-      "tag": "//",
+      "tag": "-",
       "color": "#474747",
       "strikethrough": true,
       "backgroundColor": "transparent",
@@ -56,7 +59,7 @@
       "italic": false
     },
     {
-      "tag": "?",
+      "tag": "$",
       "color": "#28FF00",
       "strikethrough": false,
       "backgroundColor": "transparent",
