@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"reflect"
@@ -41,6 +42,10 @@ func (o *Options) loadArgs(ver *version.BuildTag) error {
 	}
 
 	o.Runtime.LogArchival = !o.Runtime.LogArchival
+
+	if o.Service.ProtocolPort == 0 && o.Service.HttpPort == 0 {
+		return errors.New("settings: neither protocol or http port was defined in the configuration")
+	}
 
 	return nil
 }

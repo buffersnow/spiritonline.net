@@ -34,7 +34,7 @@ type Options struct {
 	} `envPrefix:"SPIRIT_" section:"Spirit/Microservice"`
 
 	Service struct {
-		ProtocolPort  int             `env:"PROTOCOL_PORT,required" help:"Service-specific protocol port"`
+		ProtocolPort  int             `env:"PROTOCOL_PORT" help:"Service-specific protocol port"`
 		AlternatePort int             `env:"ALTERNATE_PORT" envDefault:"8888" help:"Alternative/Secondary service-specific protocol port"`
 		HttpPort      int             `env:"HTTP_PORT" envDefault:"9999" help:"Service-specific HTTP(s) API port"`
 		Features      map[string]bool `env:"FEATURES,required" help:"Service-specific feature configuration list"`
