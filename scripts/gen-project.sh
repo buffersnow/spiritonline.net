@@ -3,12 +3,12 @@
 set -e
 
 # Usage:
-# ./gen-project.sh <service-name>
+# ./gen-project.sh <service-name> <service-short-name>
 # Example:
-#   ./gen-project.sh userservice
+#   ./gen-project.sh userservice usr
 
 if [ $# -lt 1 ]; then
-  echo "Usage: $0 <service-name>"
+  echo "Usage: $0 <service-name> <service-short-name>"
   exit 1
 fi
 
@@ -19,6 +19,7 @@ if uname | grep -iq 'mingw\|msys\|cygwin'; then
 fi
 
 SERVICE_NAME="$1"
+SERVICE_SHORT="$2"
 GEN_SRC_DIR="src/tools/pd"
 GEN_SVC_PATH="tools/pd"
 GEN_BIN="$(basename "$GEN_SVC_PATH")$EXT"
@@ -26,10 +27,10 @@ GEN_BIN_PATH="bin/$GEN_BIN"
 
 # Build
 echo "Building $GEN_SVC_PATH..."
-go build -C "$GEN_SRC_DIR" -o "../../$GEN_BIN_PATH" main.go
+go build -C "$GEN_SRC_DIR" -o "../../../$GEN_BIN_PATH" main.go
 echo "Build complete: $GEN_SVC_PATH"
 
 echo "Generating project:"
 echo " > Service Name: $SERVICE_NAME"
 
-"$GEN_BIN_PATH" "$SERVICE_NAME"
+"$GEN_BIN_PATH" --long "$SERVICE_NAME" --short "$SERVICE_SHORT"
