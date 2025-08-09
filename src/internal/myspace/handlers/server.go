@@ -12,7 +12,7 @@ import (
 	"buffersnow.com/spiritonline/internal/myspace/protocol"
 )
 
-func ListenMySpace(opt *settings.Options, log *log.Logger) error {
+func ListenService(opt *settings.Options, log *log.Logger) error {
 
 	srv, err := net.CreateTcpListener(opt.Service.ProtocolPort, log)
 	if err != nil {

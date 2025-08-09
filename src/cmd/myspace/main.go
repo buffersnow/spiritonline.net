@@ -19,7 +19,7 @@ func main() {
 		red.Provide(settings.New),
 		red.Provide(log.New),
 		red.Provide(security.New),
-		red.Invoke(handlers.ListenMySpace),
+		red.Invoke(handlers.ListenService),
 		red.Invoke(lifecycle.Await),
 	)
 
