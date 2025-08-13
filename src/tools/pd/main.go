@@ -72,7 +72,7 @@ func main() {
 	}
 	err := generateProject(cfg)
 	if err != nil {
-		log.Fatalf("Error: %v", err)
+		log.Fatalf("pd: %v", err)
 	}
 	fmt.Printf("Generation complete: %s\n", cfg.ServiceLong)
 }
