@@ -7,7 +7,7 @@ import (
 	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/version"
 
-	"buffersnow.com/spiritonline/internal/ndxnas/handlers"
+	"buffersnow.com/spiritonline/internal/wfcnas/handlers"
 
 	"github.com/luxploit/red"
 )

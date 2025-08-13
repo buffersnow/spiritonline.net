@@ -22,6 +22,17 @@
         "isDefault": true
       },
       "problemMatcher": []
+    },
+    {
+      "label": "build-wfcnas",
+      "type": "shell",
+      "command": "scripts/run-service.sh",
+      "args": ["-d", "wfcnas"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
     }
   ]
 }

@@ -2,21 +2,30 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Router",
+      "name": "Debug router",
       "type": "go",
       "request": "launch",
       "mode": "exec",
       "program": "${workspaceFolder}/bin/router.exe",
-      "args": ["-debug", "-noarchive"],
+      "args": ["-v", "--no-archive", "--devel"],
       "preLaunchTask": "build-router"
     },
     {
-      "name": "Debug MySpace",
+      "name": "Debug myspace",
       "type": "go",
       "request": "launch",
       "mode": "exec",
       "program": "${workspaceFolder}/bin/myspace.exe",
-      "args": ["-debug", "-noarchive"],
+      "args": ["-v", "--no-archive", "--devel"],
+      "preLaunchTask": "build-myspace"
+    },
+    {
+      "name": "Debug wfcnas",
+      "type": "go",
+      "request": "launch",
+      "mode": "exec",
+      "program": "${workspaceFolder}/bin/wfcnas.exe",
+      "args": ["-v", "--no-archive", "--devel"],
       "preLaunchTask": "build-myspace"
     }
   ]
