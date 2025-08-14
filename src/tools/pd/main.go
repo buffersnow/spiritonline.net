@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -10,12 +9,7 @@ import (
 	"text/template"
 )
 
-type projectConfig struct {
-	ServiceLong  string
-	ServiceShort string
-}
-
-func generateProject(cfg projectConfig) error {
+func generateProject(service string) error {
 	files := map[string]string{
 		"src/cmd/%s/main.go":                    "src/tools/pd/templates/main.go.tmpl",
 		"src/internal/%s/controllers/.gitkeep":  "src/tools/pd/templates/.gitkeep.tmpl",
@@ -31,7 +25,7 @@ func generateProject(cfg projectConfig) error {
 			return err
 		}
 
-		outputFile = fmt.Sprintf(outputFile, cfg.ServiceLong)
+		outputFile = fmt.Sprintf(outputFile, service)
 		outputPath := filepath.Dir(outputFile)
 		if err = os.MkdirAll(outputPath, os.ModePerm); err != nil {
 			return err
@@ -51,7 +45,7 @@ func generateProject(cfg projectConfig) error {
 		}
 		defer f.Close()
 
-		err = tmpl.Execute(f, cfg)
+		err = tmpl.Execute(f, service)
 		if err != nil {
 			return err
 		}
@@ -60,19 +54,9 @@ func generateProject(cfg projectConfig) error {
 }
 
 func main() {
-	long := flag.String("long", "myservice", "full service name")
-	short := flag.String("short", "mysvc", "short service name")
-	flag.Parse()
-
-	// print(os.Getwd())
-
-	cfg := projectConfig{
-		ServiceLong:  *long,
-		ServiceShort: *short,
-	}
-	err := generateProject(cfg)
+	err := generateProject(os.Args[1])
 	if err != nil {
 		log.Fatalf("pd: %v", err)
 	}
-	fmt.Printf("Generation complete: %s\n", cfg.ServiceLong)
+	fmt.Printf("Generation complete: %s\n", os.Args[1])
 }

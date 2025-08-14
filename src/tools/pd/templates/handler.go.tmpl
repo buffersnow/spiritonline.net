@@ -8,24 +8,5 @@ import (
 )
 
 func ListenService(opt *settings.Options, log *log.Logger) error {
-
-	srv, err := net.CreateTcpListener(opt.Service.ProtocolPort, log)
-	if err != nil {
-		return fmt.Errorf("{{.ServiceShort}}: %w", err)
-	}
-
-	for {
-		cli, err := srv.Accept()
-		if err != nil {
-			log.Error("Service Listener", "Accept() failed: %v", err)
-			continue
-		}
-
-		go svcDelegate(cli, log)
-	}
-}
-
-func svcDelegate(conn *net.TcpConnection, logger *log.Logger) {
-
-
+	return nil
 }
