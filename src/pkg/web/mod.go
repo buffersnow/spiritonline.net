@@ -34,8 +34,8 @@ func (h HttpUtils) NewEcho(prefix string) (*echo.Echo, error) {
 	e.HidePort = true
 	e.Renderer = &TemplateRenderer{Templates: tmpl}
 
-	e.Use(RequestLogging(prefix, h.log))
 	e.Use(XPoweredBy(h.bld))
+	e.Use(RequestLogging(prefix, h.log))
 
 	return e, nil
 }
