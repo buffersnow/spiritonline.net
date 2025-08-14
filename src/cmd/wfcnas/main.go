@@ -6,6 +6,7 @@ import (
 	"buffersnow.com/spiritonline/pkg/security"
 	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/version"
+	"buffersnow.com/spiritonline/pkg/web"
 
 	"buffersnow.com/spiritonline/internal/wfcnas/handlers"
 
@@ -20,6 +21,7 @@ func main() {
 		red.Provide(settings.New),
 		red.Provide(log.New),
 		red.Provide(security.New),
+		red.Provide(web.New),
 		red.Invoke(handlers.ListenService),
 		red.Invoke(lifecycle.Await),
 	)
