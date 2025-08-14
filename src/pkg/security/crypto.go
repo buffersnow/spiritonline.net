@@ -15,7 +15,7 @@ func (SecEncryption) RC4(pwd []byte, data []byte) (outdata []byte, outerr error)
 
 	defer func() {
 		if r := recover(); r != nil {
-			outerr = fmt.Errorf("security: crypto: %w", err)
+			outerr = fmt.Errorf("security: crypto: %v", r)
 			outdata = nil
 		}
 	}()
