@@ -3,7 +3,17 @@ package net
 import (
 	"fmt"
 	"time"
+
+	"buffersnow.com/spiritonline/pkg/log"
 )
+
+type NetUtils struct {
+	log *log.Logger
+}
+
+func New(log *log.Logger) (*NetUtils, error) {
+	return &NetUtils{log: log}, nil
+}
 
 type NetConnection interface {
 	AcceptIncoming() error
