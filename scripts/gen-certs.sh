@@ -20,6 +20,6 @@ echo "Generating certificates:"
 echo " > Public Key:  $CERT_PU_PATH"
 echo " > Private Key: $CERT_PK_PATH"
 
-openssl ecparam -genkey -name prime256v1 -noout -out "$CERT_PU_PATH"
-openssl ec -in "$CERT_PU_PATH" -pubout -out "$CERT_PK_PATH"
+openssl ecparam -genkey -name prime256v1 -noout -out "$CERT_PK_PATH"
+openssl ec -in "$CERT_PK_PATH" -pubout -out "$CERT_PU_PATH"
 echo "Generation complete"
