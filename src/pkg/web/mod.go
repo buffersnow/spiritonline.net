@@ -9,6 +9,11 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type HttpError struct {
+	Message string `json:"message"`
+	Error   string `json:"error"`
+}
+
 type HttpUtils struct {
 	bld *version.BuildTag
 	log *log.Logger
@@ -33,4 +38,22 @@ func (h HttpUtils) NewEcho(prefix string) (*echo.Echo, error) {
 	e.Use(XPoweredBy(h.bld))
 
 	return e, nil
+}
+
+func (h HttpUtils) StartEcho(e *echo.Echo, port int) (outerr error) {
+
+	// Echo doesn't always return an error so i'd rather have it catch the panic here,
+	// and since we panic on error anyways atleast we know where it crashed (roughly)
+	defer func() {
+		if r := recover(); r != nil {
+			outerr = fmt.Errorf("echo: %v", r)
+		}
+	}()
+
+	err := e.Start(fmt.Sprintf(":%d", port))
+	if err != nil {
+		return fmt.Errorf("echo: %w", err)
+	}
+
+	return nil
 }
