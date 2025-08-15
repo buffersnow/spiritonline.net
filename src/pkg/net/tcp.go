@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"buffersnow.com/spiritonline/pkg/log"
+	"github.com/luxploit/red"
 )
 
 type TcpServer struct {
@@ -32,10 +33,15 @@ func (n NetUtils) CreateTcpListener(port int) (TcpServer, error) {
 		return TcpServer{}, fmt.Errorf("net: %w", err)
 	}
 
-	n.log.Info("TCP Listener", "Listening on 0.0.0.0:%d", port)
+	logger, err := red.Locate[log.Logger]()
+	if err != nil {
+		return TcpServer{}, fmt.Errorf("net: %w", err)
+	}
+
+	logger.Info("TCP Listener", "Listening on 0.0.0.0:%d", port)
 	return TcpServer{
 		conn: tcpListener,
-		log:  n.log.Factory("TCP"),
+		log:  logger.Factory("TCP"),
 	}, nil
 }
 

@@ -3,16 +3,12 @@ package net
 import (
 	"fmt"
 	"time"
-
-	"buffersnow.com/spiritonline/pkg/log"
 )
 
-type NetUtils struct {
-	log *log.Logger
-}
+type NetUtils struct{}
 
-func New(log *log.Logger) (*NetUtils, error) {
-	return &NetUtils{log: log}, nil
+func New() (*NetUtils, error) {
+	return &NetUtils{}, nil
 }
 
 type NetConnection interface {

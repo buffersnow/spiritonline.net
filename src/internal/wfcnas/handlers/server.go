@@ -6,12 +6,11 @@ import (
 	"buffersnow.com/spiritonline/internal/wfcnas/controllers"
 	"buffersnow.com/spiritonline/internal/wfcnas/protocol"
 	"buffersnow.com/spiritonline/pkg/log"
-	"buffersnow.com/spiritonline/pkg/security"
 	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/web"
 )
 
-func ListenService(web *web.HttpUtils, sec *security.Security, opt *settings.Options, logger *log.Logger) error {
+func ListenService(web *web.HttpUtils, opt *settings.Options, logger *log.Logger) error {
 
 	e, err := web.NewEcho("Nintendo WFC NAS")
 	if err != nil {
@@ -26,14 +25,13 @@ func ListenService(web *web.HttpUtils, sec *security.Security, opt *settings.Opt
 	e.GET("/", controllers.NasTest)
 	e.GET("/nastest.jsp", controllers.NasTest)
 
-	g := e.Group("/", protocol.FieldsDecoder(sec))
+	g := e.Group("/", protocol.FieldsDecoder)
 	{
 		g.POST("/ac", controllers.Account)
 		g.POST("/pr", controllers.Product)
 		g.POST("/download", controllers.Download)
 	}
 
-	logger.Info("HTTP Listener", "Listening on 0.0.0.0:%d", opt.Service.HttpPort)
 	err = web.StartEcho(e, opt.Service.HttpPort)
 	if err != nil {
 		return fmt.Errorf("wfcnas: %w", err)

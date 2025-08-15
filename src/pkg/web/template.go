@@ -1,8 +1,8 @@
 package web
 
 import (
-	"io"
 	"html/template"
+	"io"
 
 	"github.com/labstack/echo/v4"
 )

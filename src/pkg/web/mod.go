@@ -1,32 +1,25 @@
 package web
 
 import (
+	"errors"
 	"fmt"
 	"html/template"
 
 	"buffersnow.com/spiritonline/pkg/log"
-	"buffersnow.com/spiritonline/pkg/version"
 	"github.com/labstack/echo/v4"
+	"github.com/luxploit/red"
 )
 
-type HttpError struct {
-	Message string `json:"message"`
-	Error   string `json:"error"`
-}
+type HttpUtils struct{}
 
-type HttpUtils struct {
-	bld *version.BuildTag
-	log *log.Logger
-}
-
-func New(bld *version.BuildTag, log *log.Logger) (*HttpUtils, error) {
-	return &HttpUtils{bld: bld, log: log}, nil
+func New() (*HttpUtils, error) {
+	return &HttpUtils{}, nil
 }
 
 func (h HttpUtils) NewEcho(prefix string) (*echo.Echo, error) {
 	tmpl, err := template.ParseGlob("public/*.html")
 	if err != nil {
-		return nil, fmt.Errorf("wfcnas: %w", err)
+		return nil, fmt.Errorf("web: %w", err)
 	}
 
 	e := echo.New()
@@ -34,25 +27,40 @@ func (h HttpUtils) NewEcho(prefix string) (*echo.Echo, error) {
 	e.HidePort = true
 	e.Renderer = &TemplateRenderer{Templates: tmpl}
 
-	e.Use(XPoweredBy(h.bld))
-	e.Use(RequestLogging(prefix, h.log))
+	e.HTTPErrorHandler = ErrorHandler
+
+	e.Use(XPoweredBy)
+	e.Use(RequestLogging(prefix))
+
+	e.RouteNotFound("/*", func(c echo.Context) error {
+		return NotFoundError(&Details{
+			Message: "seems like you took a wrong turn",
+			Err:     errors.New("invalid resource"),
+		})
+	})
 
 	return e, nil
 }
 
 func (h HttpUtils) StartEcho(e *echo.Echo, port int) (outerr error) {
 
+	log, err := red.Locate[log.Logger]()
+	if err != nil {
+		return fmt.Errorf("web: %w", err)
+	}
+
 	// Echo doesn't always return an error so i'd rather have it catch the panic here,
 	// and since we panic on error anyways atleast we know where it crashed (roughly)
 	defer func() {
 		if r := recover(); r != nil {
-			outerr = fmt.Errorf("echo: %v", r)
+			outerr = fmt.Errorf("web: echo: %v", r)
 		}
 	}()
 
-	err := e.Start(fmt.Sprintf(":%d", port))
+	log.Info("HTTP Listener", "Listening on 0.0.0.0:%d", port)
+	err = e.Start(fmt.Sprintf(":%d", port))
 	if err != nil {
-		return fmt.Errorf("echo: %w", err)
+		return fmt.Errorf("web: echo: %w", err)
 	}
 
 	return nil
