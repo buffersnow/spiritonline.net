@@ -6,7 +6,7 @@ require (
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.13.4
-	github.com/luxploit/red v0.2.3
+	github.com/luxploit/red v0.3.0
 	github.com/spf13/pflag v1.0.7
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 )
