@@ -26,7 +26,7 @@
       "mode": "exec",
       "program": "${workspaceFolder}/bin/wfcnas.exe",
       "args": ["-v", "--no-archive", "--devel"],
-      "preLaunchTask": "build-myspace"
+      "preLaunchTask": "build-wfcnas"
     }
   ]
 }
