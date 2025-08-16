@@ -3,6 +3,7 @@ package protocol
 import (
 	"iter"
 
+	"buffersnow.com/spiritonline/pkg/gp"
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/net"
 )
@@ -25,16 +26,14 @@ type MySpaceProfileContext struct {
 	ImageData []byte
 }
 
-type MySpaceCommandInfo struct {
-	Command    string
-	SubCommand int
-	Data       iter.Seq[MySpaceKV]
-}
-
 type MySpaceCallbackInfo struct {
 	CommandType    int
 	CommandFamily  int
 	CommandSubcode int
 	RequestId      int
-	Body           iter.Seq[MySpaceKV]
+	Body           iter.Seq[gp.GamespyKV]
+}
+
+func (cbInfo MySpaceCallbackInfo) Find(key string) gp.GamespyKV {
+	return gp.FindInternal(key, cbInfo.Body)
 }

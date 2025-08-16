@@ -26,13 +26,13 @@ func IdentifyProtocolRevision(ver int) string {
 }
 
 func EscapeString(data string) string {
-	res := strings.Replace(data, "/", "/1", -1)
-	res = strings.Replace(res, "\\", "\\2", -1)
+	res := strings.ReplaceAll(data, "/", "/1")
+	res = strings.ReplaceAll(res, "\\", "\\2")
 	return res
 }
 
 func UnEscapeString(data string) string {
-	res := strings.Replace(data, "/1", "/", -1)
-	res = strings.Replace(res, "\\2", "\\", -1)
+	res := strings.ReplaceAll(data, "/1", "/")
+	res = strings.ReplaceAll(res, "\\2", "\\")
 	return res
 }
