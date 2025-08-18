@@ -14,7 +14,7 @@ import (
 
 func ListenService(opt *settings.Options, log *log.Logger, net *net.NetUtils) error {
 
-	srv, err := net.CreateTcpListener(opt.Service.ProtocolPort)
+	srv, err := net.CreateTcpListener(opt.Service.Ports["myspace"])
 	if err != nil {
 		return fmt.Errorf("msim: %w", err)
 	}
@@ -32,7 +32,7 @@ func ListenService(opt *settings.Options, log *log.Logger, net *net.NetUtils) er
 
 func svcDelegate(conn *net.TcpConnection, logger *log.Logger) {
 
-	cli := protocol.MySpaceContext{
+	ctx := protocol.MySpaceContext{
 		Connection: conn,
 		Client: protocol.MySpaceClientContext{
 			Nonce:        util.RandomString(0x40),
@@ -44,17 +44,17 @@ func svcDelegate(conn *net.TcpConnection, logger *log.Logger) {
 		),
 	}
 
-	cli.Log.Info("Client", "Client awaiting authentication!")
+	ctx.Log.Info("Client", "Client awaiting authentication!")
 
 	defer func() {
-		cli.Log.Info("Client", "Client exited!")
-		cli.Connection.Close()
+		ctx.Log.Info("Client", "Client exited!")
+		ctx.Connection.Close()
 	}()
 
 	for {
 		_, err := conn.ReadText()
 		if err != nil {
-			cli.Log.Debug(log.DEBUG_TRAFFIC, "Server", "Traffic read error debug: %v", err)
+			ctx.Log.Debug(log.DEBUG_TRAFFIC, "Server", "Traffic read error debug: %v", err)
 			break
 		}
 

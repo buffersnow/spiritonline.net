@@ -1,7 +1,10 @@
 package util
 
 import (
+	"fmt"
 	"math/rand"
+	"os"
+	"regexp"
 )
 
 func RandomString(length int) string {
@@ -19,6 +22,22 @@ func Batch(funcs []func() error) error {
 			return err
 		}
 	}
+	return nil
+}
+
+func CleanEnv(env string) error {
+	// cleanup newlines and tabs from environments variables
+	re, err := regexp.Compile(`\s+`)
+	if err != nil {
+		return fmt.Errorf("regexp: %w", err)
+	}
+
+	osenv := os.Getenv(env)
+	osenv = re.ReplaceAllString(osenv, "")
+	if err := os.Setenv(env, osenv); err != nil {
+		return fmt.Errorf("os: %w", err)
+	}
+
 	return nil
 }
 

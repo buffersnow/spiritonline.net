@@ -5,6 +5,7 @@ import (
 
 	"buffersnow.com/spiritonline/internal/wfcnas/controllers"
 	"buffersnow.com/spiritonline/internal/wfcnas/protocol"
+
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/web"
@@ -32,7 +33,7 @@ func ListenService(web *web.HttpUtils, opt *settings.Options, logger *log.Logger
 		g.POST("/download", controllers.Download)
 	}
 
-	err = web.StartEcho(e, opt.Service.HttpPort)
+	err = web.StartEcho(e, opt.Service.Ports["wfcnas"])
 	if err != nil {
 		return fmt.Errorf("wfcnas: %w", err)
 	}

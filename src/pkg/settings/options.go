@@ -11,6 +11,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/spf13/pflag"
 
+	"buffersnow.com/spiritonline/pkg/util"
 	"buffersnow.com/spiritonline/pkg/version"
 )
 
@@ -43,23 +44,31 @@ func (o *Options) loadArgs(ver *version.BuildTag) error {
 
 	o.Runtime.LogArchival = !o.Runtime.LogArchival
 
-	if o.Service.ProtocolPort == 0 && o.Service.HttpPort == 0 {
-		return errors.New("settings: neither protocol or http port was defined in the configuration")
+	if len(o.Service.Ports) == 0 {
+		return errors.New("settings: no ports were defined in the configuration")
 	}
 
 	return nil
 }
 
-func (o *Options) loadEnv(ver *version.BuildTag) error {
+func (o *Options) loadEnv() error {
 
-	err := godotenv.Load(fmt.Sprintf(".env.%s", ver.GetService()))
-	if err != nil {
+	if err := godotenv.Load(); err != nil {
 		return fmt.Errorf("settings: env: os: %w", err) // the only error thrown is from os.Open in godotenv.go L#207
 	}
 
+	// cleanup service_ports and service_features
+	tasks := []func() error{
+		func() error { return util.CleanEnv("SERVICE_PORTS") },
+		func() error { return util.CleanEnv("SERVICE_FEATURES") },
+	}
+
+	if err := util.Batch(tasks); err != nil {
+		return fmt.Errorf("settings: env: %w", err)
+	}
+
 	var cfg Options
-	err = env.Parse(&cfg)
-	if err != nil {
+	if err := env.Parse(&cfg); err != nil {
 		return fmt.Errorf("settings: %w", err)
 	}
 
