@@ -11,8 +11,7 @@ import (
 func (l Logger) archiveLogJob() {
 	for {
 		time.Sleep(24 * time.Hour)
-		err := l.archiveLog()
-		if err != nil {
+		if err := l.archiveLog(); err != nil {
 			l.Error("Log Archiver", "Unable to complete daily log archival job: %v", err)
 		}
 	}

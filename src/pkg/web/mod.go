@@ -58,8 +58,7 @@ func (h HttpUtils) StartEcho(e *echo.Echo, port int) (outerr error) {
 	}()
 
 	log.Info("HTTP Listener", "Listening on 0.0.0.0:%d", port)
-	err = e.Start(fmt.Sprintf(":%d", port))
-	if err != nil {
+	if err = e.Start(fmt.Sprintf(":%d", port)); err != nil {
 		return fmt.Errorf("web: echo: %w", err)
 	}
 

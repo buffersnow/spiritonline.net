@@ -45,8 +45,7 @@ func generateProject(service string) error {
 		}
 		defer f.Close()
 
-		err = tmpl.Execute(f, service)
-		if err != nil {
+		if err = tmpl.Execute(f, service); err != nil {
 			return err
 		}
 	}
@@ -54,8 +53,7 @@ func generateProject(service string) error {
 }
 
 func main() {
-	err := generateProject(os.Args[1])
-	if err != nil {
+	if err := generateProject(os.Args[1]); err != nil {
 		log.Fatalf("pd: %v", err)
 	}
 	fmt.Printf("Generation complete: %s\n", os.Args[1])

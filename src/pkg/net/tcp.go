@@ -96,8 +96,7 @@ func (tcp TcpConnection) GetRemoteAddress() string {
 }
 
 func (tcp TcpConnection) WriteText(data string) error {
-	_, err := tcp.client.Write([]byte(data))
-	if err != nil {
+	if _, err := tcp.client.Write([]byte(data)); err != nil {
 		return fmt.Errorf("net: %w", err)
 	}
 
@@ -136,8 +135,7 @@ func (tcp TcpConnection) ReadTextEx(timeout time.Time) (data string, err error) 
 }
 
 func (tcp TcpConnection) WriteBytes(data []byte) error {
-	_, err := tcp.client.Write(data)
-	if err != nil {
+	if _, err := tcp.client.Write(data); err != nil {
 		return fmt.Errorf("net: %w", err)
 	}
 
@@ -175,8 +173,7 @@ func (tcp TcpConnection) ReadBytesEx(timeout time.Time) (data []byte, err error)
 }
 
 func (tcp *TcpConnection) Close() error {
-	err := tcp.client.Close()
-	if err != nil {
+	if err := tcp.client.Close(); err != nil {
 		return fmt.Errorf("net: %w", err)
 	}
 

@@ -9,9 +9,8 @@ import (
 
 func (SecHashing) SHA1(data []byte) ([]byte, error) {
 	hash := sha1.New()
-	_, err := hash.Write(data)
 
-	if err != nil {
+	if _, err := hash.Write(data); err != nil {
 		return nil, fmt.Errorf("security: hash: sha1: %w", err)
 	}
 
@@ -20,9 +19,8 @@ func (SecHashing) SHA1(data []byte) ([]byte, error) {
 
 func (SecHashing) SHA2(data []byte) ([]byte, error) {
 	hash := sha256.New()
-	_, err := hash.Write(data)
 
-	if err != nil {
+	if _, err := hash.Write(data); err != nil {
 		return nil, fmt.Errorf("security: hash: sha2: %w", err)
 	}
 
@@ -31,9 +29,8 @@ func (SecHashing) SHA2(data []byte) ([]byte, error) {
 
 func (SecHashing) FNV(data []byte) (uint32, error) {
 	hash := fnv.New32a()
-	_, err := hash.Write(data)
 
-	if err != nil {
+	if _, err := hash.Write(data); err != nil {
 		return 0, fmt.Errorf("security: hash: fnv: %w", err)
 	}
 

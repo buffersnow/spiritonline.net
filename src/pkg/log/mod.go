@@ -40,7 +40,9 @@ func New(ver *version.BuildTag, opt *settings.Options) (*Logger, error) {
 	}
 
 	tasks = append(tasks, log.openLogFile)
-	err := util.Batch(tasks)
+	if err := util.Batch(tasks); err != nil {
+		return nil, err
+	}
 
 	log.reconsileLogs()
 
@@ -48,7 +50,7 @@ func New(ver *version.BuildTag, opt *settings.Options) (*Logger, error) {
 		go log.archiveLogJob()
 	}
 
-	return log, err
+	return log, nil
 }
 
 func Global() *Logger {
