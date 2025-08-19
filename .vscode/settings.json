@@ -1,29 +1,20 @@
 {
   "vsicons.associations.folders": [
     { "icon": "config", "extensions": ["cfg"] },
-    { "icon": "sass", "extensions": ["styles"] },
     { "icon": "interfaces", "extensions": ["protocol", "com"] },
-    { "icon": "e2e", "extensions": ["messages"] },
     { "icon": "mysql", "extensions": ["sql"] },
-    { "icon": "trunk", "extensions": ["core"] },
-    { "icon": "helper", "extensions": ["di"] },
-    { "icon": "fonts", "extensions": ["ttf"] },
-    { "icon": "template", "extensions": ["layouts"] },
-    { "icon": "sso", "extensions": ["oidc"] },
-    { "icon": "services", "extensions": ["endpoints"] },
     { "icon": "plugin", "extensions": ["handlers"] },
     { "icon": "helper", "extensions": ["controllers"] },
-    { "icon": "db", "extensions": ["store"] },
     { "icon": "public", "extensions": ["static"] },
     { "icon": "private", "extensions": ["internal"] },
-    { "icon": "www", "extensions": ["webapi"] },
     { "icon": "azurepipelines", "extensions": ["gateway"] },
     { "icon": "temp", "extensions": ["version"] },
     { "icon": "composer", "extensions": ["pd"] },
     { "icon": "api", "extensions": ["net"] },
     { "icon": "paket", "extensions": ["pkg"] },
     { "icon": "certificate", "extensions": ["security"] },
-    { "icon": "notification", "extensions": ["lifecycle"] }
+    { "icon": "notification", "extensions": ["lifecycle"] },
+    { "icon": "buildkite", "extensions": ["gp"] }
   ],
   "colorful-comments.tags": [
     {
