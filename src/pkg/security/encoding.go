@@ -39,9 +39,8 @@ func (s SecEncoding) EncodeB64_Wii(data []byte) (outdata []byte, outerr error) {
 		}
 	}()
 
-	enc := []byte{}
-	s.b64wii.Encode(enc, data)
-	return enc, nil
+	enc := s.b64wii.EncodeToString(data)
+	return []byte(enc), nil
 }
 
 func (s SecEncoding) DecodeB64_Wii(data []byte) (outdata []byte, outerr error) {
@@ -52,9 +51,8 @@ func (s SecEncoding) DecodeB64_Wii(data []byte) (outdata []byte, outerr error) {
 		}
 	}()
 
-	dec := []byte{}
-	n, err := s.b64wii.Decode(dec, data)
-	if n == 0 {
+	n, err := s.b64wii.DecodeString(string(data))
+	if len(n) == 0 {
 		return nil, errors.New("security: encoding: base64: length was 0")
 	}
 
@@ -62,7 +60,7 @@ func (s SecEncoding) DecodeB64_Wii(data []byte) (outdata []byte, outerr error) {
 		return nil, fmt.Errorf("security: encoding: base64: %w", err)
 	}
 
-	return dec, nil
+	return n, nil
 }
 
 func (s SecEncoding) EncodeB32_Wii(data []byte) (outdata []byte, outerr error) {
@@ -73,9 +71,8 @@ func (s SecEncoding) EncodeB32_Wii(data []byte) (outdata []byte, outerr error) {
 		}
 	}()
 
-	enc := []byte{}
-	s.b32wii.Encode(enc, data)
-	return enc, nil
+	enc := s.b32wii.EncodeToString(data)
+	return []byte(enc), nil
 }
 
 func (s SecEncoding) DecodeB32_Wii(data []byte) (outdata []byte, outerr error) {
@@ -86,9 +83,8 @@ func (s SecEncoding) DecodeB32_Wii(data []byte) (outdata []byte, outerr error) {
 		}
 	}()
 
-	dec := []byte{}
-	n, err := s.b32wii.Decode(dec, data)
-	if n == 0 {
+	n, err := s.b32wii.DecodeString(string(data))
+	if len(n) == 0 {
 		return nil, errors.New("security: encoding: base32: length was 0")
 	}
 
@@ -96,5 +92,5 @@ func (s SecEncoding) DecodeB32_Wii(data []byte) (outdata []byte, outerr error) {
 		return nil, fmt.Errorf("security: encoding: base32:: %w", err)
 	}
 
-	return dec, nil
+	return n, nil
 }
