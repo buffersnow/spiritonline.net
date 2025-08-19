@@ -71,9 +71,7 @@ func (l *Logger) Debug(component int, prefix string, format string, a ...any) {
 }
 
 func (l *Logger) Trace(component int, prefix string, format string, a ...any) {
-	if l.debug {
-		l.processLog(debugComponentColors[component], "Trace", prefix, format, a...)
-	}
+	l.processLog(debugComponentColors[component], "Trace", prefix, format, a...)
 }
 
 func (l *Logger) Raw(colorCode, format string, a ...any) {
