@@ -2,55 +2,59 @@ package web
 
 import (
 	"fmt"
+	"time"
 
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/version"
 
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"github.com/gofiber/fiber/v2"
 	"github.com/luxploit/red"
 )
 
-func RequestLogging(prefix string) echo.MiddlewareFunc {
-	return middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
-		LogStatus:   true,
-		LogURI:      true,
-		LogMethod:   true,
-		LogLatency:  true,
-		LogRemoteIP: true,
-		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
-			logger, err := red.Locate[log.Logger]()
-			if err != nil {
-				return InternalServerError(&Details{
-					Message: "bad service location",
-					Err:     fmt.Errorf("web: %w", err),
-				})
-			}
+func RequestLogging() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		start := time.Now()
 
-			logger.Trace(log.DEBUG_SERVICE, prefix,
-				"<IP: %s> <Time: %v> <Status: %d> %s %s",
-				v.RemoteIP, v.Latency, v.Status, v.Method, v.URI,
-			)
-
-			return nil
-		},
-	})
-}
-
-func XPoweredBy(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		bld, err := red.Locate[version.BuildTag]()
+		logger, err := red.Locate[log.Logger]()
 		if err != nil {
-			return InternalServerError(&Details{
+			return InternalServerError(c, &Details{
 				Message: "bad service location",
 				Err:     fmt.Errorf("web: %w", err),
 			})
 		}
 
-		c.Response().Header().Set("x-powered-by", "buffersnow.com")
-		c.Response().Header().Set("Server", fmt.Sprintf(
+		err = c.Next()
+
+		latency := time.Since(start)
+		realip := c.IP()
+		status := c.Response().StatusCode()
+		method := c.Method()
+		uri := c.OriginalURL()
+
+		logger.Trace(log.DEBUG_TRAFFIC, "HTTP Request Logger",
+			"<IP: %s> <Time: %v> <Status: %d> %s %s",
+			realip, latency, status, method, uri,
+		)
+
+		return err
+	}
+}
+
+func XPoweredBy() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		bld, err := red.Locate[version.BuildTag]()
+		if err != nil {
+			return InternalServerError(c, &Details{
+				Message: "bad service location",
+				Err:     fmt.Errorf("web: %w", err),
+			})
+		}
+
+		c.Set("x-powered-by", "buffersnow.com")
+		c.Set("Server", fmt.Sprintf(
 			"SpiritOnline/%s/%s (%s)", bld.GetVersion(), bld.GetService(), bld.GetConfig(),
 		))
-		return next(c)
+
+		return c.Next() // proceed to next middleware or handler
 	}
 }

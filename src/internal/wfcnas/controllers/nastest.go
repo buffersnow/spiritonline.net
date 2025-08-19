@@ -1,7 +1,7 @@
 package controllers
 
-import "github.com/labstack/echo/v4"
+import "github.com/gofiber/fiber/v2"
 
-func NasTest(c echo.Context) error {
-	return c.Render(200, "nastest", nil)
+func NasTest(c *fiber.Ctx) error {
+	return c.Render("nastest", nil)
 }

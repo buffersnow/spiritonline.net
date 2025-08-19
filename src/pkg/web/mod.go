@@ -3,63 +3,84 @@ package web
 import (
 	"errors"
 	"fmt"
-	"html/template"
 
 	"buffersnow.com/spiritonline/pkg/log"
-	"github.com/labstack/echo/v4"
+
+	"github.com/gofiber/fiber/v2"
+	rec "github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/template/handlebars/v2"
+
 	"github.com/luxploit/red"
 )
 
-type HttpUtils struct{}
+type HttpUtils struct {
+}
 
 func New() (*HttpUtils, error) {
 	return &HttpUtils{}, nil
 }
 
-func (h HttpUtils) NewEcho(prefix string) (*echo.Echo, error) {
-	tmpl, err := template.ParseGlob("public/*.html")
-	if err != nil {
-		return nil, fmt.Errorf("web: %w", err)
-	}
+func (h *HttpUtils) NewFiber() (outapp *fiber.App, outerr error) {
 
-	e := echo.New()
-	e.HideBanner = true
-	e.HidePort = true
-	e.Renderer = &TemplateRenderer{Templates: tmpl}
+	// Fiber doesn't always return an error so i'd rather have it catch the panic here,
+	// and since we panic on error anyways atleast we know where it crashed (roughly)
+	defer func() {
+		if r := recover(); r != nil {
+			outapp = nil
+			outerr = fmt.Errorf("web: fiber: %v", r)
+		}
+	}()
 
-	e.HTTPErrorHandler = ErrorHandler
-
-	e.Use(XPoweredBy)
-	e.Use(RequestLogging(prefix))
-
-	e.RouteNotFound("/*", func(c echo.Context) error {
-		return NotFoundError(&Details{
-			Message: "seems like you took a wrong turn",
-			Err:     errors.New("invalid resource"),
-		})
+	engine := handlebars.New("./public", ".hbs")
+	app := fiber.New(fiber.Config{
+		Views:                 engine,
+		ErrorHandler:          ErrorHandler,
+		DisableStartupMessage: true,
 	})
 
-	return e, nil
+	app.Use(rec.New())
+	app.Use(RequestLogging())
+	app.Use(XPoweredBy())
+
+	return app, nil
 }
 
-func (h HttpUtils) StartEcho(e *echo.Echo, port int) (outerr error) {
+func (h HttpUtils) StartFiber(app *fiber.App, port int) (outerr error) {
 
-	log, err := red.Locate[log.Logger]()
+	logger, err := red.Locate[log.Logger]()
 	if err != nil {
 		return fmt.Errorf("web: %w", err)
 	}
 
-	// Echo doesn't always return an error so i'd rather have it catch the panic here,
+	// Fiber doesn't always return an error so i'd rather have it catch the panic here,
 	// and since we panic on error anyways atleast we know where it crashed (roughly)
 	defer func() {
 		if r := recover(); r != nil {
-			outerr = fmt.Errorf("web: echo: %v", r)
+			outerr = fmt.Errorf("web: fiber: %v", r)
 		}
 	}()
 
-	log.Info("HTTP Listener", "Listening on 0.0.0.0:%d", port)
-	if err = e.Start(fmt.Sprintf(":%d", port)); err != nil {
-		return fmt.Errorf("web: echo: %w", err)
+	app.Use(func(c *fiber.Ctx) error {
+		return NotFoundError(c, &Details{
+			Message: "seems like you took a wrong turn",
+			Err:     errors.New("invalid resource"),
+			Context: fiber.Map{
+				"method": c.Method(),
+			},
+		})
+	})
+
+	app.Hooks().OnListen(func(data fiber.ListenData) error {
+		if fiber.IsChild() {
+			return nil
+		}
+
+		logger.Info("HTTP Listener", "Listening on 0.0.0.0:%d", port)
+		return nil
+	})
+
+	if err = app.Listen(fmt.Sprintf(":%d", port)); err != nil {
+		return fmt.Errorf("web: fiber: %w", err)
 	}
 
 	return nil

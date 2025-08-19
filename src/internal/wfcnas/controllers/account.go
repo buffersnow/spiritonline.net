@@ -1,7 +1,7 @@
 package controllers
 
-import "github.com/labstack/echo/v4"
+import "github.com/gofiber/fiber/v2"
 
-func Account(c echo.Context) error {
-	return c.String(200, "arf!")
+func Account(c *fiber.Ctx) error {
+	return c.SendString("arf!")
 }
