@@ -44,8 +44,8 @@ func (l LoggingFactory) Error(prefix string, format string, a ...any) {
 	l.log.Error(l.prefix+prefix, l.postfix+format, a...)
 }
 
-func (l LoggingFactory) Panic(prefix string, format string, err error, a ...any) {
-	l.log.Panic(l.prefix+prefix, l.postfix+format, err, a...)
+func (l LoggingFactory) Fatal(prefix string, format string, err error, a ...any) {
+	l.log.Fatal(l.prefix+prefix, l.postfix+format, err, a...)
 }
 
 func (l LoggingFactory) Debug(component int, prefix string, format string, a ...any) {

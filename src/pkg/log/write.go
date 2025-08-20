@@ -59,8 +59,8 @@ func (l *Logger) Error(prefix string, format string, a ...any) {
 	l.processLog(levelComponentColors[intlLevel_Error], "Error", prefix, format, a...)
 }
 
-func (l *Logger) Panic(prefix string, format string, err error, a ...any) {
-	l.processLog(levelComponentColors[intlLevel_Error], "Fatal", fmt.Sprintf("%s %s", format, err.Error()), format, a...)
+func (l *Logger) Fatal(prefix string, format string, err error, a ...any) {
+	l.processLog(levelComponentColors[intlLevel_Fatal], "Fatal", prefix, fmt.Sprintf("%s %s", format, err.Error()), a...)
 	panic(err)
 }
 
