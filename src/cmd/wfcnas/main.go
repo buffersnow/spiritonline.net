@@ -22,7 +22,9 @@ func main() {
 		red.Provide(log.New),
 		red.Provide(security.New),
 		red.Provide(web.New),
-		red.Invoke(handlers.ListenService),
+		red.Invoke(handlers.ListenNAS),
+		red.Invoke(handlers.ListenConntest),
+		red.Invoke(handlers.ListenDls1),
 		red.Invoke(lifecycle.Await),
 	)
 
