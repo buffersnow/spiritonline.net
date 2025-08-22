@@ -26,7 +26,7 @@ func FieldsDecoder() fiber.Handler {
 		if err != nil {
 			return web.InternalServerError(c, &web.Details{
 				Message: "bad service location",
-				Err:     fmt.Errorf("wfcnas: protocol: %w", err),
+				Err:     fmt.Errorf("wfc: protocol: %w", err),
 			})
 		}
 
@@ -34,7 +34,7 @@ func FieldsDecoder() fiber.Handler {
 		if err != nil {
 			return web.InternalServerError(c, &web.Details{
 				Message: "bad service location",
-				Err:     fmt.Errorf("wfcnas: protocol: %w", err),
+				Err:     fmt.Errorf("wfc: protocol: %w", err),
 			})
 		}
 
@@ -42,7 +42,7 @@ func FieldsDecoder() fiber.Handler {
 		if err != nil {
 			return web.BadRequestError(c, &web.Details{
 				Message: "invalid form encoding",
-				Err:     fmt.Errorf("wfcnas: protocol: %w", err),
+				Err:     fmt.Errorf("wfc: protocol: %w", err),
 			})
 		}
 
@@ -55,14 +55,14 @@ func FieldsDecoder() fiber.Handler {
 					if err != nil {
 						return web.BadRequestError(c, &web.Details{
 							Message: "invalid base64 for field",
-							Err:     fmt.Errorf("wfcnas: protocol: %w", err),
+							Err:     fmt.Errorf("wfc: protocol: %w", err),
 						})
 					}
 					value = string(decoded)
 				}
 
 				c.Request().PostArgs().Add(key, value)
-				logger.Debug(log.DEBUG_SERVICE, "NAS Field Decoder", "%s=%s", key, value)
+				logger.Debug(log.DEBUG_SERVICE, "WFC Field Decoder", "%s=%s", key, value)
 			}
 		}
 

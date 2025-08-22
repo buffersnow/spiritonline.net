@@ -4,7 +4,7 @@
 
 - router (incomplete) - core microservices for communication between other services
 - myspace (incomplete) - myspaceim messenger backend (based on gamespy)
-- wfcnas - "**n**intendo **a**uthentication **s**erver" for nintendo wfc
+- wfc - nas, dls1 and conntest servers for nintendo wifi connection
 - gsp - gamespy presence server (handles gpcm and gpsp)
 
 ## git stuff

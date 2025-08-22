@@ -3,8 +3,8 @@ package handlers
 import (
 	"fmt"
 
-	"buffersnow.com/spiritonline/internal/wfcnas/controllers"
-	"buffersnow.com/spiritonline/internal/wfcnas/protocol"
+	"buffersnow.com/spiritonline/internal/wfc/controllers"
+	"buffersnow.com/spiritonline/internal/wfc/protocol"
 
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/settings"

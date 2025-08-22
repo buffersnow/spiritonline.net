@@ -24,10 +24,10 @@
       "problemMatcher": []
     },
     {
-      "label": "build-wfcnas",
+      "label": "build-wfc",
       "type": "shell",
       "command": "scripts/run-service.sh",
-      "args": ["-d", "wfcnas"],
+      "args": ["-d", "wfc"],
       "group": {
         "kind": "build",
         "isDefault": true

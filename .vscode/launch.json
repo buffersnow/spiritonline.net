@@ -20,13 +20,13 @@
       "preLaunchTask": "build-myspace"
     },
     {
-      "name": "Debug wfcnas",
+      "name": "Debug wfc",
       "type": "go",
       "request": "launch",
       "mode": "exec",
-      "program": "${workspaceFolder}/bin/wfcnas.exe",
+      "program": "${workspaceFolder}/bin/wfc.exe",
       "args": ["-v", "--no-archive", "--devel"],
-      "preLaunchTask": "build-wfcnas"
+      "preLaunchTask": "build-wfc"
     }
   ]
 }

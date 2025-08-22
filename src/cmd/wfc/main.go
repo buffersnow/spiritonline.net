@@ -1,14 +1,13 @@
 package main
 
 import (
+	"buffersnow.com/spiritonline/internal/wfc/handlers"
 	"buffersnow.com/spiritonline/pkg/lifecycle"
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/security"
 	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/version"
 	"buffersnow.com/spiritonline/pkg/web"
-
-	"buffersnow.com/spiritonline/internal/wfcnas/handlers"
 
 	"github.com/luxploit/red"
 )
