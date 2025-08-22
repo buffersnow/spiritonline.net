@@ -3,6 +3,7 @@ package protocol
 import (
 	"fmt"
 	"net/url"
+	"strings"
 
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/security"
@@ -48,16 +49,20 @@ func FieldsDecoder() fiber.Handler {
 		c.Request().PostArgs().Reset() // clear args
 		for key, vals := range formVals {
 			for _, v := range vals {
-				decoded, err := sec.Encoding.DecodeB64_Wii([]byte(v))
-				if err != nil {
-					return web.BadRequestError(c, &web.Details{
-						Message: "invalid base64 for field",
-						Err:     fmt.Errorf("wfcnas: protocol: %w", err),
-					})
-
+				value := v
+				if !strings.HasPrefix(key, "_") { // https://github.com/WiiLink24/wfc-server/blob/main/nas/auth.go#L80
+					decoded, err := sec.Encoding.DecodeB64_Wii([]byte(v))
+					if err != nil {
+						return web.BadRequestError(c, &web.Details{
+							Message: "invalid base64 for field",
+							Err:     fmt.Errorf("wfcnas: protocol: %w", err),
+						})
+					}
+					value = string(decoded)
 				}
-				c.Request().PostArgs().Add(key, string(decoded))
-				logger.Debug(log.DEBUG_SERVICE, "NAS Field Decoder", "%s=%s", key, string(decoded))
+
+				c.Request().PostArgs().Add(key, value)
+				logger.Debug(log.DEBUG_SERVICE, "NAS Field Decoder", "%s=%s", key, value)
 			}
 		}
 
