@@ -2,6 +2,7 @@ package log
 
 import (
 	"archive/zip"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -18,8 +19,18 @@ func (l Logger) archiveLogJob() {
 }
 
 func (l *Logger) archiveLog() error {
+
+	// Check if the file exists
+	if _, err := os.Stat(l.fileName); err != nil {
+		if !errors.Is(err, os.ErrNotExist) {
+			return fmt.Errorf("log: %w", err)
+		}
+
+		l.Warning("Log Archiver", "No log file for archiving found!")
+		return nil
+	}
+
 	l.mu.Lock()
-	defer l.mu.Unlock()
 
 	logFileRWHandle, err := os.OpenFile(l.fileName, os.O_RDWR, 0644)
 	if err != nil {
@@ -27,8 +38,9 @@ func (l *Logger) archiveLog() error {
 	}
 	defer logFileRWHandle.Close()
 
+	date := time.Now().Local().Format("02-01-2006")
 	zipFile, err := os.OpenFile(
-		fmt.Sprintf("logs-%s.zip", time.Now().Local().Format("02-01-2006")),
+		fmt.Sprintf("logs-%s.zip", date),
 		os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644,
 	)
 
@@ -59,6 +71,9 @@ func (l *Logger) archiveLog() error {
 	if _, err := io.Copy(writer, logFileRWHandle); err != nil {
 		return fmt.Errorf("log: %w", err)
 	}
+
+	l.mu.Unlock()
+	l.Event("Log Archiver", "Archived logs for %s", date)
 
 	return nil
 }
