@@ -15,17 +15,20 @@ type Logger struct {
 	mu         *sync.Mutex
 	debug      bool
 	fileName   string
+	filePath   string
 	fileHandle *os.File
 	unwritten  []string
 }
 
-var instance = &Logger{fileName: "console.log", mu: &sync.Mutex{}}
+var instance = &Logger{mu: &sync.Mutex{}}
 
 func New(ver *version.BuildTag, opt *settings.Options) (*Logger, error) {
 	log := instance //& this is only a pointer for convinence
 
 	tasks := []func() error{}
 
+	log.fileName = fmt.Sprintf("%s.log", ver.GetService())
+	log.filePath = fmt.Sprintf("logs/%s.log", ver.GetService())
 	log.debug = opt.Development.EnableDebug
 
 	log.ToFile("SpiritOnline! Build Tag: %s", ver.GetFullTag())
@@ -33,6 +36,7 @@ func New(ver *version.BuildTag, opt *settings.Options) (*Logger, error) {
 	log.ToFile("CI by Build Slave: %s", ver.GetCISlave())
 	log.ToFile("Start Time: %v", time.Now())
 
+	tasks = append(tasks, log.createLogsFolder)
 	if opt.Runtime.LogArchival {
 		tasks = append(tasks, log.archiveLog)
 	} else {
@@ -63,5 +67,18 @@ func (l *Logger) openLogFile() error {
 		return fmt.Errorf("log: %w", err)
 	}
 	l.fileHandle = file
+	return nil
+}
+
+func (l *Logger) createLogsFolder() error {
+	_, err := os.Stat("logs")
+	if os.IsNotExist(err) {
+		err := os.Mkdir("logs", 0755)
+		if err != nil {
+			return fmt.Errorf("log: %w", err)
+		}
+	} else if err != nil {
+		return fmt.Errorf("log: %w", err)
+	}
 	return nil
 }

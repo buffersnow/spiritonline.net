@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -21,7 +22,7 @@ func (l Logger) archiveLogJob() {
 func (l *Logger) archiveLog() error {
 
 	// Check if the file exists
-	if _, err := os.Stat(l.fileName); err != nil {
+	if _, err := os.Stat(l.filePath); err != nil {
 		if !errors.Is(err, os.ErrNotExist) {
 			return fmt.Errorf("log: %w", err)
 		}
@@ -32,7 +33,7 @@ func (l *Logger) archiveLog() error {
 
 	l.mu.Lock()
 
-	logFileRWHandle, err := os.OpenFile(l.fileName, os.O_RDWR, 0644)
+	logFileRWHandle, err := os.OpenFile(l.filePath, os.O_RDWR, 0644)
 	if err != nil {
 		return fmt.Errorf("log: %w", err)
 	}
@@ -40,7 +41,7 @@ func (l *Logger) archiveLog() error {
 
 	date := time.Now().Local().Format("02-01-2006")
 	zipFile, err := os.OpenFile(
-		fmt.Sprintf("logs-%s.zip", date),
+		fmt.Sprintf("logs/logs-%s-%s.zip", filepath.Base(l.fileName), date),
 		os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644,
 	)
 
