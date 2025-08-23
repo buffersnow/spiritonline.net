@@ -33,9 +33,12 @@ func (h *HttpUtils) NewFiber() (outapp *fiber.App, outerr error) {
 
 	engine := handlebars.New("./public", ".hbs")
 	app := fiber.New(fiber.Config{
-		Views:                 engine,
-		ErrorHandler:          ErrorHandler,
-		DisableStartupMessage: true,
+		Views:                   engine,
+		ErrorHandler:            ErrorHandler,
+		DisableStartupMessage:   true,
+		EnableTrustedProxyCheck: true,
+		TrustedProxies:          []string{"localhost", "127.0.0.1"},
+		ProxyHeader:             "X-Forwarded-IP",
 	})
 
 	app.Use(rec.New())

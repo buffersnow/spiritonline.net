@@ -100,6 +100,13 @@ func InternalServerError(c *fiber.Ctx, details *Details) error {
 	return details
 }
 
+// 502 - Bad Gateway Error
+func BadGatewayError(c *fiber.Ctx, details *Details) error {
+	details.code = fiber.StatusBadGateway
+	c.Status(fiber.StatusBadGateway)
+	return details
+}
+
 func ErrorHandler(c *fiber.Ctx, inerr error) error {
 	logger, err := red.Locate[log.Logger]()
 	if err != nil {

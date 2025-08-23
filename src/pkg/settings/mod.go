@@ -36,6 +36,7 @@ type Options struct {
 	Service struct {
 		Ports    map[string]int  `env:"PORTS,required" help:"Service-specific protocol/http/misc ports"`
 		Features map[string]bool `env:"FEATURES,required" help:"Service-specific feature configuration list"`
+		Proxies  map[string]string `env:"PROXIES,required" help:"HTTP-only services specific reverse proxy list"`
 	} `envPrefix:"SERVICE_"`
 }
 
