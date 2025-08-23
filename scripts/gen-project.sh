@@ -8,7 +8,7 @@ set -e
 #   ./gen-project.sh userservice
 
 if [ $# -lt 1 ]; then
-  echo "Usage: $0 <service-name> <service-short-name>"
+  echo "Usage: $0 <service-name>"
   exit 1
 fi
 
