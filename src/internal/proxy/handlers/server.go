@@ -23,6 +23,10 @@ func ListenService(opt *settings.Options, log *log.Logger) (outerr error) {
 		}
 	}()
 
+	if len(opt.Service.Proxies) == 0 {
+		return fmt.Errorf("proxy: no targets were defined in env config")
+	}
+
 	upstreams := make(map[string]string, len(opt.Service.Proxies))
 	for target, host := range opt.Service.Proxies {
 		addr, err := protocol.EnsureScheme(host)
@@ -51,7 +55,6 @@ func ListenService(opt *settings.Options, log *log.Logger) (outerr error) {
 			})
 		}
 
-		// Standard forward headers.
 		c.Request().Header.Add("X-Forwarded-IP", c.IP())
 		c.Request().Header.Set("X-Forwarded-Host", host)
 		c.Request().Header.Set("X-Forwarded-Proto", "http")
