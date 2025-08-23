@@ -7,7 +7,7 @@ bin/**/*.*
 **/*.css.map
 node_modules/
 dist/
-**/console.log
+**/*.log
 **/*.zip
 src/web/app/app
 **/pnpm-lock.yaml
