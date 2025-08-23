@@ -21,7 +21,7 @@ func ListenConntest(web *web.HttpUtils, opt *settings.Options, logger *log.Logge
 	app.Use(protocol.XOrganization(), protocol.FieldsDecoder())
 
 	app.Get("/", controllers.Test)
-	app.Get("/nastest.jsp", controllers.Test) // WiiLink puts this here so god knows
+	app.Get("/nastest.jsp", controllers.Test) //? WiiLink puts this here so god knows
 
 	err = web.StartFiber(app, opt.Service.Ports["wfctest"])
 	if err != nil {

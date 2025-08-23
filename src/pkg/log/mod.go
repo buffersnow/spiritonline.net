@@ -22,7 +22,7 @@ type Logger struct {
 var instance = &Logger{fileName: "console.log", mu: &sync.Mutex{}}
 
 func New(ver *version.BuildTag, opt *settings.Options) (*Logger, error) {
-	log := instance // this is only a pointer for convinence
+	log := instance //& this is only a pointer for convinence
 
 	tasks := []func() error{}
 

@@ -12,7 +12,7 @@ func (l *Logger) processLog(colorCode string, logType string, prefix string, for
 	formatBuffer := fmt.Sprintf(format, a...)
 	finalBuffer := fmt.Sprintf("[%s] [%s] <%s> %s", time.Now().Local().Format("02/01/2006 15:04:05"), logType, prefix, formatBuffer)
 
-	// File Write
+	//& File Write
 	if l.fileHandle != nil {
 		fileBuffer := fmt.Sprintf("%s\n", finalBuffer)
 		l.fileHandle.WriteString(fileBuffer)
@@ -20,7 +20,7 @@ func (l *Logger) processLog(colorCode string, logType string, prefix string, for
 		l.unwritten = append(l.unwritten, (finalBuffer + "\n"))
 	}
 
-	{ // Console Write
+	{ //& Console Write
 		conBuffer := fmt.Sprintf("%s%s\033[0m", colorCode, finalBuffer)
 		fmt.Println(conBuffer)
 	}
@@ -79,12 +79,12 @@ func (l *Logger) Raw(colorCode, format string, a ...any) {
 
 	formatBuffer := fmt.Sprintf(format, a...)
 
-	{ // Console Write
+	{ //& Console Write
 		conBuffer := fmt.Sprintf("%s%s\033[0m", colorCode, formatBuffer)
 		fmt.Println(conBuffer)
 	}
 
-	// File Write
+	//& File Write
 	if l.fileHandle != nil {
 		fileBuffer := fmt.Sprintf("%s\n", formatBuffer)
 		l.fileHandle.WriteString(fileBuffer)
@@ -100,7 +100,7 @@ func (l *Logger) ToFile(format string, a ...any) {
 
 	formatBuffer := fmt.Sprintf(format, a...)
 
-	// File Write
+	//& File Write
 	if l.fileHandle != nil {
 		fileBuffer := fmt.Sprintf("%s\n", formatBuffer)
 		l.fileHandle.WriteString(fileBuffer)

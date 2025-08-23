@@ -168,7 +168,7 @@ func (o *Options) parseArgs(val reflect.Value) error {
 		}
 
 		if len(envName) != 0 {
-			continue // this is an env variable
+			continue //& this is an env variable
 		}
 
 		fullFlag, shortFlag := getArgs(argTag)

@@ -33,6 +33,7 @@ type SecEncoding struct {
 func New(bld *version.BuildTag, opt *settings.Options) (*Security, error) {
 	sec := &Security{}
 
+	//@ Unused for now
 	//certsPath := fmt.Sprintf("%s/%s", opt.Runtime.CertsFolder, bld.GetService())
 	tasks := []func() error{
 		//func() error { return sec.readPublicKey(certsPath) },

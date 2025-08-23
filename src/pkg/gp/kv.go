@@ -39,7 +39,7 @@ func SerializeKVDict(kvI iter.Seq[GamespyKV]) string {
 func DeserializeKVBatch(data string) iter.Seq[GamespyKV] {
 
 	splits := slices.DeleteFunc(strings.Split(data, "\\"), func(e string) bool {
-		return e == "" // delete empty strings
+		return e == "" //& delete empty strings
 	})
 
 	return (func(yield func(GamespyKV) bool) {

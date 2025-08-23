@@ -20,6 +20,6 @@ func (SecEncryption) RC4(pwd []byte, data []byte) (outdata []byte, outerr error)
 		}
 	}()
 
-	c.XORKeyStream(crypted, data) // why the fuck does this panic? terrible design
+	c.XORKeyStream(crypted, data) //~ why the fuck does this panic? terrible design
 	return crypted, nil
 }

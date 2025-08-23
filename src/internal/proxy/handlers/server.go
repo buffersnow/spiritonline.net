@@ -15,8 +15,9 @@ import (
 
 func ListenService(opt *settings.Options, log *log.Logger) (outerr error) {
 
-	// Fiber doesn't always return an error so i'd rather have it catch the panic here,
-	// and since we panic on error anyways atleast we know where it crashed (roughly)
+	//& Fiber doesn't always return an error so i'd rather have it catch the panic here,
+	//& and since we panic on error anyways atleast we know where it crashed (roughly)
+
 	defer func() {
 		if r := recover(); r != nil {
 			outerr = fmt.Errorf("proxy: fiber: %v", r)

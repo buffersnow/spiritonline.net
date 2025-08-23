@@ -14,7 +14,7 @@ func (s *Security) initb64wii() (outerr error) {
 		}
 	}()
 
-	// https://github.com/Retro-Rewind-Team/wfc-server/blob/main/common/encoding.go#L17
+	//$ https://github.com/Retro-Rewind-Team/wfc-server/blob/main/common/encoding.go#L17
 	s.Encoding.b64wii = base64.NewEncoding("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.-").WithPadding('*')
 	return nil
 }
@@ -26,7 +26,7 @@ func (s *Security) initb32wii() (outerr error) {
 		}
 	}()
 
-	// https://github.com/Retro-Rewind-Team/wfc-server/blob/main/common/encoding.go#L20
+	//$ https://github.com/Retro-Rewind-Team/wfc-server/blob/main/common/encoding.go#L20
 	s.Encoding.b32wii = base32.NewEncoding("0123456789abcdefghijklmnopqrstuv")
 	return nil
 }

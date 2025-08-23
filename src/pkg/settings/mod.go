@@ -5,10 +5,12 @@ import (
 	"buffersnow.com/spiritonline/pkg/version"
 )
 
+//& Runtime.LogArchive gets inverted after parsing
+
 type Options struct {
 	Runtime struct {
 		DBMigration bool   `arg:"-m,--migrate-db" help:"Apply SQL migrations to database (run once!)"`
-		LogArchival bool   `arg:"--no-archive" help:"Disables logfile daily archive and compressions"` // gets inverted after
+		LogArchival bool   `arg:"--no-archive" help:"Disables logfile daily archive and compressions"`
 		CertsFolder string `arg:"--certs-folder" default:"certs" help:"ECDSA public and private key directory"`
 	}
 
@@ -44,7 +46,7 @@ func New(ver *version.BuildTag) (*Options, error) {
 	options := &Options{}
 
 	tasks := []func() error{
-		// needs to be loaded first to avoid overriding flags
+		//! needs to be loaded first to avoid overriding flags
 		func() error { return options.loadEnv() },
 		func() error { return options.loadArgs(ver) },
 	}

@@ -22,8 +22,8 @@ func New() (*HttpUtils, error) {
 
 func (h *HttpUtils) NewFiber() (outapp *fiber.App, outerr error) {
 
-	// Fiber doesn't always return an error so i'd rather have it catch the panic here,
-	// and since we panic on error anyways atleast we know where it crashed (roughly)
+	//& Fiber doesn't always return an error so i'd rather have it catch the panic here,
+	//& and since we panic on error anyways atleast we know where it crashed (roughly)
 	defer func() {
 		if r := recover(); r != nil {
 			outapp = nil
@@ -55,8 +55,8 @@ func (h HttpUtils) StartFiber(app *fiber.App, port int) (outerr error) {
 		return fmt.Errorf("web: %w", err)
 	}
 
-	// Fiber doesn't always return an error so i'd rather have it catch the panic here,
-	// and since we panic on error anyways atleast we know where it crashed (roughly)
+	//& Fiber doesn't always return an error so i'd rather have it catch the panic here,
+	//& and since we panic on error anyways atleast we know where it crashed (roughly)
 	defer func() {
 		if r := recover(); r != nil {
 			outerr = fmt.Errorf("web: fiber: %v", r)

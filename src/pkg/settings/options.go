@@ -54,10 +54,10 @@ func (o *Options) loadArgs(ver *version.BuildTag) error {
 func (o *Options) loadEnv() error {
 
 	if err := godotenv.Load(); err != nil {
-		return fmt.Errorf("settings: env: os: %w", err) // the only error thrown is from os.Open in godotenv.go L#207
+		return fmt.Errorf("settings: env: os: %w", err) //% the only error thrown is from os.Open in godotenv.go L#207
 	}
 
-	// cleanup service_ports and service_features
+	//& cleanup service_ports and service_features
 	tasks := []func() error{
 		func() error { return util.CleanEnv("SERVICE_PORTS") },
 		func() error { return util.CleanEnv("SERVICE_FEATURES") },

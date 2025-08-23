@@ -135,7 +135,7 @@ func ErrorHandler(c *fiber.Ctx, inerr error) error {
 		return c.Status(be.code).JSON(be)
 	}
 
-	// Fallback for unexpected errors
+	//& Fallback for unexpected errors
 	logger.Error("HTTP Error Handler", "<IP: %s> Fallback! Error: %s", c.IP(), inerr.Error())
 	return c.Status(fiber.StatusTeapot).JSON(fiber.Map{
 		"message": "how did we get here?",

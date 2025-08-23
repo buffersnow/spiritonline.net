@@ -26,7 +26,7 @@ func Batch(funcs []func() error) error {
 }
 
 func CleanEnv(env string) error {
-	// cleanup newlines and tabs from environments variables
+	//& cleanup newlines and tabs from environments variables
 	re, err := regexp.Compile(`\s+`)
 	if err != nil {
 		return fmt.Errorf("regexp: %w", err)
@@ -50,3 +50,5 @@ func CleanEnv(env string) error {
 //& Explanations and links to our resources
 //$ Links to external stuff and also misc highlights
 //§ Deprecated stuff, only there because yeah forgot
+
+//% GoDoc comments are excluded from being colored!

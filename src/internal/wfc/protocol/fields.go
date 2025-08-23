@@ -46,11 +46,11 @@ func FieldsDecoder() fiber.Handler {
 			})
 		}
 
-		c.Request().PostArgs().Reset() // clear args
+		c.Request().PostArgs().Reset() //& clear args
 		for key, vals := range formVals {
 			for _, v := range vals {
 				value := v
-				if !strings.HasPrefix(key, "_") { // https://github.com/WiiLink24/wfc-server/blob/main/nas/auth.go#L80
+				if !strings.HasPrefix(key, "_") { //$ https://github.com/WiiLink24/wfc-server/blob/main/nas/auth.go#L80
 					decoded, err := sec.Encoding.DecodeB64_Wii([]byte(v))
 					if err != nil {
 						return web.BadRequestError(c, &web.Details{

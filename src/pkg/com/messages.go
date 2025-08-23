@@ -2,12 +2,12 @@ package com
 
 import "github.com/vmihailenco/msgpack/v5"
 
-// RegionID Tag Format:
-// us-east-test-2
-// + Country Code
-//   + Cardinal Region (+ Central & Global)
-//     + Service Name
-//       + Registration Index
+//% RegionID Tag Format:
+//% us-east-test-2
+//% + Country Code
+//%   + Cardinal Region (+ Central & Global)
+//%     + Service Name
+//%       + Registration Index
 
 type MessageHeader struct {
 	Version     int    `msgpack:"version"`

@@ -2,11 +2,8 @@ package version
 
 import "fmt"
 
-/*
-	This file only exists for ldflags version settings in run-service.sh
-*/
-
-// Variable available to LDFlags during compliation. DO NOT TOUCH!
+//& This file only exists for ldflags version settings in run-service.sh
+//! Variable available to LDFlags during compliation. DO NOT TOUCH!
 var (
 	DoNotTouch_Build_Service             string
 	DoNotTouch_Build_Version_Major       string
