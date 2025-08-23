@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  gsp:
+    build:
+      context: .
+      args:
+        SERVICE_NAME: gsp
+    container_name: gsp
+    ports:
+      - "29900:29900"
+      - "29901:29901"
+  myspace:
+    build:
+      context: .
+      args:
+        SERVICE_NAME: myspace
+    container_name: myspace
+    ports:
+      - "1863:1863"
+  proxy:
+    build:
+      context: .
+      args:
+        SERVICE_NAME: proxy
+    container_name: proxy
+    ports:
+      - "80:80"
+  router:
+    build:
+      context: .
+      args:
+        SERVICE_NAME: router
+    container_name: router
+    ports:
+      - "1390:1390"
+  wfc:
+    build:
+      context: .
+      args:
+        SERVICE_NAME: wfc
+    ports:
+      - "5600:5600"
+      - "5601:5601"
+      - "5602:5602"
+    container_name: wfc
+    volumes:
+      - ./public:/app/public
