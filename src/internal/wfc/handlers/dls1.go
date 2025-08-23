@@ -20,8 +20,7 @@ func ListenDls1(web *web.HttpUtils, opt *settings.Options, logger *log.Logger) e
 
 	app.Use(protocol.XOrganization(), protocol.FieldsDecoder())
 
-	app.Get("/", controllers.Test)
-	app.Get("/nastest.jsp", controllers.Test) // WiiLink puts this here so god knows
+	app.Get("/download", controllers.Download)
 
 	err = web.StartFiber(app, opt.Service.Ports["wfcdls1"])
 	if err != nil {
