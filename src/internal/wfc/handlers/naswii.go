@@ -23,7 +23,7 @@ func ListenNASWii(web *web.HttpUtils, opt *settings.Options, logger *log.Logger)
 	app.Post("/ac", controllers.AccountWii)
 	app.Post("/pr", controllers.Profanity)
 
-	err = web.StartFiber(app, opt.Service.Ports["wfcnas-wii"])
+	err = web.StartFiber(app, opt.Service.Ports["wfcwii"])
 	if err != nil {
 		return fmt.Errorf("wfc: nas-wii: %w", err)
 	}
