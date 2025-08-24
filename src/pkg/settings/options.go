@@ -21,9 +21,9 @@ func (o *Options) loadArgs(ver *version.BuildTag) error {
 
 	fs = pflag.NewFlagSet("", pflag.ContinueOnError)
 	fs.Usage = func() {
-		fmt.Printf("Usage: ./%s <... arguments>\n", ver.GetService())
+		fmt.Printf("Usage: ./%s{.exe/.lxb} <... arguments>\n", ver.GetService())
 		o.helpText(reflect.ValueOf(o), "", "")
-		fmt.Printf("\nThis help menu can be brought up again by running \"./%s help\"\n", ver.GetService())
+		fmt.Printf("\nThis help menu can be brought up again by running \"./%s{.exe/.lxb} help\"\n", ver.GetService())
 		os.Exit(0)
 	}
 
@@ -54,7 +54,8 @@ func (o *Options) loadArgs(ver *version.BuildTag) error {
 func (o *Options) loadEnv() error {
 
 	if err := godotenv.Load(); err != nil {
-		return fmt.Errorf("settings: env: os: %w", err) //% the only error thrown is from os.Open in godotenv.go L#207
+		//% the only error thrown is from os.Open in godotenv.go L#207
+		return fmt.Errorf("settings: env: os: %w", err)
 	}
 
 	//& cleanup service_ports and service_features
@@ -65,7 +66,7 @@ func (o *Options) loadEnv() error {
 	}
 
 	if err := util.Batch(tasks); err != nil {
-		return fmt.Errorf("settings: env: %w", err)
+		return fmt.Errorf("settings: util: %w", err)
 	}
 
 	var cfg Options

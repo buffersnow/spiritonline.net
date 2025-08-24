@@ -9,6 +9,8 @@ import (
 var longestArg int
 var longestHelp int
 
+//@ TODO: this could probably do with a re-write cause its fucking ass dawg
+
 func getArgs(args string) (long, short string) {
 	argParts := strings.Split(args, ",")
 	argNameA, argNameB := argParts[0], ""
@@ -39,7 +41,7 @@ func getArgs(args string) (long, short string) {
 
 func (o *Options) helpText(val reflect.Value, envprefix, section string) {
 
-	if val.Kind() == reflect.Ptr {
+	if val.Kind() == reflect.Pointer {
 		val = val.Elem()
 	}
 	typ := val.Type()
@@ -124,7 +126,7 @@ func (o *Options) helpText(val reflect.Value, envprefix, section string) {
 
 func (o *Options) parseArgs(val reflect.Value) error {
 
-	if val.Kind() == reflect.Ptr {
+	if val.Kind() == reflect.Pointer {
 		val = val.Elem()
 	}
 	typ := val.Type()

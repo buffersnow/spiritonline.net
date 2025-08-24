@@ -17,4 +17,5 @@ src/helper/project-gen.*
 **/vendor/
 /.env.*
 /.env
+!/.env.example
 logs/

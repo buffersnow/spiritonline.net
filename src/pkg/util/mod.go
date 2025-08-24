@@ -41,7 +41,7 @@ func CleanEnv(env string) error {
 	return nil
 }
 
-/// Comment Colors
+/// Comment Colors - Please actually use these
 //! Urgent, Important and perchance rants
 //% Notes, Infos, Useful stuff
 //@ TODOs, Stuff to remember for later
