@@ -11,21 +11,21 @@ import (
 	"buffersnow.com/spiritonline/pkg/web"
 )
 
-func ListenNAS(web *web.HttpUtils, opt *settings.Options, logger *log.Logger) error {
+func ListenNASDS(web *web.HttpUtils, opt *settings.Options, logger *log.Logger) error {
 
 	app, err := web.NewFiber()
 	if err != nil {
-		return fmt.Errorf("wfc: nas: %w", err)
+		return fmt.Errorf("wfc: nas-ds: %w", err)
 	}
 
 	app.Use(protocol.XOrganization(), protocol.FieldsDecoder())
 
-	app.Post("/ac", controllers.Account)
+	app.Post("/ac", controllers.AccountDS)
 	app.Post("/pr", controllers.Profanity)
 
-	err = web.StartFiber(app, opt.Service.Ports["wfcnas"])
+	err = web.StartFiber(app, opt.Service.Ports["wfcnas-ds"])
 	if err != nil {
-		return fmt.Errorf("wfc: nas: %w", err)
+		return fmt.Errorf("wfc: nas-ds: %w", err)
 	}
 
 	return nil
