@@ -5,12 +5,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-//@ TODO: Test with an actual DS (luxploit)
-//@ TODO: Actually implement, return 20107 atm (luxploit)
+//$ https://github.com/insanekartwii/wfc-server/blob/main/nas/auth.go#L179
 
-func AccountDS(c *fiber.Ctx) error {
+func AC_AccountCreate(c *fiber.Ctx) error {
 	return protocol.NASReply(c, fiber.Map{
 		"retry":    0,
-		"returncd": 107,
+		"datetime": protocol.GetDateTime(),
+		"returncd": 002,
 	})
 }
