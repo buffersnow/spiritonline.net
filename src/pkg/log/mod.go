@@ -62,7 +62,7 @@ func Global() *Logger {
 }
 
 func (l *Logger) openLogFile() error {
-	file, err := os.OpenFile(l.fileName, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+	file, err := os.OpenFile(l.filePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return fmt.Errorf("log: %w", err)
 	}
