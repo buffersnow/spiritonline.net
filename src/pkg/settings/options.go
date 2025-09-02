@@ -44,6 +44,11 @@ func (o *Options) loadArgs(ver *version.BuildTag) error {
 
 	o.Runtime.LogArchival = !o.Runtime.LogArchival
 
+	if o.DeploymentOverride.EnableOverride {
+		o.Spirit.AuthorizationToken = o.DeploymentOverride.AuthorizationToken
+		o.Spirit.ServiceTag = o.DeploymentOverride.ServiceTag
+	}
+
 	if len(o.Service.Ports) == 0 {
 		return errors.New("settings: no ports were defined in the configuration")
 	}

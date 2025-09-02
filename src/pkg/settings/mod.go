@@ -20,6 +20,12 @@ type Options struct {
 		EnableDebug bool `arg:"-v,--debug" help:"Show all debug/developer log prints"`
 	}
 
+	DeploymentOverride struct {
+		EnableOverride     bool   `arg:"--override" help:"Enable deployment override for BufferSnow internal deployment scripts"`
+		AuthorizationToken string `arg:"-t,--auth-token" default:"randomgarbage" help:"Spirit network auth token override"`
+		ServiceTag         string `arg:"-i,--service-tag" default:"ww-global-unknown-1" help:"Spirit service service-tag/id override"`
+	} `section:"Deployment Override"`
+
 	MySQL struct {
 		Host     string `env:"HOST,required" help:"MySQL database server IP/Hostname"`
 		Port     int    `env:"PORT" envDefault:"3306" help:"MySQL database server port"`
