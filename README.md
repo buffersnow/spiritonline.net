@@ -1,13 +1,5 @@
 # SpiritOnline
 
-## available services
-
-- router (incomplete) - core microservices for communication between other services
-- myspace (incomplete) - myspaceim messenger backend (based on gamespy)
-- wfc - nas, dls1 and conntest servers for nintendo wifi connection
-- gsp - gamespy presence server (handles gpcm and gpsp)
-- proxy - http/1.1 reverse proxy for http services
-
 ## git stuff
 
 use git fetch, then decide if you should rebase or merge --ff-only or do a real merge (usually only in cases of merging to master)
