@@ -25,6 +25,12 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 	}
 
 	urlVals := url.Values{}
+	{ // these values are always present in responses (or should be!)
+		urlVals.Set("retry", "0")
+		urlVals.Set("datetime", GetDateTime())
+		urlVals.Set("locator", "gamespy.com")
+	}
+
 	for k, v := range params {
 
 		str, err := cast.ToStringE(v)

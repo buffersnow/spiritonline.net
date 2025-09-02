@@ -9,8 +9,6 @@ import (
 
 func AC_AccountCreate(c *fiber.Ctx) error {
 	return protocol.NASReply(c, fiber.Map{
-		"retry":    0,
-		"datetime": protocol.GetDateTime(),
-		"returncd": 002,
+		"returncd": protocol.ReCD_AccountCreate,
 	})
 }

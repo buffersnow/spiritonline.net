@@ -10,7 +10,6 @@ import (
 
 func AccountDS(c *fiber.Ctx) error {
 	return protocol.NASReply(c, fiber.Map{
-		"retry":    0,
-		"returncd": 107,
+		"returncd": protocol.ReCD_UnsupportedGame,
 	})
 }
