@@ -36,7 +36,7 @@ func svcDelegate(conn *net.TcpConnection, logger *log.Logger) {
 		Connection: conn,
 		Client: protocol.MySpaceClientContext{
 			Nonce:        util.RandomString(0x40),
-			SessionKey:   rand.IntN(0xFFFFF),
+			SessionKey:   rand.UintN(0xFFFFF),
 			IgnoreTicket: true,
 		},
 		Log: logger.FactoryWithPostfix("MySpace",

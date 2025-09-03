@@ -17,8 +17,8 @@ type MySpaceContext struct {
 
 type MySpaceClientContext struct {
 	Nonce        string
-	SessionKey   int
-	BuildNumber  int
+	SessionKey   uint
+	BuildNumber  uint
 	IgnoreTicket bool
 }
 
