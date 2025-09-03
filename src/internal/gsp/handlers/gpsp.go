@@ -41,10 +41,10 @@ func gpspDelegate(conn *net.TcpConnection, logger *log.Logger) {
 		),
 	}
 
-	ctx.Log.Info("Client", "Client awaiting authentication!")
+	ctx.Log.Event("Client", "Client awaiting authentication!")
 
 	defer func() {
-		ctx.Log.Info("Client", "Client exited!")
+		ctx.Log.Event("Client", "Client exited!")
 		ctx.Connection.Close()
 	}()
 

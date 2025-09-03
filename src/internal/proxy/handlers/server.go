@@ -76,7 +76,7 @@ func ListenService(opt *settings.Options, log *log.Logger) (outerr error) {
 			return nil
 		}
 
-		log.Info("HTTP Listener", "Listening on 0.0.0.0:%d", opt.Service.Ports["proxy"])
+		log.Action("HTTP Listener", "Listening on 0.0.0.0:%d", opt.Service.Ports["proxy"])
 		return nil
 	})
 

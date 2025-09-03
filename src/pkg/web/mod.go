@@ -78,7 +78,7 @@ func (h HttpUtils) StartFiber(app *fiber.App, port int) (outerr error) {
 			return nil
 		}
 
-		logger.Info("HTTP Listener", "Listening on 0.0.0.0:%d", port)
+		logger.Action("HTTP Listener", "Listening on 0.0.0.0:%d", port)
 		return nil
 	})
 

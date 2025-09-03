@@ -38,7 +38,7 @@ func (n NetUtils) CreateTcpListener(port int) (TcpServer, error) {
 		return TcpServer{}, fmt.Errorf("net: %w", err)
 	}
 
-	logger.Info("TCP Listener", "Listening on 0.0.0.0:%d", port)
+	logger.Action("TCP Listener", "Listening on 0.0.0.0:%d", port)
 	return TcpServer{
 		conn: tcpListener,
 		log:  logger.Factory("TCP"),
