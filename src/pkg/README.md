@@ -6,6 +6,7 @@ _NOTE: tbi stands for To Be Implemented!_
 
 - [**log**](./log): Simple injectable logger, supports file, console and 24 hour regular archival
 - [**settings**](./settings): Comprehensive configuration package via environment variables and command-line arguments
+- [**db**](./db): Essential database injectable module, expects to run atop of MySQL 8
 
 ## Network
 
