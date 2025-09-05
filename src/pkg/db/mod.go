@@ -40,6 +40,7 @@ func New(log *log.Logger, opt *settings.Options) (*SQL, error) {
 
 	var version string
 	if err := engine.Raw("select version()").Scan(&version).Error; err != nil {
+		//& this really is just because its unclear otherwise
 		log.Error("Database", "Failed to query MySQL version")
 		return nil, fmt.Errorf("db: gorm: %w", err)
 	}
@@ -53,12 +54,16 @@ func New(log *log.Logger, opt *settings.Options) (*SQL, error) {
 	return sql, nil
 }
 
-func (s *SQL) MigrateObject(objects ...any) error {
+func (s *SQL) MigrateObject(service string, objects ...any) error {
 
 	if !s.allowMigration {
-		s.f.Info("Migration", "Migrations will not be run")
+		s.f.Info("Migration", "%s migrations will not be run", service)
 		return nil
 	}
+
+	//& this has the double effect of 1. validate that objects are pointers
+	//& which is expected by gorm.DB.AutoMigrate, but also being able to log
+	//& which tables we are migrating, which looks nice in the log (luxploit)
 
 	names := []string{}
 	for _, obj := range objects {
@@ -77,7 +82,7 @@ func (s *SQL) MigrateObject(objects ...any) error {
 		names = append(names, t.Name())
 	}
 
-	s.f.Action("Migration", "Running migrations for tables: %s", strings.Join(names, ", "))
+	s.f.Action("Migration", "Running %s migrations for objects: %s", service, strings.Join(names, ", "))
 	err := s.e.AutoMigrate(objects)
 
 	if err != nil {
