@@ -10,22 +10,22 @@ type GamespyData struct {
 	data string
 }
 
-func (conv GamespyData) DataBlock() []byte {
-	return []byte(conv.data)
+func (g GamespyData) DataBlock() []byte {
+	return []byte(g.data)
 }
 
-func (conv GamespyData) String() string {
-	return conv.data
+func (g GamespyData) String() string {
+	return g.data
 }
 
-func (conv GamespyData) Integer() (int, error) {
-	return strconv.Atoi(conv.data)
+func (g GamespyData) Integer() (int, error) {
+	return strconv.Atoi(g.data)
 }
 
-func (conv GamespyData) Dictionary() iter.Seq[GamespyKV] {
-	return DeserializeKVDict(conv.data)
+func (g GamespyData) Dictionary() iter.Seq[GameSpyKV] {
+	return PickleDictionary(g.data)
 }
 
-func (conv GamespyData) Base64() string {
-	return base64.StdEncoding.EncodeToString([]byte(conv.data))
+func (g GamespyData) Base64() string {
+	return base64.StdEncoding.EncodeToString([]byte(g.data))
 }

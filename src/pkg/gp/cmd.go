@@ -5,14 +5,14 @@ import "iter"
 type GamespyCommandInfo struct {
 	Command    string
 	SubCommand int
-	Data       iter.Seq[GamespyKV]
+	Data       iter.Seq[GameSpyKV]
 }
 
-func (cmdInfo GamespyCommandInfo) Find(key string) GamespyKV {
-	return FindInternal(key, cmdInfo.Data)
+func (cmdInfo GamespyCommandInfo) Find(key string) GameSpyKV {
+	return FindFromBundle(key, cmdInfo.Data)
 }
 
-func FindInternal(key string, kvs iter.Seq[GamespyKV]) GamespyKV {
+func FindFromBundle(key string, kvs iter.Seq[GameSpyKV]) GameSpyKV {
 
 	for kv := range kvs {
 		if kv.key != key {
@@ -22,5 +22,5 @@ func FindInternal(key string, kvs iter.Seq[GamespyKV]) GamespyKV {
 		return kv
 	}
 
-	return GamespyKV{}
+	return GameSpyKV{}
 }

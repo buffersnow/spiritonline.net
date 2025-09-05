@@ -31,9 +31,9 @@ type MySpaceCallbackInfo struct {
 	CommandFamily  int
 	CommandSubcode int
 	RequestId      int
-	Body           iter.Seq[gp.GamespyKV]
+	Body           iter.Seq[gp.GameSpyKV]
 }
 
-func (cbInfo MySpaceCallbackInfo) Find(key string) gp.GamespyKV {
-	return gp.FindInternal(key, cbInfo.Body)
+func (cbInfo MySpaceCallbackInfo) Find(key string) gp.GameSpyKV {
+	return gp.FindFromBundle(key, cbInfo.Body)
 }
