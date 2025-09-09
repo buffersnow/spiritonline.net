@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"os"
 	"regexp"
+	"strings"
 )
 
 func RandomString(length int) string {
@@ -39,6 +40,34 @@ func CleanEnv(env string) error {
 	}
 
 	return nil
+}
+
+// Replaces '?' in the query with the provided args !ONLY FOR LOGGING!
+func FormatSQL(query string, args ...any) string {
+	var b strings.Builder
+	argIndex := 0
+	for i := 0; i < len(query); i++ {
+		if query[i] == '?' && argIndex < len(args) {
+			// Write the argument in a quoted form
+			b.WriteString(quoteArg(args[argIndex]))
+			argIndex++
+		} else {
+			b.WriteByte(query[i])
+		}
+	}
+	return b.String()
+}
+func quoteArg(arg any) string {
+	switch v := arg.(type) {
+	case string:
+		return fmt.Sprintf("'%s'", strings.ReplaceAll(v, "'", "''"))
+	case []byte:
+		return fmt.Sprintf("'%x'", v)
+	case nil:
+		return "NULL"
+	default:
+		return fmt.Sprintf("%v", v)
+	}
 }
 
 /// Comment Colors - Please actually use these
