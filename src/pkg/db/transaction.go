@@ -155,9 +155,9 @@ func (s *SQLTransaction) Get(dest any, sb squirrel.SelectBuilder) error {
 	}
 
 	if err != nil {
-		s.f.Trace(log.DEBUG_DATABASE, "Get", "<Time: %s> <Rows: %d> %s", elapsed, rows, util.FormatSQL(query, args))
-	} else {
 		s.f.Error("Get", "<Time: %s> <Rows: None> %v (%s)", elapsed, err, util.FormatSQL(query, args))
+	} else {
+		s.f.Trace(log.DEBUG_DATABASE, "Get", "<Time: %s> <Rows: %d> %s", elapsed, rows, util.FormatSQL(query, args))
 	}
 
 	return err
@@ -173,12 +173,12 @@ func (s *SQLTransaction) Select(dest any, sb squirrel.SelectBuilder) error {
 
 	err = s.e.SelectContext(s.c, dest, query, args...)
 	elapsed := time.Since(start)
-	rows := int64(1)
+	rows := util.CountSQLRows(dest)
 	if err != nil {
 		rows = 0
-		s.f.Trace(log.DEBUG_DATABASE, "Select", "<Time: %s> <Rows: %d> %s", elapsed, rows, util.FormatSQL(query, args))
-	} else {
 		s.f.Error("Select", "<Time: %s> <Rows: None> %v (%s)", elapsed, err, util.FormatSQL(query, args))
+	} else {
+		s.f.Trace(log.DEBUG_DATABASE, "Select", "<Time: %s> <Rows: %d> %s", elapsed, rows, util.FormatSQL(query, args))
 	}
 
 	return err

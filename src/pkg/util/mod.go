@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"reflect"
 	"regexp"
 	"strings"
 )
@@ -67,6 +68,23 @@ func quoteArg(arg any) string {
 		return "NULL"
 	default:
 		return fmt.Sprintf("%v", v)
+	}
+}
+
+func CountSQLRows(dest any) int64 {
+	if dest == nil {
+		return 0
+	}
+	rv := reflect.ValueOf(dest)
+	if rv.Kind() == reflect.Ptr {
+		rv = rv.Elem()
+	}
+	switch rv.Kind() {
+	case reflect.Slice:
+		return int64(rv.Len())
+	default:
+		// struct, map, primitive, etc. — assume at most 1 row
+		return 1
 	}
 }
 
