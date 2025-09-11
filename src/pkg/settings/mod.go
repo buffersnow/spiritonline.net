@@ -9,7 +9,6 @@ import (
 
 type Options struct {
 	Runtime struct {
-		DBMigration bool   `arg:"-m,--migrate-db" help:"Apply SQL migrations to database (run once!)"`
 		LogArchival bool   `arg:"--no-archive" help:"Disables logfile daily archive and compressions"`
 		CertsFolder string `arg:"--certs-folder" default:"certs" help:"ECDSA public and private key directory"`
 	}
