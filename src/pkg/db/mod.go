@@ -36,6 +36,9 @@ func New(log *log.Logger, opt *settings.Options) (*SQL, error) {
 		return nil, fmt.Errorf("db: sqlx: %w", err)
 	}
 
+	sql.e = engine
+	sql.f = log.Factory("SqlX")
+
 	var version string
 	if err := sql.Get(&version, squirrel.Select("version()")); err != nil {
 		//& this really is just because its unclear otherwise
@@ -44,9 +47,6 @@ func New(log *log.Logger, opt *settings.Options) (*SQL, error) {
 	}
 
 	log.Info("Database", "Connected to \"MySQL Server v%s\"", version)
-
-	sql.e = engine
-	sql.f = log.Factory("SqlX")
 
 	return sql, nil
 }

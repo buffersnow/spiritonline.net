@@ -100,7 +100,7 @@ func (s *SQL) Get(dest any, sb squirrel.SelectBuilder) error {
 
 	err = s.e.Get(dest, query, args...)
 	elapsed := time.Since(start)
-	rows := int64(1)
+	rows := util.CountSQLRows(dest)
 	if err == sql.ErrNoRows {
 		rows = 0
 	}
