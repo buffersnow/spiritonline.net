@@ -81,7 +81,7 @@ func New() (*BuildTag, error) {
 		},
 	}
 
-	buffer := "- Welcome to spiritonline.net -> " + bi.GetService() + " v" + bi.GetVersion() + "\n"
+	buffer := "- Welcome to spiritonline.net -> bFXServer/" + bi.GetService() + " v" + bi.GetVersion() + "\n"
 	buffer += "Build Tag: " + bi.GetPartialTag()
 	fmt.Printf("\033[38;5;61m%s\033[0m\n", buffer)
 

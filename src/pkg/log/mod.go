@@ -31,6 +31,7 @@ func New(ver *version.BuildTag, opt *settings.Options) (*Logger, error) {
 	log.filePath = fmt.Sprintf("logs/%s.log", ver.GetService())
 	log.debug = opt.Development.EnableDebug
 
+	log.ToFile("bFXServer - Start Up")
 	log.ToFile("SpiritOnline! Build Tag: %s", ver.GetFullTag())
 	log.ToFile("Runtime Options: %+v", opt.Runtime)
 	log.ToFile("CI by Build Slave: %s", ver.GetCISlave())
