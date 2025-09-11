@@ -19,3 +19,7 @@ src/helper/project-gen.*
 /.env
 !/.env.example
 logs/
+sql/*.user.toml
+sql/*.artifact
+sql/report.html
+sql/report.json

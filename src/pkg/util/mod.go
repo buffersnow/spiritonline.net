@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"reflect"
 	"regexp"
+	"strings"
 )
 
 func RandomString(length int) string {
@@ -39,6 +41,51 @@ func CleanEnv(env string) error {
 	}
 
 	return nil
+}
+
+// Replaces '?' in the query with the provided args !ONLY FOR LOGGING!
+func FormatSQL(query string, args ...any) string {
+	var b strings.Builder
+	argIndex := 0
+	for i := 0; i < len(query); i++ {
+		if query[i] == '?' && argIndex < len(args) {
+			// Write the argument in a quoted form
+			b.WriteString(quoteArg(args[argIndex]))
+			argIndex++
+		} else {
+			b.WriteByte(query[i])
+		}
+	}
+	return b.String()
+}
+func quoteArg(arg any) string {
+	switch v := arg.(type) {
+	case string:
+		return fmt.Sprintf("'%s'", strings.ReplaceAll(v, "'", "''"))
+	case []byte:
+		return fmt.Sprintf("'%x'", v)
+	case nil:
+		return "NULL"
+	default:
+		return fmt.Sprintf("%v", v)
+	}
+}
+
+func CountSQLRows(dest any) int64 {
+	if dest == nil {
+		return 0
+	}
+	rv := reflect.ValueOf(dest)
+	if rv.Kind() == reflect.Ptr {
+		rv = rv.Elem()
+	}
+	switch rv.Kind() {
+	case reflect.Slice:
+		return int64(rv.Len())
+	default:
+		// struct, map, primitive, etc. — assume at most 1 row
+		return 1
+	}
 }
 
 /// Comment Colors - Please actually use these

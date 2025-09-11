@@ -1,0 +1,59 @@
+Project "spiritonline" {
+    database_type: "mysql"
+}
+
+Table "accounts" {
+  "user_id" bigint [pk, increment, not null]
+  "screenname" varchar(64) [not null]
+  "mail" varchar(128) [not null]
+  "flags" bigint [not null, default: 0]
+  "last_updated_on" datetime(3) [not null]
+
+  Indexes {
+    screenname [name: "idx_accounts_screenname"]
+    mail [name: "idx_accounts_mail"]
+  }
+}
+
+Table "users" {
+    "user_id" bigint [pk, not null, ref: > accounts.user_id]
+    "avatar_hash" varchar(32) 
+    "contact_list_rev" bigint [not null, default: 0]
+    "last_cl_update" datetime(3) 
+    "last_login" datetime(3)
+    "first_login" datetime(3)
+    "signup_date" datetime(3) [not null]
+    "last_updated_on" datetime(3) [not null]
+}
+
+Table "profiles" {
+    "user_id" bigint [pk, not null, ref: > accounts.user_id]
+    "status_message" text
+    "away_message" text
+    "offline_message" text
+    "last_updated_on" datetime(3) [not null]
+}
+
+Table "contacts" {
+    "sender_id" bigint [not null, ref: > accounts.user_id]
+    "friend_id" bigint [not null, ref: > accounts.user_id]
+    "reason" mediumtext
+    "is_blocked" boolean [not null, default:false]
+    "added_on" datetime(3) [not null]
+    "last_updated_on" datetime(3) [not null]
+
+    Indexes {
+        (sender_id, friend_id) [unique, name: "idx_sender_id_friend_id"]
+    }
+}
+
+Table "app_passwords" {
+    "user_id" bigint [not null, ref: > accounts.user_id]
+    "type" varchar(32) [not null]
+    "contents" mediumtext
+    "last_updated_on" datetime(3) [not null]
+
+    Indexes {
+        (user_id, type) [unique, name: "idx_user_id_type"]
+    }
+}

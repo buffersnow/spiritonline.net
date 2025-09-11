@@ -1,0 +1,28 @@
+databaseType = "MySql"
+id = "8677516c-5a45-4401-b506-56392bf1c0c3"
+name = "spiritonline"
+
+[flyway]
+locations = [ "filesystem:migrations" ]
+mixed = true
+outOfOrder = true
+schemaModelLocation = "schema-model"
+validateMigrationNaming = true
+
+  [flyway.check]
+  majorTolerance = 0
+
+[flywayDesktop]
+developmentEnvironment = "development"
+shadowEnvironment = "shadow"
+enableMigrations = false
+
+[redgateCompare]
+filterFile = "filter.rgf"
+
+[redgateCompare.mysql.options.ignores]
+ignoreNewlinesInTextObjects = "off"
+
+[environments.dev]
+url = "jdbc:mysql://localhost:3306"
+schemas = [ "spiritonline" ]
