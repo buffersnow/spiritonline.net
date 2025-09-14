@@ -6,12 +6,14 @@ Table "accounts" {
   "user_id" bigint [pk, increment, not null]
   "screenname" varchar(64) [not null]
   "mail" varchar(128) [not null]
-  "flags" bigint [not null, default: 0]
+  "priv_status" tinyint [not null, default: 0]
+  "acs_status" tinyint [not null, default: 0]
+  "is_verified" boolean [not null, default: false]
   "last_updated_on" datetime(3) [not null]
 
   Indexes {
-    screenname [name: "idx_accounts_screenname"]
-    mail [name: "idx_accounts_mail"]
+    screenname [name: "idx_screenname"]
+    mail [name: "idx_mail"]
   }
 }
 
@@ -38,12 +40,14 @@ Table "contacts" {
     "sender_id" bigint [not null, ref: > accounts.user_id]
     "friend_id" bigint [not null, ref: > accounts.user_id]
     "reason" mediumtext
-    "is_blocked" boolean [not null, default:false]
+    "is_blocked" boolean [not null, default: false]
     "added_on" datetime(3) [not null]
     "last_updated_on" datetime(3) [not null]
 
     Indexes {
-        (sender_id, friend_id) [unique, name: "idx_sender_id_friend_id"]
+        sender_id [name: "idx_sender_id"]
+        friend_id [name: "idx_friend_id"]
+        (sender_id, friend_id) [unique, name: "udx_sender_id_friend_id"]
     }
 }
 
@@ -54,6 +58,36 @@ Table "app_passwords" {
     "last_updated_on" datetime(3) [not null]
 
     Indexes {
-        (user_id, type) [unique, name: "idx_user_id_type"]
+        (user_id, type) [unique, name: "udx_user_id_type"]
+    }
+}
+
+// WFC Specific
+
+Table "wfc_accounts" { 
+    "wfc_id" bigint [pk, increment, not null]
+    "linked_id" bigint [ref: > accounts.user_id]
+    "nand_ids" json
+    "console_ids" json
+    "ip_addresses" json
+    "last_updated_on" datetime(3) [not null]
+
+    Indexes {
+        linked_id [name: "idx_linked_id"]
+    }
+}
+
+Table "wfc_suspensions" {
+    "audit_id" bigint [pk, not null]
+    "wfc_id" bigint [not null, ref: > wfc_accounts.wfc_id]
+    "moderator_id" bigint [not null, ref: > accounts.user_id]
+    "ban_message" longtext
+    "ban_reason" longtext
+    "last_banned_on" datetime(3) [not null]
+    "ban_expires_on" datetime(3)
+
+    Indexes {
+        wfc_id [name: "idx_wfc_id"]
+        moderator_id [name: "idx_moderator_id"]
     }
 }

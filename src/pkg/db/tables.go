@@ -11,11 +11,6 @@ type Account struct {
 	Mail          string    `db:"mail"`
 	Flags         int64     `db:"flags"`
 	LastUpdatedOn time.Time `db:"last_updated_on"`
-
-	User         User          `db:"-"`
-	Profile      Profile       `db:"-"`
-	AppPasswords []AppPassword `db:"-"`
-	Contacts     []Contact     `db:"-"`
 }
 
 type User struct {

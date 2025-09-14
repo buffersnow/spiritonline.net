@@ -1,12 +1,14 @@
 -- SQL dump generated using DBML (dbml.dbdiagram.io)
 -- Database: MySQL
--- Generated at: 2025-09-09T09:53:48.863Z
+-- Generated at: 2025-09-14T13:08:53.696Z
 
 CREATE TABLE `accounts` (
   `user_id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `screenname` varchar(64) NOT NULL,
   `mail` varchar(128) NOT NULL,
-  `flags` bigint NOT NULL DEFAULT 0,
+  `priv_status` tinyint NOT NULL DEFAULT 0,
+  `acs_status` tinyint NOT NULL DEFAULT 0,
+  `is_verified` boolean NOT NULL DEFAULT false,
   `last_updated_on` datetime(3) NOT NULL
 );
 
@@ -45,13 +47,42 @@ CREATE TABLE `app_passwords` (
   `last_updated_on` datetime(3) NOT NULL
 );
 
-CREATE INDEX `idx_accounts_screenname` ON `accounts` (`screenname`);
+CREATE TABLE `wfc_accounts` (
+  `wfc_id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `linked_id` bigint,
+  `nand_ids` json,
+  `console_ids` json,
+  `ip_addresses` json,
+  `last_updated_on` datetime(3) NOT NULL
+);
 
-CREATE INDEX `idx_accounts_mail` ON `accounts` (`mail`);
+CREATE TABLE `wfc_suspensions` (
+  `audit_id` bigint PRIMARY KEY NOT NULL,
+  `wfc_id` bigint NOT NULL,
+  `moderator_id` bigint NOT NULL,
+  `ban_message` longtext,
+  `ban_reason` longtext,
+  `last_banned_on` datetime(3) NOT NULL,
+  `ban_expires_on` datetime(3)
+);
 
-CREATE UNIQUE INDEX `idx_sender_id_friend_id` ON `contacts` (`sender_id`, `friend_id`);
+CREATE INDEX `idx_screenname` ON `accounts` (`screenname`);
 
-CREATE UNIQUE INDEX `idx_user_id_type` ON `app_passwords` (`user_id`, `type`);
+CREATE INDEX `idx_mail` ON `accounts` (`mail`);
+
+CREATE INDEX `idx_sender_id` ON `contacts` (`sender_id`);
+
+CREATE INDEX `idx_friend_id` ON `contacts` (`friend_id`);
+
+CREATE UNIQUE INDEX `udx_sender_id_friend_id` ON `contacts` (`sender_id`, `friend_id`);
+
+CREATE UNIQUE INDEX `udx_user_id_type` ON `app_passwords` (`user_id`, `type`);
+
+CREATE INDEX `idx_linked_id` ON `wfc_accounts` (`linked_id`);
+
+CREATE INDEX `idx_wfc_id` ON `wfc_suspensions` (`wfc_id`);
+
+CREATE INDEX `idx_moderator_id` ON `wfc_suspensions` (`moderator_id`);
 
 ALTER TABLE `users` ADD FOREIGN KEY (`user_id`) REFERENCES `accounts` (`user_id`);
 
@@ -62,3 +93,9 @@ ALTER TABLE `contacts` ADD FOREIGN KEY (`sender_id`) REFERENCES `accounts` (`use
 ALTER TABLE `contacts` ADD FOREIGN KEY (`friend_id`) REFERENCES `accounts` (`user_id`);
 
 ALTER TABLE `app_passwords` ADD FOREIGN KEY (`user_id`) REFERENCES `accounts` (`user_id`);
+
+ALTER TABLE `wfc_accounts` ADD FOREIGN KEY (`linked_id`) REFERENCES `accounts` (`user_id`);
+
+ALTER TABLE `wfc_suspensions` ADD FOREIGN KEY (`wfc_id`) REFERENCES `wfc_accounts` (`wfc_id`);
+
+ALTER TABLE `wfc_suspensions` ADD FOREIGN KEY (`moderator_id`) REFERENCES `accounts` (`user_id`);

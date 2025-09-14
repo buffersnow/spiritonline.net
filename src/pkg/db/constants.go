@@ -1,21 +1,21 @@
 package db
 
-type AccountFlags int
+type PriviligeStatus int
 
 const (
-	StatusFlag_Banned     = AccountFlags(1 << 0)
-	StatusFlag_Unverified = AccountFlags(1 << 1)
-	StatusFlag_FreeUser   = AccountFlags(1 << 2)
-	StatusFlag_Operator   = AccountFlags(1 << 3)
-	StatusFlag_NetAdmin   = AccountFlags(1 << 4)
-	StatusFlag_Developer  = AccountFlags(1 << 5)
+	PriviligeStatus_FreeUser PriviligeStatus = iota
+	PriviligeStatus_Operator
+	PriviligeStatus_NetAdmin
+	PriviligeStatus_Developer
 )
 
+type AccessLevel int
+
 const (
-	AccessFlag_ReleasePreview    = AccountFlags(1 << 6)
-	AccessFlag_ConsumerPreview   = AccountFlags(1 << 7)
-	AccessFlag_TechnologyPreview = AccountFlags(1 << 8)
-	AccessFlag_DeveloperPreview  = AccountFlags(1 << 9)
+	AccessLevel_ReleaseGA AccessLevel = iota
+	AccessLevel_ConsumerPreview
+	AccessLevel_TechnologyPreview
+	AccessLevel_DeveloperPreview
 )
 
 type PasswordType string
