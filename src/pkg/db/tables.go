@@ -6,11 +6,13 @@ import (
 )
 
 type Account struct {
-	UserID        int64     `db:"user_id"`
-	Screenname    string    `db:"screenname"`
-	Mail          string    `db:"mail"`
-	Flags         int64     `db:"flags"`
-	LastUpdatedOn time.Time `db:"last_updated_on"`
+	UserID        int64           `db:"user_id"`
+	Screenname    string          `db:"screenname"`
+	Mail          string          `db:"mail"`
+	Privilige     PriviligeStatus `db:"priv_status"`
+	Access        AccessLevel     `db:"acs_status"`
+	IsVerified    bool            `db:"is_verified"`
+	LastUpdatedOn time.Time       `db:"last_updated_on"`
 }
 
 type User struct {
