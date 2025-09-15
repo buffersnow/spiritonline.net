@@ -12,6 +12,7 @@ type WFCAccount struct {
 	LinkedID      sql.NullInt64  `db:"linked_id"`
 	NandIDs       db.IntegerList `db:"nand_ids"`
 	ConsoleIDs    db.StringList  `db:"console_ids"`
-	IPAddresses   db.IPList      `db:"ip_addresses"`
+	IPs           db.IPList      `db:"ip_addrs"`
+	MacAddresses  db.StringList  `db:"mac_addrs"`
 	LastUpdatedOn time.Time      `db:"last_updated_on"`
 }
