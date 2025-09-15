@@ -9,9 +9,9 @@ package protocol
 //$ https://github.com/Retro-Rewind-Team/wfc-server/blob/main/nas/auth.go#L335
 
 const (
-	ReCD_Login             = 001  // 001 - Login success
-	ReCD_AccountCreate     = 002  // 002 - AcctCreate success
-	ReCD_ServiceLocate     = 007  // 007 - SVCLOC success
+	ReCD_Login             = 1    // 001 - Login success
+	ReCD_AccountCreate     = 2    // 002 - AcctCreate success
+	ReCD_ServiceLocate     = 7    // 007 - SVCLOC success
 	ReCD_ProfaneName       = 40   // 040 - WiiLink has this set when "HasProfaneName" is true
 	ReCD_Maintenance       = 101  // 101 - unused, use *.AVAILABLE.GS.NINTENDOWIFI.NET bit 2
 	ReCD_BannedFromWFC     = 102  // 102 - used by Wiimmfi and WiiLink, AltWFC uses >999

@@ -70,7 +70,7 @@ func AC_Login(c *fiber.Ctx) error {
 			Message: "bad db query",
 			Err:     fmt.Errorf("wfc: controllers: %w", err),
 		})
-	} else if err == nil {
+	} else if suspension.AuditID != 0 /*should be valid*/ {
 		if !suspension.BanExpiresOn.Valid {
 			return protocol.NASReply(c, fiber.Map{
 				"returncd": protocol.ReCD_BannedFromWFC,

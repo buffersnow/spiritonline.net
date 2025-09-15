@@ -21,13 +21,13 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 		return web.BadLocateError(c, fmt.Errorf("wfc: protocol: %w", err))
 	}
 
-	urlVals := url.Values{}
 	{ // these values are always present in responses (or should be!)
-		urlVals.Set("retry", "0")
-		urlVals.Set("datetime", GetDateTime())
-		urlVals.Set("locator", "gamespy.com")
+		params["retry"] = 0
+		params["datetime"] = GetDateTime()
+		params["locator"] = "gamespy.com"
 	}
 
+	urlVals := url.Values{}
 	for k, v := range params {
 
 		str, err := cast.ToStringE(v)
@@ -64,5 +64,5 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 	resp := urlVals.Encode()
 	resp = strings.ReplaceAll(resp, "%2A", "*")
 
-	return c.Type(fiber.MIMEApplicationForm).SendString(resp)
+	return c.Type(fiber.MIMEApplicationForm).Status(200).SendString(resp)
 }

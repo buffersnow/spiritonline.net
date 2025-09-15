@@ -8,7 +8,7 @@ import (
 func AccountWii(c *fiber.Ctx) error {
 
 	handlers := map[string]fiber.Handler{
-		"login":      func(*fiber.Ctx) error { return nil },
+		"login":      AC_Login,
 		"acctcreate": AC_AccountCreate,
 		"svcloc":     func(*fiber.Ctx) error { return nil },
 	}
