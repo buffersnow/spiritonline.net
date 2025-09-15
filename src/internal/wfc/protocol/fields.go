@@ -24,18 +24,12 @@ func FieldsDecoder() fiber.Handler {
 
 		sec, err := red.Locate[security.Security]()
 		if err != nil {
-			return web.InternalServerError(c, &web.Details{
-				Message: "bad service location",
-				Err:     fmt.Errorf("wfc: protocol: %w", err),
-			})
+			return web.BadLocateError(c, fmt.Errorf("wfc: protocol: %w", err))
 		}
 
 		logger, err := red.Locate[log.Logger]()
 		if err != nil {
-			return web.InternalServerError(c, &web.Details{
-				Message: "bad service location",
-				Err:     fmt.Errorf("wfc: protocol: %w", err),
-			})
+			return web.BadLocateError(c, fmt.Errorf("wfc: protocol: %w", err))
 		}
 
 		formVals, err := url.ParseQuery(string(c.Body()))

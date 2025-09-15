@@ -18,10 +18,7 @@ func RequestLogging() fiber.Handler {
 
 		logger, err := red.Locate[log.Logger]()
 		if err != nil {
-			return InternalServerError(c, &Details{
-				Message: "bad service location",
-				Err:     fmt.Errorf("web: %w", err),
-			})
+			return BadLocateError(c, fmt.Errorf("web: %w", err))
 		}
 
 		err = c.Next()
@@ -45,18 +42,12 @@ func XPoweredBy() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		bld, err := red.Locate[version.BuildTag]()
 		if err != nil {
-			return InternalServerError(c, &Details{
-				Message: "bad service location",
-				Err:     fmt.Errorf("web: %w", err),
-			})
+			return BadLocateError(c, fmt.Errorf("web: %w", err))
 		}
 
 		opt, err := red.Locate[settings.Options]()
 		if err != nil {
-			return InternalServerError(c, &Details{
-				Message: "bad service location",
-				Err:     fmt.Errorf("web: %w", err),
-			})
+			return BadLocateError(c, fmt.Errorf("web: %w", err))
 		}
 
 		c.Set("X-Powered-By", "buffersnow.com")

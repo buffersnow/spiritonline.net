@@ -18,10 +18,7 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 
 	sec, err := red.Locate[security.Security]()
 	if err != nil {
-		return web.InternalServerError(c, &web.Details{
-			Message: "bad service location",
-			Err:     fmt.Errorf("wfc: protocol: %w", err),
-		})
+		return web.BadLocateError(c, fmt.Errorf("wfc: protocol: %w", err))
 	}
 
 	urlVals := url.Values{}

@@ -16,10 +16,7 @@ func RequestLogging() fiber.Handler {
 
 		logger, err := red.Locate[log.Logger]()
 		if err != nil {
-			return web.InternalServerError(c, &web.Details{
-				Message: "bad service location",
-				Err:     fmt.Errorf("web: %w", err),
-			})
+			return web.BadLocateError(c, fmt.Errorf("proxy: protocol: %w", err))
 		}
 
 		err = c.Next()
