@@ -1,8 +1,6 @@
 package repositories
 
 import (
-	"net"
-
 	sq "github.com/Masterminds/squirrel"
 )
 
@@ -66,7 +64,7 @@ func (w *WFCAccountRepo) GetByNandID(cfc int64) (*WFCAccount, error) {
 	return account, err
 }
 
-func (w *WFCAccountRepo) GetByIP(ip net.IP) (*WFCAccount, error) {
+func (w *WFCAccountRepo) GetByIP(ip string) (*WFCAccount, error) {
 	account := new(WFCAccount)
 	err := w.sql.Get(account,
 		sq.Select("*").From("wfc_accounts").Where(

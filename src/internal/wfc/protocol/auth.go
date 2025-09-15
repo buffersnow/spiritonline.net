@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"net"
 )
 
 type AuthToken struct {
@@ -14,7 +13,7 @@ type AuthToken struct {
 	ConsoleID string `json:"console_id"`
 	NandID    int64  `json:"nand_id"`
 	MAC       string `json:"mac_addr"`
-	IP        net.IP `json:"ip_addr"`
+	IP        string `json:"ip_addr"`
 	Challenge string `json:"challenge"`
 }
 

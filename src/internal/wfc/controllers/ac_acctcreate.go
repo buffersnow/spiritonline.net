@@ -3,7 +3,6 @@ package controllers
 import (
 	"database/sql"
 	"fmt"
-	"net"
 	"time"
 
 	"buffersnow.com/spiritonline/internal/wfc/protocol"
@@ -43,7 +42,7 @@ func AC_AccountCreate(c *fiber.Ctx) error {
 	query := repositories.WFCAccountQuery{
 		ConsoleID: c.FormValue("csnum"),
 		NandID:    cfc,
-		IP:        net.IP(c.IP()),
+		IP:        c.IP(),
 		MAC:       c.FormValue("macadr"),
 	}
 
