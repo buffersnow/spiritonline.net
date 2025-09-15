@@ -1,8 +1,9 @@
 package util
 
 import (
+	"encoding/hex"
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"os"
 	"reflect"
 	"regexp"
@@ -13,7 +14,7 @@ func RandomString(length int) string {
 	letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	b := make([]rune, length)
 	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
+		b[i] = letters[rand.IntN(len(letters))]
 	}
 	return string(b)
 }
@@ -86,6 +87,19 @@ func CountSQLRows(dest any) int64 {
 		// struct, map, primitive, etc. — assume at most 1 row
 		return 1
 	}
+}
+
+func HexToByte(hexStr string) byte {
+	if len(hexStr) != 2 {
+		return 0xFF
+	}
+
+	bytes, err := hex.DecodeString(hexStr)
+	if err != nil || len(bytes) != 1 {
+		return 0xFF
+	}
+
+	return bytes[0]
 }
 
 /// Comment Colors - Please actually use these
