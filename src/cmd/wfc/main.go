@@ -1,13 +1,16 @@
 package main
 
 import (
-	"buffersnow.com/spiritonline/internal/wfc/handlers"
+	"buffersnow.com/spiritonline/pkg/db"
 	"buffersnow.com/spiritonline/pkg/lifecycle"
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/security"
 	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/version"
 	"buffersnow.com/spiritonline/pkg/web"
+
+	"buffersnow.com/spiritonline/internal/wfc/handlers"
+	"buffersnow.com/spiritonline/internal/wfc/repositories"
 
 	"github.com/luxploit/red"
 )
@@ -21,6 +24,8 @@ func main() {
 		red.Provide(log.New),
 		red.Provide(security.New),
 		red.Provide(web.New),
+		red.Provide(db.New),
+		red.Provide(repositories.New),
 		red.Invoke(handlers.ListenNASWii),
 		red.Invoke(handlers.ListenNASDS),
 		red.Invoke(handlers.ListenConntest),

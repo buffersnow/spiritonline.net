@@ -12,7 +12,7 @@ const (
 	ReCD_Login             = 001  // 001 - Login success
 	ReCD_AccountCreate     = 002  // 002 - AcctCreate success
 	ReCD_ServiceLocate     = 007  // 007 - SVCLOC success
-	ReCD_ProfaneName       = 0400 // 040 - WiiLink has this set when "HasProfaneName" is true
+	ReCD_ProfaneName       = 40   // 040 - WiiLink has this set when "HasProfaneName" is true
 	ReCD_Maintenance       = 101  // 101 - unused, use *.AVAILABLE.GS.NINTENDOWIFI.NET bit 2
 	ReCD_BannedFromWFC     = 102  // 102 - used by Wiimmfi and WiiLink, AltWFC uses >999
 	ReCD_BrokenConID       = 103  // 103 - Invalid Base32, UserID and MAC don't match
@@ -25,6 +25,7 @@ const (
 	ReCD_InvalidAction     = 109  // 109 - Wiimmfi uses this as Invalid GameID, WiiLink as Invalid Action
 	ReCD_ServerShutdown    = 110  // 110 - Sent by nintendowifi.net after services went offline forever
 	ReCD_ConIDAbuse        = 115  // 115 - Ie. this CID was seen too many times (eg. Dolphin w/o real NAND)
+	ReCD_TempBannedFromWFC = 164  // 164 - Custom Error - Account temporarily banned from WFC (check on Dashboard)
 	ReCD_ServerUnavailable = 213  // 213 - Custom Error - Indicates that server is unavailable at the moment
 	ReCD_UnknownConsole    = 343  // 343 - Custom Error - Indicates that the console hasn't been whitelisted yet
 	ReCD_ConsolePending    = 365  // 365 - Custom Error - Indicates that the console is pending whitelist approval

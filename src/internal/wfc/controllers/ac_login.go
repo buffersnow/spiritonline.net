@@ -8,24 +8,16 @@ import (
 
 	"buffersnow.com/spiritonline/internal/wfc/protocol"
 	"buffersnow.com/spiritonline/internal/wfc/repositories"
+	"buffersnow.com/spiritonline/pkg/util"
 	"buffersnow.com/spiritonline/pkg/web"
 	"github.com/gofiber/fiber/v2"
 	"github.com/luxploit/red"
 	"github.com/spf13/cast"
 )
 
-//$ https://github.com/insanekartwii/wfc-server/blob/main/nas/auth.go#L179
+func AC_Login(c *fiber.Ctx) error {
 
-func AC_AccountCreate(c *fiber.Ctx) error {
-
-	//% Fields we use to determine a User
-	//% Post Body:
-	//%   * csnum  -> Console Serial Number (aka CiD)
-	//%   * cfc    -> Console NandID
-	//%   * macadr -> Console MAC Address (usually wireless nic)
-	//%
-	//% fiber.Ctx:
-	//%   * c.IP() -> Console IP Address
+	//% refer to ac_acctcreate.go for which factors determine a user
 
 	repo, err := red.Locate[repositories.WFCRepo]()
 	if err != nil {
@@ -53,7 +45,9 @@ func AC_AccountCreate(c *fiber.Ctx) error {
 			Message: "bad db query",
 			Err:     fmt.Errorf("wfc: controllers: %w", err),
 		})
-	} else if err == sql.ErrNoRows {
+	}
+
+	if err == sql.ErrNoRows {
 		wfcid, err := repo.Account.Insert(query)
 		if err != nil {
 			return web.InternalServerError(c, &web.Details{
@@ -62,10 +56,13 @@ func AC_AccountCreate(c *fiber.Ctx) error {
 			})
 		}
 
-		return protocol.NASReply(c, fiber.Map{
-			"returncd": protocol.ReCD_AccountCreate,
-			"userid":   wfcid,
-		})
+		acc, err = repo.Account.GetByWFCID(wfcid)
+		if err != nil {
+			return web.BadRequestError(c, &web.Details{
+				Message: "bad db refresh",
+				Err:     fmt.Errorf("wfc: controllers: %w", err),
+			})
+		}
 	}
 
 	suspension, err := repo.Suspension.Get(acc.WFCID)
@@ -74,26 +71,41 @@ func AC_AccountCreate(c *fiber.Ctx) error {
 			Message: "bad db query",
 			Err:     fmt.Errorf("wfc: controllers: %w", err),
 		})
-	} else if err == sql.ErrNoRows {
-		return protocol.NASReply(c, fiber.Map{
-			"returncd": protocol.ReCD_AccountCreate,
-			"userid":   acc.WFCID,
-		})
+	} else if err == nil {
+		if !suspension.BanExpiresOn.Valid {
+			return protocol.NASReply(c, fiber.Map{
+				"returncd": protocol.ReCD_BannedFromWFC,
+			})
+		} else if suspension.BanExpiresOn.Time.Before(time.Now()) {
+			return protocol.NASReply(c, fiber.Map{
+				"returncd": protocol.ReCD_TempBannedFromWFC,
+			})
+		}
+
 	}
 
-	if !suspension.BanExpiresOn.Valid {
-		return protocol.NASReply(c, fiber.Map{
-			"returncd": protocol.ReCD_BannedFromWFC,
-		})
-	} else if suspension.BanExpiresOn.Time.Before(time.Now()) {
-		return protocol.NASReply(c, fiber.Map{
-			"returncd": protocol.ReCD_TempBannedFromWFC,
+	challenge := util.RandomString(8)
+	token, err := protocol.CreateToken(protocol.AuthToken{
+		WFCID:     acc.WFCID,
+		GameCode:  c.FormValue("gamecd"),
+		RegionID:  util.HexToByte(c.FormValue("region")),
+		ConsoleID: query.ConsoleID,
+		NandID:    query.NandID,
+		MAC:       query.MAC,
+		IP:        query.IP,
+		Challenge: challenge,
+	})
+
+	if err != nil {
+		return web.InternalServerError(c, &web.Details{
+			Message: "bad token generation",
+			Err:     fmt.Errorf("wfc: controllers: %w", err),
 		})
 	}
 
 	return protocol.NASReply(c, fiber.Map{
-		"returncd": protocol.ReCD_AccountCreate,
-		"userid":   acc.WFCID,
+		"returncd":  protocol.ReCD_Login,
+		"challenge": challenge,
+		"token":     token,
 	})
-
 }
