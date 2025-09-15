@@ -35,6 +35,7 @@ func ListenService(opt *settings.Options, log *log.Logger) (outerr error) {
 			return fmt.Errorf("proxy: %w", err)
 		}
 		upstreams[target] = addr
+		log.Event("HTTP Proxy", "Created proxy target for %s", target)
 	}
 
 	app := fiber.New(fiber.Config{

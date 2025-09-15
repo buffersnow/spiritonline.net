@@ -32,8 +32,8 @@ func RequestLogging() fiber.Handler {
 		target := c.Get("Host")
 		host := c.Get("X-Forwarded-Host")
 
-		if host == "" {
-			host = "none"
+		if host == "" || host == target {
+			host = "Invalid"
 		}
 
 		logger.Trace(log.DEBUG_TRAFFIC, "HTTP Request Logger",
