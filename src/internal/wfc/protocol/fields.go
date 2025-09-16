@@ -56,7 +56,9 @@ func FieldsDecoder() fiber.Handler {
 				}
 
 				c.Request().PostArgs().Add(key, value)
-				logger.Debug(log.DEBUG_SERVICE, "WFC Field Decoder", "%s=%s", key, value)
+				logger.Debug(log.DEBUG_SERVICE, "WFC Field Decoder",
+					"<IP: %s> <Endpont: %s> %s=%s", c.IP(), c.Path(), key, value,
+				)
 			}
 		}
 

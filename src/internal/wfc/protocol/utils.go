@@ -13,7 +13,7 @@ import (
 //$ https://github.com/WiiLink24/wfc-server/blob/main/nas/auth.go#L410
 
 func GetDateTime() string {
-	return time.Now().Format("20060102150405")
+	return time.Now().Format("060102150405")
 }
 
 func MarioKartOnly() fiber.Handler {
@@ -24,7 +24,7 @@ func MarioKartOnly() fiber.Handler {
 		}
 
 		if !opt.Service.Features["wfc_nas_mkwii_only"] {
-			c.Next()
+			return c.Next()
 		}
 
 		gamecd := c.Get("HTTP_X_GAMECD")
@@ -38,7 +38,7 @@ func MarioKartOnly() fiber.Handler {
 			})
 		}
 
-		if gamecd != "RMCP" {
+		if gamecd != "RMCP" && gamecd != "RMCE" && gamecd != "RMCJ" {
 			return NASReply(c, fiber.Map{
 				"returncd": ReCD_UnsupportedGame,
 			})
@@ -46,4 +46,12 @@ func MarioKartOnly() fiber.Handler {
 
 		return c.Next()
 	}
+}
+
+func GetEndpoint(c *fiber.Ctx) string {
+	if str := c.FormValue("action"); len(str) != 0 {
+		return fmt.Sprintf("<Action: %s> <Endpoint: %s>", str, c.Path())
+	}
+
+	return fmt.Sprintf("<Endpoint: %s>", c.Path())
 }

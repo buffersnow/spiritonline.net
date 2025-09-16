@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"strings"
 
+	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/security"
 	"buffersnow.com/spiritonline/pkg/web"
 	"github.com/gofiber/fiber/v2"
@@ -21,6 +22,11 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 		return web.BadLocateError(c, fmt.Errorf("wfc: protocol: %w", err))
 	}
 
+	logger, err := red.Locate[log.Logger]()
+	if err != nil {
+		return web.BadLocateError(c, fmt.Errorf("wfc: protcol: %w", err))
+	}
+
 	{ // these values are always present in responses (or should be!)
 		params["retry"] = 0
 		params["datetime"] = GetDateTime()
@@ -28,6 +34,8 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 	}
 
 	urlVals := url.Values{}
+	logVals := url.Values{}
+	recdnum := 0
 	for k, v := range params {
 
 		str, err := cast.ToStringE(v)
@@ -40,14 +48,14 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 
 		//& Special case: pad returncd to 3 digits
 		if k == "returncd" {
-			num, err := cast.ToIntE(str)
+			recdnum, err = cast.ToIntE(str)
 			if err != nil {
 				return web.InternalServerError(c, &web.Details{
 					Message: "bad returncd value",
 					Err:     fmt.Errorf("wfc: protocol: %w", err),
 				})
 			}
-			str = fmt.Sprintf("%03d", num)
+			str = fmt.Sprintf("%03d", recdnum)
 		}
 
 		b64, err := sec.Encoding.EncodeB64_Wii([]byte(str))
@@ -59,10 +67,21 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 		}
 
 		urlVals.Set(k, string(b64))
+		logVals.Set(k, str)
 	}
 
 	resp := urlVals.Encode()
 	resp = strings.ReplaceAll(resp, "%2A", "*")
+
+	logResp := logVals.Encode()
+	logResp = strings.ReplaceAll(logResp, "%2A", "*")
+
+	unitcd := cast.ToInt(c.FormValue("unitcd"))
+
+	logger.Debug(log.DEBUG_TRAFFIC, "WFC NAS Response",
+		"<IP: %s> %s %s! (ReCD: %03d) Sent with data: %s",
+		c.IP(), GetEndpoint(c), GetReCDMeaning(recdnum, unitcd), recdnum, logResp,
+	)
 
 	return c.Type(fiber.MIMEApplicationForm).Status(200).SendString(resp)
 }
