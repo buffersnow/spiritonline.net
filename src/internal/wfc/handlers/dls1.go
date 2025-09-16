@@ -18,7 +18,12 @@ func ListenDls1(web *web.HttpUtils, opt *settings.Options, logger *log.Logger) e
 		return fmt.Errorf("wfc: dls1: %w", err)
 	}
 
-	app.Use(protocol.XOrganization(), protocol.FieldsDecoder())
+	app.Use(
+		protocol.XOrganization(),
+		protocol.FieldsDecoder(),
+		protocol.ValidateRequest(),
+		protocol.RequestFixup(),
+	)
 
 	app.Get("/download", controllers.Download)
 

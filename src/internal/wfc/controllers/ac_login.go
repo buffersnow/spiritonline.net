@@ -12,6 +12,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/luxploit/red"
 	"github.com/spf13/cast"
+
+	goaway "github.com/TwiN/go-away"
 )
 
 func AC_Login(c *fiber.Ctx) error {
@@ -23,12 +25,35 @@ func AC_Login(c *fiber.Ctx) error {
 		return web.BadLocateError(c, fmt.Errorf("wfc: controllers: %w", err))
 	}
 
-	cfc, err := cast.ToInt64E(c.FormValue("cfc"))
-	if err != nil {
+	cfc := cast.ToInt64(c.FormValue("cfc"))
+	unitcd := cast.ToInt64(c.FormValue("unitcd"))
+
+	playername := c.FormValue("ingamesn")
+	if len(playername) == 0 && unitcd == protocol.UnitCD_NintendoWii {
 		return web.BadRequestError(c, &web.Details{
-			Message: "invalid nandid/cfc",
-			Err:     fmt.Errorf("wfc: controllers: cast: %w", err),
+			Message: "invalid ingamesn",
+			Err:     fmt.Errorf("wfc: controllers: %w", err),
 		})
+	} else if len(playername) != 0 {
+		if goaway.IsProfane(playername) {
+			return protocol.NASReply(c, fiber.Map{
+				"returncd": protocol.ReCD_ProfaneName,
+			})
+		}
+	}
+
+	devicename := c.FormValue("devname")
+	if len(devicename) == 0 && unitcd == protocol.UnitCD_NintendoDS {
+		return web.BadRequestError(c, &web.Details{
+			Message: "invalid ingamesn",
+			Err:     fmt.Errorf("wfc: controllers: %w", err),
+		})
+	} else if len(devicename) != 0 {
+		if goaway.IsProfane(devicename) {
+			return protocol.NASReply(c, fiber.Map{
+				"returncd": protocol.ReCD_ProfaneName,
+			})
+		}
 	}
 
 	query := repositories.WFCAccountQuery{

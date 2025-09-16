@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
+	"time"
 )
 
 func RandomString(length int) string {
@@ -100,6 +101,14 @@ func HexToByte(hexStr string) byte {
 	}
 
 	return bytes[0]
+}
+
+func WithinTimezoneDrift(t time.Time) bool {
+	_, offsetSeconds := t.Zone()
+	offsetHours := offsetSeconds / 3600
+
+	// Valid timezone drift is between -12 and +14 hours
+	return offsetHours >= -12 && offsetHours <= 14
 }
 
 /// Comment Colors - Please actually use these

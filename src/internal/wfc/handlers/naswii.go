@@ -20,9 +20,11 @@ func ListenNASWii(web *web.HttpUtils, repo *repositories.WFCRepo, opt *settings.
 	}
 
 	app.Use(
-		//protocol.MarioKartOnly(),
 		protocol.XOrganization(),
 		protocol.FieldsDecoder(),
+		protocol.ValidateRequest(),
+		protocol.RequestFixup(),
+		protocol.MarioKartOnly(),
 	)
 
 	app.Post("/ac", controllers.AccountWii)

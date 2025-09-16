@@ -18,7 +18,12 @@ func ListenNASDS(web *web.HttpUtils, opt *settings.Options, logger *log.Logger) 
 		return fmt.Errorf("wfc: nas-ds: %w", err)
 	}
 
-	app.Use(protocol.XOrganization(), protocol.FieldsDecoder())
+	app.Use(
+		protocol.XOrganization(),
+		protocol.FieldsDecoder(),
+		protocol.ValidateRequest(),
+		protocol.RequestFixup(),
+	)
 
 	app.Post("/ac", controllers.AccountDS)
 	app.Post("/pr", controllers.Profanity)
