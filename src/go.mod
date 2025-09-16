@@ -4,7 +4,9 @@ go 1.25.0
 
 require (
 	github.com/Masterminds/squirrel v1.5.4
+	github.com/TwiN/go-away v1.7.0
 	github.com/caarlos0/env/v11 v11.3.1
+	github.com/fxamacker/cbor/v2 v2.9.0
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/gofiber/fiber/v2 v2.52.9
 	github.com/gofiber/template/handlebars/v2 v2.1.12
@@ -18,7 +20,6 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
-	github.com/TwiN/go-away v1.7.0 // indirect
 	github.com/andybalholm/brotli v1.2.0 // indirect
 	github.com/gofiber/template v1.8.3 // indirect
 	github.com/gofiber/utils v1.1.0 // indirect
@@ -35,6 +36,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.65.0 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
+	github.com/x448/float16 v0.8.4 // indirect
 	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/text v0.29.0 // indirect
 )

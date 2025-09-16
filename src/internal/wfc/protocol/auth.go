@@ -2,26 +2,31 @@ package protocol
 
 import (
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
+
+	"github.com/fxamacker/cbor/v2"
 )
 
+/*migrated from json to cbor to make the token smaller*/
 type AuthToken struct {
-	WFCID     int64  `json:"wfc_id"`
-	GameCode  string `json:"game_cd"`
-	RegionID  byte   `json:"region_id"`
-	ConsoleID string `json:"console_id"`
-	NandID    int64  `json:"nand_id"`
-	MAC       string `json:"mac_addr"`
-	IP        string `json:"ip_addr"`
-	Challenge string `json:"challenge"`
+	WFCID     int64  `cbor:"wid"`
+	GameCode  string `cbor:"gcd"`
+	RegionID  byte   `cbor:"rid"`
+	ConsoleID string `cbor:"cid"`
+	NandID    int64  `cbor:"nid"`
+	MAC       string `cbor:"mac"`
+	IP        string `cbor:"ipa"`
+	Challenge string `cbor:"chg"`
 }
 
 func CreateToken(params AuthToken) (string, error) {
-	token, err := json.Marshal(params)
+	token, err := cbor.Marshal(params)
 	if err != nil {
-		return "", fmt.Errorf("encoding/json: %w", err)
+		return "", fmt.Errorf("cbor: %w", err)
 	}
 
-	return ("NDS" + base64.StdEncoding.EncodeToString(token)), nil
+	fmt.Printf("%s\n", string(token))
+	fmt.Printf("%s\n", base64.StdEncoding.EncodeToString(token))
+
+	return "NDS" + base64.StdEncoding.EncodeToString(token), nil
 }
