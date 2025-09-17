@@ -10,7 +10,7 @@ func AccountWii(c *fiber.Ctx) error {
 	handlers := map[string]fiber.Handler{
 		"login":      AC_Login,
 		"acctcreate": AC_AccountCreate,
-		"svcloc":     func(*fiber.Ctx) error { return nil },
+		"svcloc":     AC_ServiceLocate,
 	}
 
 	action := c.FormValue("action")

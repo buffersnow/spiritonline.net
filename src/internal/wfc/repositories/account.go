@@ -27,18 +27,36 @@ type WFCAccount struct {
 
 type WFCAccountQuery struct {
 	ConsoleID string
-	NandID    int64
 	IP        string
 	MAC       string
+}
+
+func (w *WFCAccountRepo) GetWFCID(query WFCAccountQuery) (int64, error) {
+
+	wfcid := int64(0)
+	err := w.sql.Get(&wfcid, sq.Select("wfc_id").From("wfc_accounts").Where(
+		`JSON_CONTAINS(console_ids, JSON_QUOTE(?)) 
+			OR JSON_CONTAINS(ip_addrs, JSON_QUOTE(?)) 
+			OR JSON_CONTAINS(mac_addrs, JSON_QUOTE(?))
+		`,
+		query.ConsoleID, query.IP, query.MAC,
+	))
+
+	if err != nil {
+		w.logger.Warning("Query", "Failed to get WFCID (%+v)", query)
+		return 0, err
+	}
+
+	return wfcid, nil
 }
 
 func (w *WFCAccountRepo) Insert(query WFCAccountQuery) (int64 /*wfc_id*/, error) {
 	_, err := w.sql.Insert(
 		sq.Insert("wfc_accounts").
-			Columns("console_ids", "nand_ids", "ip_addrs", "mac_addrs", "last_updated_on").
+			Columns("console_ids", "ip_addrs", "mac_addrs", "last_updated_on").
 			Values(
-				db.StringList{query.ConsoleID}, db.IntegerList{query.NandID},
-				db.StringList{query.IP}, db.StringList{query.MAC}, time.Now(),
+				db.StringList{query.ConsoleID}, db.StringList{query.IP},
+				db.StringList{query.MAC}, time.Now(),
 			),
 	)
 

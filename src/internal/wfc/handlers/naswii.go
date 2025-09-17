@@ -24,6 +24,7 @@ func ListenNASWii(web *web.HttpUtils, repo *repositories.WFCRepo, opt *settings.
 		protocol.FieldsDecoder(),
 		protocol.ValidateRequest(),
 		protocol.RequestFixup(),
+		protocol.ProfanityFilter(),
 		protocol.MarioKartOnly(),
 	)
 

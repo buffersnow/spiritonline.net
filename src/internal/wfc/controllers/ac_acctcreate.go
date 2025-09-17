@@ -10,7 +10,6 @@ import (
 	"buffersnow.com/spiritonline/pkg/web"
 	"github.com/gofiber/fiber/v2"
 	"github.com/luxploit/red"
-	"github.com/spf13/cast"
 )
 
 //$ https://github.com/insanekartwii/wfc-server/blob/main/nas/auth.go#L179
@@ -20,7 +19,6 @@ func AC_AccountCreate(c *fiber.Ctx) error {
 	//% Fields we use to determine a User
 	//% Post Body:
 	//%   * csnum  -> Console Serial Number (aka CiD)
-	//%   * cfc    -> Console NandID
 	//%   * macadr -> Console MAC Address (usually wireless nic)
 	//%
 	//% fiber.Ctx:
@@ -31,43 +29,19 @@ func AC_AccountCreate(c *fiber.Ctx) error {
 		return web.BadLocateError(c, fmt.Errorf("wfc: controllers: %w", err))
 	}
 
-	cfc, err := cast.ToInt64E(c.FormValue("cfc"))
-	if err != nil {
-		return web.BadRequestError(c, &web.Details{
-			Message: "invalid nandid/cfc",
-			Err:     fmt.Errorf("wfc: controllers: cast: %w", err),
-		})
-	}
-
-	query := repositories.WFCAccountQuery{
+	wfcid, err := protocol.GetWFCAccountID(repo, repositories.WFCAccountQuery{
 		ConsoleID: c.FormValue("csnum"),
-		NandID:    cfc,
 		IP:        c.IP(),
 		MAC:       c.FormValue("macadr"),
-	}
-
-	acc, err := repo.Account.Get(query)
-	if err != nil && err != sql.ErrNoRows {
-		return web.BadRequestError(c, &web.Details{
+	})
+	if err != nil {
+		return web.InternalServerError(c, &web.Details{
 			Message: "bad db query",
 			Err:     fmt.Errorf("wfc: controllers: %w", err),
 		})
-	} else if err == sql.ErrNoRows {
-		wfcid, err := repo.Account.Insert(query)
-		if err != nil {
-			return web.InternalServerError(c, &web.Details{
-				Message: "bad db insert",
-				Err:     fmt.Errorf("wfc: controllers: %w", err),
-			})
-		}
-
-		return protocol.NASReply(c, fiber.Map{
-			"returncd": protocol.ReCD_AccountCreate,
-			"userid":   wfcid,
-		})
 	}
 
-	suspension, err := repo.Suspension.Get(acc.WFCID)
+	suspension, err := repo.Suspension.Get(wfcid)
 	if err != nil && err != sql.ErrNoRows {
 		return web.InternalServerError(c, &web.Details{
 			Message: "bad db query",
@@ -76,7 +50,7 @@ func AC_AccountCreate(c *fiber.Ctx) error {
 	} else if err == sql.ErrNoRows {
 		return protocol.NASReply(c, fiber.Map{
 			"returncd": protocol.ReCD_AccountCreate,
-			"userid":   acc.WFCID,
+			"userid":   wfcid,
 		})
 	}
 
@@ -92,7 +66,7 @@ func AC_AccountCreate(c *fiber.Ctx) error {
 
 	return protocol.NASReply(c, fiber.Map{
 		"returncd": protocol.ReCD_AccountCreate,
-		"userid":   acc.WFCID,
+		"userid":   wfcid,
 	})
 
 }

@@ -13,7 +13,6 @@ type AuthToken struct {
 	GameCode  string `cbor:"gcd"`
 	RegionID  byte   `cbor:"rid"`
 	ConsoleID string `cbor:"cid"`
-	NandID    int64  `cbor:"nid"`
 	MAC       string `cbor:"mac"`
 	IP        string `cbor:"ipa"`
 	Challenge string `cbor:"chg"`

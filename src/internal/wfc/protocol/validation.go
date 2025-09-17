@@ -26,8 +26,9 @@ func ValidateRequest() fiber.Handler {
 		//@ TODO: Make sure this work on the DS! Currently only works tested on Wii
 
 		//% action validation is done in controllers/account_[wii/ds].go
+		//% svc for svcloc is validated in controllers/ac_svcloc.go
 		//% gsbrcd, lang, gamecd and region are validated in protocol/reqfixer.go
-		//% ingamesn and devname profanity is validated in protocol/ac_[login/acctcreate].go
+		//% ingamesn and devname profanity is validated in protocol/profanity.go
 
 		//& its important to this one first
 		//& used for per-console behaviour
@@ -169,10 +170,9 @@ func ValidateRequest() fiber.Handler {
 		}
 
 		if i64_unitcd == UnitCD_NintendoWii {
-			//& CFC = NandID(?) so if this null its perfectly fine (i think?)
 			str_cfc := c.FormValue("cfc")
-			_, err = cast.ToInt64E(str_cfc)
-			if err != nil {
+			i64_cfc, err := cast.ToInt64E(str_cfc)
+			if err != nil || i64_cfc != 0 {
 				return web.BadRequestError(c, &web.Details{
 					Message: "invalid makercd",
 					Err:     fmt.Errorf("wfc: protocol: cast: %w", err),

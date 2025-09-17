@@ -1,9 +1,11 @@
 package protocol
 
 import (
+	"database/sql"
 	"fmt"
 	"time"
 
+	"buffersnow.com/spiritonline/internal/wfc/repositories"
 	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/web"
 	"github.com/gofiber/fiber/v2"
@@ -54,4 +56,20 @@ func GetEndpoint(c *fiber.Ctx) string {
 	}
 
 	return fmt.Sprintf("<Endpoint: %s>", c.Path())
+}
+
+func GetWFCAccountID(repo *repositories.WFCRepo, query repositories.WFCAccountQuery) (int64, error) {
+	wfcid, err := repo.Account.GetWFCID(query)
+	if err != nil && err != sql.ErrNoRows {
+		return 0, fmt.Errorf("wfc: controllers: %w", err)
+	} else if err == sql.ErrNoRows {
+		wfcid, err = repo.Account.Insert(query)
+		if err != nil {
+			return 0, fmt.Errorf("wfc: controllers: %w", err)
+		}
+
+		return wfcid, nil
+	}
+
+	return wfcid, nil
 }

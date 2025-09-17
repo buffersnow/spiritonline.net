@@ -1,9 +1,7 @@
 package controllers
 
 import (
-	"database/sql"
 	"fmt"
-	"time"
 
 	"buffersnow.com/spiritonline/internal/wfc/protocol"
 	"buffersnow.com/spiritonline/internal/wfc/repositories"
@@ -11,11 +9,22 @@ import (
 	"buffersnow.com/spiritonline/pkg/web"
 	"github.com/gofiber/fiber/v2"
 	"github.com/luxploit/red"
+	"github.com/spf13/cast"
 )
 
-func AC_Login(c *fiber.Ctx) error {
+func AC_ServiceLocate(c *fiber.Ctx) error {
 
-	//% refer to ac_acctcreate.go for which factors determine a user
+	//$ https://github.com/barronwaffles/dwc_network_server_emulator/blob/master/nas_server.py#L153
+	svc := c.FormValue("svc")
+	if len(svc) != 0 {
+		_, err := cast.ToIntE(svc)
+		if err != nil {
+			return web.BadRequestError(c, &web.Details{
+				Message: "invalid svc",
+				Err:     fmt.Errorf("wfc: protocol: cast: %w", err),
+			})
+		}
+	}
 
 	repo, err := red.Locate[repositories.WFCRepo]()
 	if err != nil {
@@ -36,25 +45,6 @@ func AC_Login(c *fiber.Ctx) error {
 		})
 	}
 
-	suspension, err := repo.Suspension.Get(wfcid)
-	if err != nil && err != sql.ErrNoRows {
-		return web.InternalServerError(c, &web.Details{
-			Message: "bad db query",
-			Err:     fmt.Errorf("wfc: controllers: %w", err),
-		})
-	} else if suspension.AuditID != 0 /*should be valid*/ {
-		if !suspension.BanExpiresOn.Valid {
-			return protocol.NASReply(c, fiber.Map{
-				"returncd": protocol.ReCD_BannedFromWFC,
-			})
-		} else if suspension.BanExpiresOn.Time.Before(time.Now()) {
-			return protocol.NASReply(c, fiber.Map{
-				"returncd": protocol.ReCD_TempBannedFromWFC,
-			})
-		}
-
-	}
-
 	challenge := util.RandomString(8)
 	token, err := protocol.CreateToken(protocol.AuthToken{
 		WFCID:     wfcid,
@@ -73,9 +63,27 @@ func AC_Login(c *fiber.Ctx) error {
 		})
 	}
 
-	return protocol.NASReply(c, fiber.Map{
-		"returncd":  protocol.ReCD_Login,
-		"challenge": challenge,
-		"token":     token,
-	})
+	switch svc {
+	case "9000":
+		return protocol.NASReply(c, fiber.Map{
+			"returncd":   protocol.ReCD_ServiceLocate,
+			"statusdata": "Y",
+			"svchost":    "dls1.nintendowifi.net",
+			"token":      token,
+		})
+	case "9001":
+		return protocol.NASReply(c, fiber.Map{
+			"returncd":     protocol.ReCD_ServiceLocate,
+			"statusdata":   "Y",
+			"svchost":      "dls1.nintendowifi.net",
+			"servicetoken": token,
+		})
+	default: //& covers "0000" requested by Pokemon GTS and empty by Boom Street
+		return protocol.NASReply(c, fiber.Map{
+			"returncd":     protocol.ReCD_ServiceLocate,
+			"statusdata":   "Y",
+			"svchost":      "n/a",
+			"servicetoken": token,
+		})
+	}
 }

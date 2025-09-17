@@ -67,7 +67,6 @@ Table "app_passwords" {
 Table "wfc_accounts" { 
     "wfc_id" bigint [pk, increment, not null]
     "linked_id" bigint [ref: > accounts.user_id]
-    "nand_ids" json
     "console_ids" json
     "ip_addrs" json
     "mac_addrs" json
