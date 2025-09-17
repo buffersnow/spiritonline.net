@@ -23,6 +23,7 @@ func ListenNASDS(web *web.HttpUtils, opt *settings.Options, logger *log.Logger) 
 		protocol.FieldsDecoder(),
 		protocol.ValidateRequest(),
 		protocol.RequestFixup(),
+		protocol.ProfanityFilter(),
 	)
 
 	app.Post("/ac", controllers.AccountDS)
