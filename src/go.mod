@@ -13,8 +13,8 @@ require (
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/joho/godotenv v1.5.1
 	github.com/luxploit/red v0.3.2
-	github.com/spf13/cast v1.9.2
-	github.com/spf13/pflag v1.0.7
+	github.com/spf13/cast v1.10.0
+	github.com/spf13/pflag v1.0.10
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 )
 
