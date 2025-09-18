@@ -9,7 +9,28 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	"golang.org/x/text/encoding/unicode"
+	"golang.org/x/text/transform"
 )
+
+func ToUTF16(endianness unicode.Endianness, input string) ([]byte, error) {
+	encoder := unicode.UTF16(endianness, unicode.IgnoreBOM).NewEncoder()
+	bytes, _, err := transform.Bytes(encoder, []byte(input))
+	if err != nil {
+		return nil, fmt.Errorf("util: x/text: %w", err)
+	}
+	return bytes, nil
+}
+
+func FromUTF16(endianness unicode.Endianness, input []byte) (string, error) {
+	decoder := unicode.UTF16(endianness, unicode.IgnoreBOM).NewDecoder()
+	decoded, _, err := transform.Bytes(decoder, input)
+	if err != nil {
+		return "", fmt.Errorf("util: x/text: %w", err)
+	}
+	return string(decoded), nil
+}
 
 func RandomString(length int) string {
 	letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -47,29 +68,60 @@ func CleanEnv(env string) error {
 
 // Replaces '?' in the query with the provided args !ONLY FOR LOGGING!
 func FormatSQL(query string, args ...any) string {
+	// expand slices into flat args
+	flatArgs := make([]any, 0, len(args))
+	for _, arg := range args {
+		switch v := arg.(type) {
+		case []string:
+			for _, s := range v {
+				flatArgs = append(flatArgs, s)
+			}
+		case []int64:
+			for _, n := range v {
+				flatArgs = append(flatArgs, n)
+			}
+		case []any:
+			flatArgs = append(flatArgs, v...)
+		default:
+			flatArgs = append(flatArgs, v)
+		}
+	}
+
 	var b strings.Builder
 	argIndex := 0
+
 	for i := 0; i < len(query); i++ {
-		if query[i] == '?' && argIndex < len(args) {
-			// Write the argument in a quoted form
-			b.WriteString(quoteArg(args[argIndex]))
+		if query[i] == '?' && argIndex < len(flatArgs) {
+			b.WriteString(quoteArg(flatArgs[argIndex]))
 			argIndex++
 		} else {
 			b.WriteByte(query[i])
 		}
 	}
-	return b.String()
+
+	// collapse whitespace and trim
+	return strings.Join(strings.Fields(b.String()), " ")
 }
+
 func quoteArg(arg any) string {
 	switch v := arg.(type) {
 	case string:
+		// escape single quotes
 		return fmt.Sprintf("'%s'", strings.ReplaceAll(v, "'", "''"))
 	case []byte:
+		// hex representation
 		return fmt.Sprintf("'%x'", v)
 	case nil:
 		return "NULL"
+	case []string:
+		// return only the first element quoted
+		// (the caller should pass elements one by one for multiple ? placeholders)
+		if len(v) == 0 {
+			return "NULL"
+		}
+		return fmt.Sprintf("'%s'", strings.ReplaceAll(v[0], "'", "''"))
 	default:
-		return fmt.Sprintf("%v", v)
+		return fmt.Sprintf("'%v'", v)
 	}
 }
 

@@ -28,7 +28,8 @@ func ValidateRequest() fiber.Handler {
 		//% action validation is done in controllers/account_[wii/ds].go
 		//% svc for svcloc is validated in controllers/ac_svcloc.go
 		//% gsbrcd, lang, gamecd and region are validated in protocol/reqfixer.go
-		//% ingamesn and devname profanity is validated in protocol/profanity.go
+		//% ingamesn, devname and words are validated in protocol/reqfixer.go
+		//% console/player name profanity is validated in protocol/profanity.go
 
 		//& its important to this one first
 		//& used for per-console behaviour
