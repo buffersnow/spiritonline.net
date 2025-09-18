@@ -172,9 +172,9 @@ func ValidateRequest() fiber.Handler {
 		if i64_unitcd == UnitCD_NintendoWii {
 			str_cfc := c.FormValue("cfc")
 			i64_cfc, err := cast.ToInt64E(str_cfc)
-			if err != nil || i64_cfc != 0 {
+			if err != nil || i64_cfc == 0 {
 				return web.BadRequestError(c, &web.Details{
-					Message: "invalid makercd",
+					Message: "invalid cfc",
 					Err:     fmt.Errorf("wfc: protocol: cast: %w", err),
 				})
 			}
@@ -192,7 +192,7 @@ func ValidateRequest() fiber.Handler {
 		if len(str_csnum) <= 8 || len(str_csnum) > 16 {
 			return web.BadRequestError(c, &web.Details{
 				Message: "invalid csnum",
-				Err:     fmt.Errorf("wfc: protocol: length of csnum is 0"),
+				Err:     fmt.Errorf("wfc: protocol: length of csnum is 0 or has exceeded maximum"),
 			})
 		}
 
