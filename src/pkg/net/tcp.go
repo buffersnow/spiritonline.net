@@ -96,6 +96,10 @@ func (tcp TcpConnection) GetRemoteAddress() string {
 }
 
 func (tcp TcpConnection) WriteText(data string) error {
+	if tcp.server == nil || tcp.client == nil {
+		return errors.New("net: TCP server or client not initialized")
+	}
+
 	if _, err := tcp.client.Write([]byte(data)); err != nil {
 		return fmt.Errorf("net: %w", err)
 	}
@@ -113,28 +117,35 @@ func (tcp TcpConnection) ReadText() (data string, err error) {
 }
 
 func (tcp TcpConnection) ReadTextEx(timeout time.Time) (data string, err error) {
+	if tcp.server == nil || tcp.client == nil {
+		return "", errors.New("net: TCP server or client not initialized")
+	}
+
 	tcp.client.SetReadDeadline(timeout)
 
 	buf := make([]byte, 65535)
-	length, err := tcp.client.Read(buf)
+	n, err := tcp.client.Read(buf)
 
 	if err != nil {
 		return "", fmt.Errorf("net: %w", err)
 	}
 
-	ret := make([]byte, length)
-	copy(ret, buf)
+	lastData := buf[:n]
+	retstr := strings.TrimRight(string(lastData), "\r\n")
 
-	retstr := strings.TrimRight(string(ret), "\r\n")
 	tcp.Log.Debug(log.DEBUG_TRAFFIC,
 		"ReadText", "Data Length: %d, Data Stream: %s",
-		len(ret), retstr,
+		len(lastData), retstr,
 	)
 
 	return retstr, nil
 }
 
 func (tcp TcpConnection) WriteBytes(data []byte) error {
+	if tcp.server == nil || tcp.client == nil {
+		return errors.New("net: TCP server or client not initialized")
+	}
+
 	if _, err := tcp.client.Write(data); err != nil {
 		return fmt.Errorf("net: %w", err)
 	}
@@ -152,24 +163,27 @@ func (tcp TcpConnection) ReadBytes() (data []byte, err error) {
 }
 
 func (tcp TcpConnection) ReadBytesEx(timeout time.Time) (data []byte, err error) {
+	if tcp.server == nil || tcp.client == nil {
+		return nil, errors.New("net: TCP server or client not initialized")
+	}
+
 	tcp.client.SetReadDeadline(timeout)
 
 	buf := make([]byte, 65535)
-	length, err := tcp.client.Read(buf)
+	n, err := tcp.client.Read(buf)
 
 	if err != nil {
 		return nil, fmt.Errorf("net: %w", err)
 	}
 
-	ret := make([]byte, length)
-	copy(ret, buf)
+	lastData := buf[:n]
 
 	tcp.Log.Debug(log.DEBUG_TRAFFIC,
 		"ReadBytes", "Data Length: %d, Data Stream: %s",
-		len(ret), prettyBytes(ret),
+		len(lastData), prettyBytes(lastData),
 	)
 
-	return ret, nil
+	return lastData, nil
 }
 
 func (tcp *TcpConnection) Close() error {
