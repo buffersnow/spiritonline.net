@@ -26,5 +26,10 @@ func Download(c *fiber.Ctx) error {
 		})
 	}
 
+	//$ https://github.com/barronwaffles/dwc_network_server_emulator/blob/master/dls1_server.py#L79
+	//$ https://github.com/Retro-Rewind-Team/wfc-server/blob/main/nas/auth.go#L159
+	//? Both wwfc and AltWFC both put this header here, so it's probably a good idea to set it
+	c.Set("X-DLS-Host", "http://127.0.0.1")
+
 	return handler(c)
 }
