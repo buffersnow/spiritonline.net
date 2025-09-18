@@ -10,6 +10,7 @@ import (
 	"buffersnow.com/spiritonline/pkg/web"
 	"github.com/gofiber/fiber/v2"
 	"github.com/luxploit/red"
+	"github.com/spf13/cast"
 )
 
 //$ https://github.com/insanekartwii/wfc-server/blob/main/nas/auth.go#L179
@@ -30,9 +31,10 @@ func AC_AccountCreate(c *fiber.Ctx) error {
 	}
 
 	wfcid, err := protocol.GetWFCAccountID(repo, repositories.WFCAccountQuery{
-		ConsoleID: c.FormValue("csnum"),
-		IP:        c.IP(),
-		MAC:       c.FormValue("macadr"),
+		Serial: c.FormValue("csnum"),
+		FC:     cast.ToInt64(c.FormValue("cfc")),
+		IP:     c.IP(),
+		MAC:    c.FormValue("macadr"),
 	})
 	if err != nil {
 		return web.InternalServerError(c, &web.Details{

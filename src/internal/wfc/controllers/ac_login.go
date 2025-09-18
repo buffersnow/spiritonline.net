@@ -11,6 +11,7 @@ import (
 	"buffersnow.com/spiritonline/pkg/web"
 	"github.com/gofiber/fiber/v2"
 	"github.com/luxploit/red"
+	"github.com/spf13/cast"
 )
 
 func AC_Login(c *fiber.Ctx) error {
@@ -23,9 +24,10 @@ func AC_Login(c *fiber.Ctx) error {
 	}
 
 	query := repositories.WFCAccountQuery{
-		ConsoleID: c.FormValue("csnum"),
-		IP:        c.IP(),
-		MAC:       c.FormValue("macadr"),
+		Serial: c.FormValue("csnum"),
+		FC:     cast.ToInt64(c.FormValue("cfc")),
+		IP:     c.IP(),
+		MAC:    c.FormValue("macadr"),
 	}
 
 	wfcid, err := protocol.GetWFCAccountID(repo, query)
@@ -57,13 +59,14 @@ func AC_Login(c *fiber.Ctx) error {
 
 	challenge := util.RandomString(8)
 	token, err := protocol.CreateToken(protocol.AuthToken{
-		WFCID:     wfcid,
-		GameCode:  c.FormValue("gamecd"),
-		RegionID:  util.HexToByte(c.FormValue("region")),
-		ConsoleID: query.ConsoleID,
-		MAC:       query.MAC,
-		IP:        query.IP,
-		Challenge: challenge,
+		WFCID:      wfcid,
+		GameCode:   c.FormValue("gamecd"),
+		RegionID:   util.HexToByte(c.FormValue("region")),
+		Serial:     query.Serial,
+		FriendCode: query.FC,
+		MAC:        query.MAC,
+		IP:         query.IP,
+		Challenge:  challenge,
 	})
 
 	if err != nil {

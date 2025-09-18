@@ -1,6 +1,6 @@
 -- SQL dump generated using DBML (dbml.dbdiagram.io)
 -- Database: MySQL
--- Generated at: 2025-09-18T07:37:22.448Z
+-- Generated at: 2025-09-18T21:43:06.960Z
 
 CREATE TABLE `accounts` (
   `user_id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -50,7 +50,8 @@ CREATE TABLE `app_passwords` (
 CREATE TABLE `wfc_accounts` (
   `wfc_id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `linked_id` bigint,
-  `console_ids` json,
+  `console_sns` json,
+  `console_fcs` json,
   `ip_addrs` json,
   `mac_addrs` json,
   `last_updated_on` datetime(3) NOT NULL
