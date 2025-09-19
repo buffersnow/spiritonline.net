@@ -9,12 +9,13 @@ _NOTE: tbi stands for To Be Implemented!_
 
 ## Service
 
-- [**myspace**](./myspace): MySpaceIM server (uses [**gamespy**](/src/pkg/gp) protocol)
+- [**myspace**](./myspace): MySpaceIM server (uses [**gamespy**](/src/pkg/gp) presence protocol)
 
 ### Gamespy
 
-- [**gsp**](./gsp): GameSpy Presence, houses GPCM (tbi) and GPSP (tbi) servers
-- [**wfc**](./wfc): Nintendo WiFi Connection, houses NAS-Wii (WIP), NAS-DS (tbi), DLS1 (tbi), Conntest, SAKE (tbi), RACE (tbi)
+- [**gsp**](./gsp): GameSpy Presence, contains GPCM (tbi) and GPSP (tbi) servers
+- [**wfc**](./wfc): Nintendo WiFi Connection, houses NAS-Wii, NAS-DS (WIP), DLS1 (tbi), Conntest, SAKE (tbi), RACE (tbi)
+- [**qr**](./qr): GameSpy Query and Report, also known as the Gamespy master server
 
 ## Edge
 
