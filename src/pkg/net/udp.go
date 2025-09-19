@@ -20,7 +20,7 @@ type UdpPacket struct {
 	Log  log.LoggingFactory
 	addr *net.UDPAddr
 	conn *net.UDPConn
-	data []byte
+	Data []byte
 }
 
 func (n NetUtils) CreateUdpListener(port int) (*UdpServer, error) {
