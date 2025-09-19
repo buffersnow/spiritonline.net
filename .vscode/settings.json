@@ -14,7 +14,8 @@
     { "icon": "paket", "extensions": ["pkg"] },
     { "icon": "certificate", "extensions": ["security"] },
     { "icon": "notification", "extensions": ["lifecycle"] },
-    { "icon": "buildkite", "extensions": ["gp"] }
+    { "icon": "buildkite", "extensions": ["gp"] },
+    { "icon": "component", "extensions": ["dlc"] }
   ],
   "colorful-comments.tags": [
     {

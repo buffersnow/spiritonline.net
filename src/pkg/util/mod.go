@@ -2,9 +2,11 @@ package util
 
 import (
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"math/rand/v2"
 	"os"
+	"path/filepath"
 	"reflect"
 	"regexp"
 	"strings"
@@ -161,6 +163,38 @@ func WithinTimezoneDrift(t time.Time) bool {
 
 	// Valid timezone drift is between -12 and +14 hours
 	return offsetHours >= -12 && offsetHours <= 14
+}
+
+// To be used for DLS1 eventually, when i can be bothered to implement it!
+func SafeFileRead(baseDir, filename string) ([]byte, error) {
+	cleanName := filepath.Clean(filename)
+
+	if filepath.IsAbs(cleanName) {
+		return nil, errors.New("util: fs: absolute paths are not allowed")
+	}
+
+	fullPath := filepath.Join(baseDir, cleanName)
+
+	absBase, err := filepath.Abs(baseDir)
+	if err != nil {
+		return nil, fmt.Errorf("util: fs: os: %w", err)
+	}
+
+	absTarget, err := filepath.Abs(fullPath)
+	if err != nil {
+		return nil, fmt.Errorf("util: fs: os: %w", err)
+	}
+
+	if !strings.HasPrefix(absTarget, absBase) {
+		return nil, errors.New("util: fs: path traversal is not allowed")
+	}
+
+	data, err := os.ReadFile(absTarget)
+	if err != nil {
+		return nil, fmt.Errorf("util: fs: os: %w", err)
+	}
+
+	return data, nil
 }
 
 /// Comment Colors - Please actually use these
