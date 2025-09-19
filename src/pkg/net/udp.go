@@ -13,12 +13,7 @@ import (
 
 type UdpServer struct {
 	conn *net.UDPConn
-	log  log.LoggingFactory
-}
-
-type UdpConnection struct {
-	server *UdpServer
-	Log    log.LoggingFactory
+	Log  log.LoggingFactory
 }
 
 type UdpPacket struct {
@@ -48,7 +43,7 @@ func (n NetUtils) CreateUdpListener(port int) (*UdpServer, error) {
 
 	return &UdpServer{
 		conn: udpConn,
-		log:  logger.Factory("UDP"),
+		Log:  logger.Factory("UDP"),
 	}, nil
 }
 
@@ -56,19 +51,19 @@ func (udp UdpPacket) GetRemoteAddress() string {
 	return udp.addr.String()
 }
 
-func (udp *UdpConnection) ReadBytes() (*UdpPacket, error) {
+func (udp *UdpServer) ReadBytes() (*UdpPacket, error) {
 	return udp.ReadBytesEx(time.Time{})
 }
 
-func (udp *UdpConnection) ReadBytesEx(timeout time.Time) (*UdpPacket, error) {
-	if udp.server == nil || udp.server.conn == nil {
+func (udp *UdpServer) ReadBytesEx(timeout time.Time) (*UdpPacket, error) {
+	if udp == nil || udp.conn == nil {
 		return nil, errors.New("net: UDP server or socket not initialized")
 	}
 
-	udp.server.conn.SetReadDeadline(timeout)
+	udp.conn.SetReadDeadline(timeout)
 
 	buf := make([]byte, 65535)
-	n, addr, err := udp.server.conn.ReadFromUDP(buf)
+	n, addr, err := udp.conn.ReadFromUDP(buf)
 	if err != nil {
 		return nil, fmt.Errorf("net: %w", err)
 	}
@@ -104,19 +99,19 @@ func (udp *UdpPacket) WriteBytes(data []byte) error {
 	return nil
 }
 
-func (udp *UdpConnection) ReadText() (*UdpPacket, error) {
+func (udp *UdpServer) ReadText() (*UdpPacket, error) {
 	return udp.ReadTextEx(time.Time{})
 }
 
-func (udp *UdpConnection) ReadTextEx(timeout time.Time) (*UdpPacket, error) {
-	if udp.server == nil || udp.server.conn == nil {
+func (udp *UdpServer) ReadTextEx(timeout time.Time) (*UdpPacket, error) {
+	if udp == nil || udp.conn == nil {
 		return nil, errors.New("net: UDP server or socket not initialized")
 	}
 
-	udp.server.conn.SetReadDeadline(timeout)
+	udp.conn.SetReadDeadline(timeout)
 
 	buf := make([]byte, 65535)
-	n, addr, err := udp.server.conn.ReadFromUDP(buf)
+	n, addr, err := udp.conn.ReadFromUDP(buf)
 	if err != nil {
 		return nil, fmt.Errorf("net: %w", err)
 	}
