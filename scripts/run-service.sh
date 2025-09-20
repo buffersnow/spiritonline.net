@@ -3,7 +3,7 @@
 set -e
 
 usage() {
-  echo "Usage: $0 [...] <service-name> [extra-run-args...]"
+  echo "Usage: $0 <service-name> [...] [extra-run-args...]"
   echo "  Build Mode:                   [-d|-t|-p]"
   echo "  Run after Build:              [-r]"
   echo "  Cross-Compile Arch:           [-a <arch>]"
