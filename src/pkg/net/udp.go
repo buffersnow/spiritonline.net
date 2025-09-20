@@ -77,7 +77,7 @@ func (udp *UdpServer) ReadBytesEx(timeout time.Time) (*UdpPacket, error) {
 
 	return &UdpPacket{
 		addr: addr,
-		data: lastData,
+		Data: lastData,
 	}, nil
 }
 
@@ -127,7 +127,7 @@ func (udp *UdpServer) ReadTextEx(timeout time.Time) (*UdpPacket, error) {
 	return &UdpPacket{
 		Log:  udp.Log,
 		addr: addr,
-		data: []byte(retstr),
+		Data: []byte(retstr),
 	}, nil
 }
 
