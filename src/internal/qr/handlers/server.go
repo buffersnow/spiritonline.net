@@ -27,7 +27,7 @@ func ListenService(opt *settings.Options, log *log.Logger, net *net.NetUtils) er
 		//& a '\' as the first byte." - OpenSpy Core v2
 		//$ https://github.com/openspy/openspy-core
 		//~ omw to fucking shoot myself with these fucking
-		//~ backslashes hauting me from myspace to iw8 lan
+		//~ '\\' hauting me from myspace to iw8 lan (luxploit)
 		if udp.Data[0] == '\\' /*legacy*/ {
 			//% handlers/qr1.go
 			go qr1Delegate(udp, log)
