@@ -67,7 +67,7 @@ func (o *Options) loadEnv() error {
 	tasks := []func() error{
 		func() error { return util.CleanEnv("SERVICE_PORTS") },
 		func() error { return util.CleanEnv("SERVICE_FEATURES") },
-		func() error { return util.CleanEnv("SERVICE_PROXIES") },
+		func() error { return util.CleanEnv("SERVICE_HTTP_PROXIES") },
 	}
 
 	if err := util.Batch(tasks); err != nil {
