@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// @ TODO: Implement action handlers (luxploit)
 func Download(c *fiber.Ctx) error {
 	handlers := map[string]fiber.Handler{
 		"count":    func(*fiber.Ctx) error { return nil },
@@ -31,5 +32,6 @@ func Download(c *fiber.Ctx) error {
 	//? Both wwfc and AltWFC both put this header here, so it's probably a good idea to set it
 	c.Set("X-DLS-Host", "http://127.0.0.1")
 
+	c.Status(fiber.StatusNotImplemented)
 	return handler(c)
 }
