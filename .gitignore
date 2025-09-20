@@ -23,3 +23,6 @@ sql/*.user.toml
 sql/*.artifact
 sql/report.html
 sql/report.json
+**/taxi.yaml
+**/taxi.*.yaml
+!/taxi.example.yaml

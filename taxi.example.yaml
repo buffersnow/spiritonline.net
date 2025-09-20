@@ -1,0 +1,19 @@
+programs:
+  - name: gsp
+    args:
+      - "-v"
+  - name: myspace
+    args:
+      - "-v"
+  - name: proxy
+    args:
+      - "-v"
+  - name: qr
+    args:
+      - "-v"
+  - name: router
+    args:
+      - "-v"
+  - name: wfc
+    args:
+      - "-v"
