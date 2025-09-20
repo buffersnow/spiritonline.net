@@ -6,8 +6,10 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"os/signal"
 	"runtime"
 	"strings"
+	"syscall"
 
 	"gopkg.in/yaml.v3"
 )
@@ -54,7 +56,7 @@ func runService(name, command string, args ...string) {
 	}(name, stdout)
 
 	if err := cmd.Wait(); err != nil {
-		fmt.Printf("%s exited with err: %v", name, err)
+		fmt.Printf("%s exited with err: %v\n", name, err)
 	}
 }
 
@@ -82,5 +84,12 @@ func main() {
 
 	for _, prg := range cfg.Programs {
 		go runService(prg.Name, fmt.Sprintf("bin/%s%s", prg.Name, fileExt), prg.Args...)
+	}
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	if sig := <-c; sig != nil {
+		println("quitting")
+		os.Exit(0)
 	}
 }
