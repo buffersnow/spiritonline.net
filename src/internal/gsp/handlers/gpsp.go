@@ -2,14 +2,11 @@ package handlers
 
 import (
 	"fmt"
-	"math/rand/v2"
 
 	"buffersnow.com/spiritonline/internal/gsp/protocol"
-
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/net"
 	"buffersnow.com/spiritonline/pkg/settings"
-	"buffersnow.com/spiritonline/pkg/util"
 )
 
 func ListenGPSP(opt *settings.Options, net *net.NetUtils, log *log.Logger) error {
@@ -31,11 +28,8 @@ func ListenGPSP(opt *settings.Options, net *net.NetUtils, log *log.Logger) error
 
 func gpspDelegate(conn *net.TcpConnection, logger *log.Logger) {
 
-	ctx := protocol.GamespyContext{
-		Client: protocol.GamespyClientContext{
-			Nonce:      util.RandomString(0x40),
-			SessionKey: rand.IntN(0xFFFFF),
-		},
+	ctx := &protocol.GamespyContext{
+		Connection: conn,
 		Log: logger.FactoryWithPostfix("GPSP",
 			fmt.Sprintf("<IP: %s>", conn.GetRemoteAddress()),
 		),

@@ -31,8 +31,9 @@ func ListenGPCM(opt *settings.Options, net *net.NetUtils, log *log.Logger) error
 
 func gpcmDelegate(conn *net.TcpConnection, logger *log.Logger) {
 
-	ctx := protocol.GamespyContext{
-		Client: protocol.GamespyClientContext{
+	ctx := &protocol.GamespyContext{
+		Connection: conn,
+		GPCM: protocol.GPCMContext{
 			Nonce:      util.RandomString(0x40),
 			SessionKey: rand.IntN(0xFFFFF),
 		},
@@ -47,6 +48,8 @@ func gpcmDelegate(conn *net.TcpConnection, logger *log.Logger) {
 		ctx.Log.Event("Client", "Client exited!")
 		ctx.Connection.Close()
 	}()
+
+	protocol.StartGPCMAuth(ctx)
 
 	for {
 		_, err := conn.ReadText()
