@@ -6,7 +6,7 @@ import (
 
 type GameSpyKV struct {
 	key   string
-	value GamespyData
+	value GameSpyData
 }
 
 func (kv GameSpyKV) Serialize() string {
@@ -21,6 +21,6 @@ func (kv GameSpyKV) Key() string {
 	return kv.key
 }
 
-func (kv GameSpyKV) Value() GamespyData {
+func (kv GameSpyKV) Value() GameSpyData {
 	return kv.value
 }

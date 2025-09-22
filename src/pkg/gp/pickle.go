@@ -32,7 +32,7 @@ func PickleMessage(data string) iter.Seq[GameSpyKV] {
 
 			if !yield(GameSpyKV{
 				key:   splits[idx],
-				value: GamespyData{data: val},
+				value: GameSpyData{data: val},
 			}) {
 				return
 			}
@@ -56,7 +56,7 @@ func PickleDictionary(data string) iter.Seq[GameSpyKV] {
 
 				if !yield(GameSpyKV{
 					key:   splits[idx],
-					value: GamespyData{data: value},
+					value: GameSpyData{data: value},
 				}) {
 					return
 				}

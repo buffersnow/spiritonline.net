@@ -3,29 +3,30 @@ package gp
 import (
 	"encoding/base64"
 	"iter"
-	"strconv"
+
+	"github.com/spf13/cast"
 )
 
-type GamespyData struct {
+type GameSpyData struct {
 	data string
 }
 
-func (g GamespyData) DataBlock() []byte {
+func (g GameSpyData) DataBlock() []byte {
 	return []byte(g.data)
 }
 
-func (g GamespyData) String() string {
+func (g GameSpyData) String() string {
 	return g.data
 }
 
-func (g GamespyData) Integer() (int, error) {
-	return strconv.Atoi(g.data)
+func (g GameSpyData) Integer() (int, error) {
+	return cast.ToIntE(g.data)
 }
 
-func (g GamespyData) Dictionary() iter.Seq[GameSpyKV] {
+func (g GameSpyData) Dictionary() iter.Seq[GameSpyKV] {
 	return PickleDictionary(g.data)
 }
 
-func (g GamespyData) Base64() string {
+func (g GameSpyData) Base64() string {
 	return base64.StdEncoding.EncodeToString([]byte(g.data))
 }

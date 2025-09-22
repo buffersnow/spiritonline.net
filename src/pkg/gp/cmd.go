@@ -2,13 +2,18 @@ package gp
 
 import "iter"
 
-type GamespyCommandInfo struct {
+type GameSpyError struct {
+	ErrorCode int
+	Message   string
+}
+
+type GameSpyCommandInfo struct {
 	Command    string
 	SubCommand int
 	Data       iter.Seq[GameSpyKV]
 }
 
-func (cmdInfo GamespyCommandInfo) Find(key string) GameSpyKV {
+func (cmdInfo GameSpyCommandInfo) Find(key string) GameSpyKV {
 	return FindFromBundle(key, cmdInfo.Data)
 }
 
