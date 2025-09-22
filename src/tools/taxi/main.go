@@ -21,6 +21,8 @@ type Config struct {
 	} `yaml:"programs"`
 }
 
+var longestName = 0
+
 var colorsList = map[string]string{
 	"gsp":     "\033[38;5;62m",  /// Hex: #5f5fd7
 	"myspace": "\033[38;5;208m", /// Hex: #ff8700
@@ -51,7 +53,7 @@ func runService(name, command string, args ...string) {
 				color = "\033[38;5;61m"
 			}
 
-			fmt.Printf("%s%s | %s\n", color, gname, txt)
+			fmt.Printf("%s%+*s | %s\n", color, longestName, gname, txt)
 		}
 	}(name, stdout)
 
@@ -80,6 +82,12 @@ func main() {
 	fileExt := ".exe"
 	if runtime.GOOS != "windows" {
 		fileExt = ".lxb"
+	}
+
+	for _, prg := range cfg.Programs {
+		if longestName < len(prg.Name) {
+			longestName = len(prg.Name)
+		}
 	}
 
 	for _, prg := range cfg.Programs {
