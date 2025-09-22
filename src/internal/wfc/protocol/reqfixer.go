@@ -17,7 +17,7 @@ func RequestFixup() fiber.Handler {
 		i64_unitcd := cast.ToInt64(c.FormValue("unitcd"))
 
 		str_lang := c.FormValue("lang", "FE")
-		if u8_lang := util.HexToByte(str_lang); u8_lang == 0xFF || u8_lang == 0x00 {
+		if u8_lang := util.HexToByte(str_lang); u8_lang == 0xFF {
 			return web.BadRequestError(c, &web.Details{
 				Message: "invalid lang",
 				Err:     fmt.Errorf("wfc: protocol: lang was outside of boundaries"),
@@ -27,7 +27,7 @@ func RequestFixup() fiber.Handler {
 		if i64_unitcd == UnitCD_NintendoWii {
 			//$ https://github.com/Retro-Rewind-Team/wfc-server/blob/main/nas/auth.go#L318
 			str_region := c.FormValue("region", "FE")
-			if u8_region := util.HexToByte(str_region); u8_region == 0xFF || u8_region == 0x00 {
+			if u8_region := util.HexToByte(str_region); u8_region == 0xFF {
 				return web.BadRequestError(c, &web.Details{
 					Message: "invalid region",
 					Err:     fmt.Errorf("wfc: protocol: region was outside of boundaries"),

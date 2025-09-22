@@ -74,5 +74,10 @@ func GetWFCAccountID(repo *repositories.WFCRepo, query repositories.WFCAccountQu
 		return wfcid, nil
 	}
 
+	err = repo.Account.Update(query)
+	if err != nil {
+		return 0, err
+	}
+
 	return wfcid, nil
 }

@@ -36,14 +36,12 @@ type WFCAccountQuery struct {
 func (w *WFCAccountRepo) GetWFCID(query WFCAccountQuery) (int64, error) {
 
 	wfcid := int64(0)
-	err := w.sql.Get(&wfcid, sq.Select("wfc_id").From("wfc_accounts").Where(
-		`JSON_CONTAINS(console_sns, JSON_QUOTE(?)) 
-			OR JSON_CONTAINS(console_fcs, JSON_QUOTE(?)) 
-			OR JSON_CONTAINS(ip_addrs, JSON_QUOTE(?))
-			OR JSON_CONTAINS(mac_addrs, JSON_QUOTE(?))
-		`,
-		query.Serial, query.FC, query.IP, query.MAC,
-	))
+	err := w.sql.Get(&wfcid, sq.Select("wfc_id").From("wfc_accounts").Where(sq.Or{
+		sq.Expr("JSON_SEARCH(console_sns, 'one', ?) IS NOT NULL", query.Serial),
+		sq.Expr("JSON_SEARCH(console_fcs, 'one', ?) IS NOT NULL", query.FC),
+		sq.Expr("JSON_SEARCH(ip_addrs, 'one', ?) IS NOT NULL", query.IP),
+		sq.Expr("JSON_SEARCH(mac_addrs, 'one', ?) IS NOT NULL", query.MAC),
+	}))
 
 	if err != nil {
 		w.logger.Warning("Query", "Failed to get WFCID (%+v)", query)
@@ -73,4 +71,42 @@ func (w *WFCAccountRepo) Insert(query WFCAccountQuery) (int64 /*wfc_id*/, error)
 	))
 
 	return wfcid, err
+}
+
+func (w *WFCAccountRepo) Update(query WFCAccountQuery) error {
+
+	queries := []func(sq.UpdateBuilder) sq.UpdateBuilder{
+		func(ub sq.UpdateBuilder) sq.UpdateBuilder {
+			return ub.Set("console_sns", sq.Expr("JSON_ARRAY_APPEND(console_sns, '$', ?)", query.Serial)).Where(sq.Or{
+				sq.Expr("NOT JSON_CONTAINS(console_sns, JSON_QUOTE(?), '$')", query.Serial),
+			})
+		},
+
+		func(ub sq.UpdateBuilder) sq.UpdateBuilder {
+			return ub.Set("console_fcs", sq.Expr("JSON_ARRAY_APPEND(console_fcs, '$', ?)", query.FC)).Where(sq.Or{
+				sq.Expr("NOT JSON_CONTAINS(console_fcs, CAST(? AS JSON), '$')", query.FC),
+			})
+		},
+
+		func(ub sq.UpdateBuilder) sq.UpdateBuilder {
+			return ub.Set("ip_addrs", sq.Expr("JSON_ARRAY_APPEND(ip_addrs, '$', ?)", query.IP)).Where(sq.Or{
+				sq.Expr("NOT JSON_CONTAINS(ip_addrs, JSON_QUOTE(?), '$')", query.IP),
+			})
+		},
+
+		func(ub sq.UpdateBuilder) sq.UpdateBuilder {
+			return ub.Set("mac_addrs", sq.Expr("JSON_ARRAY_APPEND(mac_addrs, '$', ?)", query.MAC)).Where(sq.Or{
+				sq.Expr("NOT JSON_CONTAINS(mac_addrs, JSON_QUOTE(?), '$')", query.MAC),
+			})
+		},
+	}
+
+	for _, query := range queries {
+		err := w.sql.Update(query(sq.Update("wfc_accounts")))
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
