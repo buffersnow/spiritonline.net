@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand/v2"
 
+	"buffersnow.com/spiritonline/internal/gsp/controllers"
 	"buffersnow.com/spiritonline/internal/gsp/protocol"
 
 	"buffersnow.com/spiritonline/pkg/log"
@@ -49,7 +50,7 @@ func gpcmDelegate(conn *net.TcpConnection, logger *log.Logger) {
 		ctx.Connection.Close()
 	}()
 
-	protocol.StartGPCMAuth(ctx)
+	controllers.StartGPCMAuth(ctx)
 
 	for {
 		_, err := conn.ReadText()
