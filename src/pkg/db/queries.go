@@ -26,12 +26,12 @@ func (s *SQL) ExecRaw(query string, args ...any) (sql.Result, error) {
 	return res, err
 }
 
-func (s *SQL) Insert(ib squirrel.InsertBuilder) (sql.Result, error) {
+func (s *SQL) Insert(ib squirrel.InsertBuilder) error {
 	start := time.Now()
 	query, args, err := ib.ToSql()
 	if err != nil {
 		s.f.Error("Insert", "Failed to build SQL query: %v", err)
-		return nil, fmt.Errorf("db: sqlx: squirrel: %w", err)
+		return fmt.Errorf("db: sqlx: squirrel: %w", err)
 	}
 
 	res, err := s.e.Exec(query, args...)
@@ -45,15 +45,15 @@ func (s *SQL) Insert(ib squirrel.InsertBuilder) (sql.Result, error) {
 		s.f.Warning("Insert", "<Time: %s> <Rows: None> %v (%s)", elapsed, err, util.FormatSQL(query, args))
 	}
 
-	return res, err
+	return err
 }
 
-func (s *SQL) Update(ub squirrel.UpdateBuilder) (sql.Result, error) {
+func (s *SQL) Update(ub squirrel.UpdateBuilder) error {
 	start := time.Now()
 	query, args, err := ub.ToSql()
 	if err != nil {
 		s.f.Error("Update", "Failed to build SQL query: %v", err)
-		return nil, fmt.Errorf("db: sqlx: squirrel: %w", err)
+		return fmt.Errorf("db: sqlx: squirrel: %w", err)
 	}
 
 	res, err := s.e.Exec(query, args...)
@@ -66,15 +66,15 @@ func (s *SQL) Update(ub squirrel.UpdateBuilder) (sql.Result, error) {
 		s.f.Warning("Update", "<Time: %s> <Rows: None> %v (%s)", elapsed, err, util.FormatSQL(query, args))
 	}
 
-	return res, err
+	return err
 }
 
-func (s *SQL) Delete(db squirrel.DeleteBuilder) (sql.Result, error) {
+func (s *SQL) Delete(db squirrel.DeleteBuilder) error {
 	start := time.Now()
 	query, args, err := db.ToSql()
 	if err != nil {
 		s.f.Error("Delete", "Failed to build SQL query: %v", err)
-		return nil, fmt.Errorf("db: sqlx: squirrel: %w", err)
+		return fmt.Errorf("db: sqlx: squirrel: %w", err)
 	}
 
 	res, err := s.e.Exec(query, args...)
@@ -87,7 +87,7 @@ func (s *SQL) Delete(db squirrel.DeleteBuilder) (sql.Result, error) {
 		s.f.Warning("Delete", "<Time: %s> <Rows: None> %v (%s)", elapsed, err, util.FormatSQL(query, args))
 	}
 
-	return res, err
+	return err
 }
 
 func (s *SQL) Get(dest any, sb squirrel.SelectBuilder) error {

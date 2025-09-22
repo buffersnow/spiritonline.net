@@ -54,7 +54,7 @@ func (w *WFCAccountRepo) GetWFCID(query WFCAccountQuery) (int64, error) {
 }
 
 func (w *WFCAccountRepo) Insert(query WFCAccountQuery) (int64 /*wfc_id*/, error) {
-	_, err := w.sql.Insert(
+	err := w.sql.Insert(
 		sq.Insert("wfc_accounts").
 			Columns("console_sns", "console_fcs", "ip_addrs", "mac_addrs", "last_updated_on").
 			Values(

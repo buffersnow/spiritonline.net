@@ -60,12 +60,15 @@ func GetEndpoint(c *fiber.Ctx) string {
 
 func GetWFCAccountID(repo *repositories.WFCRepo, query repositories.WFCAccountQuery) (int64, error) {
 	wfcid, err := repo.Account.GetWFCID(query)
+
 	if err != nil && err != sql.ErrNoRows {
-		return 0, fmt.Errorf("wfc: controllers: %w", err)
-	} else if err == sql.ErrNoRows {
+		return 0, err
+	}
+
+	if err == sql.ErrNoRows {
 		wfcid, err = repo.Account.Insert(query)
 		if err != nil {
-			return 0, fmt.Errorf("wfc: controllers: %w", err)
+			return 0, err
 		}
 
 		return wfcid, nil
