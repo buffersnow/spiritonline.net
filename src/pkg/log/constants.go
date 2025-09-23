@@ -15,7 +15,7 @@ var debugComponentColors = []string{
 	"\033[38;5;93m",  /// Hex: #8700ff DEBUG_SERVICE  -> Microservice
 	"\033[38;5;191m", /// Hex: #d7ff5f DEBUG_DATABASE -> GORM SQL/CouchDB queries
 	"\033[38;5;111m", /// Hex: #87afff DEBUG_API      -> Extra API logging (eg. WebAPI)
-	"\033[38;5;212m", /// Hex: #ff87d7 DEBUG_ROUTER   -> Spirit Internal
+	"\033[38;5;212m", /// Hex: #ff87d7 DEBUG_SPIRIT   -> Spirit Internal
 }
 
 const (
@@ -33,5 +33,5 @@ const (
 	DEBUG_SERVICE
 	DEBUG_DATABASE
 	DEBUG_API
-	DEBUG_ROUTER
+	DEBUG_SPIRIT
 )
