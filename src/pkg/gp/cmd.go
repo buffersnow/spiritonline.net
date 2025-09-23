@@ -2,11 +2,6 @@ package gp
 
 import "iter"
 
-type GameSpyError struct {
-	ErrorCode int
-	Message   string
-}
-
 type GameSpyCommandInfo struct {
 	Command    string
 	SubCommand int
