@@ -22,11 +22,11 @@ const (
 )
 
 var (
-	GPError_Unknown            = gp.GameSpyError{ErrorCode: 0x0000, Message: "An unknown error occurred"}
-	GPError_Parse              = gp.GameSpyError{ErrorCode: 0x0001, Message: "Failed to processing incoming request"}
-	GPError_NeedsAuthorization = gp.GameSpyError{ErrorCode: 0x0002, Message: "Please login to make this request"}
+	GPError_Unknown            = gp.GameSpyError{ErrorCode: 0x0000, Message: "An unknown error occurred", IsFatal: true}
+	GPError_Parse              = gp.GameSpyError{ErrorCode: 0x0001, Message: "Failed to processing incoming request", IsFatal: true}
+	GPError_NeedsAuthorization = gp.GameSpyError{ErrorCode: 0x0002, Message: "Please login to make this request", IsFatal: true}
 )
 
 var (
-	GPLoginError_Unknown = gp.GameSpyError{ErrorCode: 0x0040, Message: "There was an unknown"}
+	GPLoginError_Unknown = gp.GameSpyError{ErrorCode: 0x0040, Message: "There was an unknown login error", IsFatal: true}
 )

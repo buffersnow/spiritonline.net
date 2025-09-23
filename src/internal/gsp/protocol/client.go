@@ -15,19 +15,15 @@ func (g GamespyContext) Send(kvs []gp.GameSpyKV) error {
 
 func (g GamespyContext) Error(err gp.GameSpyError) error {
 
-	return g.Send([]gp.GameSpyKV{
+	msg := []gp.GameSpyKV{
 		gp.Message.Empty("error"),
 		gp.Message.Integer("err", err.ErrorCode),
 		gp.Message.String("errmsg", err.Message),
-	})
-}
+	}
 
-func (g GamespyContext) Fatal(err gp.GameSpyError) error {
+	if err.IsFatal {
+		msg = append(msg, gp.Message.Boolean("fatal", true))
+	}
 
-	return g.Send([]gp.GameSpyKV{
-		gp.Message.Empty("error"),
-		gp.Message.Integer("err", err.ErrorCode),
-		gp.Message.String("errmsg", err.Message),
-		gp.Message.Boolean("fatal", true),
-	})
+	return g.Send(msg)
 }

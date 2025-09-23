@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"errors"
+	"fmt"
 	"slices"
 	"strings"
 
@@ -36,32 +38,49 @@ func StartGPCMAuth(g *protocol.GamespyContext) {
 	})
 }
 
-func HandleIncoming(g *protocol.GamespyContext, stream string) {
+func HandleIncoming(g *protocol.GamespyContext, stream string) error {
 
 	data := strings.SplitSeq(stream, "final\\")
 	for command := range data {
 		kvs := gp.PickleMessage(command)
-		handleClientCommands(g, slices.Collect(kvs))
+
+		err := handleClientCommands(g, slices.Collect(kvs))
+		if err == nil {
+			continue
+		}
+
+		var gpErr *gp.GameSpyError
+		if errors.As(err, &gpErr) {
+			g.Error(*gpErr)
+			return err
+		}
+
+		return err
 	}
+
+	return nil
 }
 
-func handleClientCommands(g *protocol.GamespyContext, kvs []gp.GameSpyKV) {
+func handleClientCommands(g *protocol.GamespyContext, kvs []gp.GameSpyKV) error {
 
 	if len(kvs) == 0 {
-		return
+		return errors.New("gsp: parser: no kv's found")
 	}
 
 	commandPair := kvs[0] //& should always be the command
 	g.Log.Trace(log.DEBUG_SERVICE, "Parser", "Processing command %s", commandPair.Key())
 
-	// subCmdId := 0
-	// if commandPair.Length() != 0 {
-	// 	i64_subCmdId, err := commandPair.Value().Integer()
-	// 	if err != nil {
+	subCmdId := 0
+	if commandPair.Length() != 0 {
+		id, err := commandPair.Value().Integer()
+		if err != nil {
+			return fmt.Errorf("gsp: parser: %w", err)
+		}
 
-	// 		return
-	// 	}
+		subCmdId = id
+	}
 
-	// }
+	g.Log.Trace(log.DEBUG_SERVICE, "Parser", "Sub-Command Id: %d", subCmdId)
 
+	return nil
 }
