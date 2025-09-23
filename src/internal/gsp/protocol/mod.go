@@ -12,6 +12,6 @@ type GamespyContext struct {
 }
 
 type GPCMContext struct {
-	Nonce      string
+	Challenge  string
 	SessionKey int
 }

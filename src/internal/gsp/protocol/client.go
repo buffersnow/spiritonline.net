@@ -1,12 +1,29 @@
 package protocol
 
-import "buffersnow.com/spiritonline/pkg/gp"
+import (
+	"fmt"
 
-func (g GamespyContext) Send(kvs []gp.GameSpyKV) error {
+	"buffersnow.com/spiritonline/pkg/gp"
+)
+
+func (g GamespyContext) Send(gci gp.GameSpyCommandInfo) error {
+
+	msg := []gp.GameSpyKV{}
+	if gci.SubCommand != 0 {
+		msg = append(msg, gp.Message.Integer(gci.Command, gci.SubCommand))
+	} else {
+		msg = append(msg, gp.Message.Empty(gci.Command))
+	}
+
+	msg = append(msg, gci.Data...)
+	return g.SendRaw(msg)
+}
+
+func (g GamespyContext) SendRaw(kvs []gp.GameSpyKV) error {
 
 	data := ""
 	for _, datapair := range kvs {
-		data += datapair.Serialize()
+		data += datapair.Depickle()
 	}
 	data += "\\final\\"
 
@@ -16,14 +33,18 @@ func (g GamespyContext) Send(kvs []gp.GameSpyKV) error {
 func (g GamespyContext) Error(err gp.GameSpyError) error {
 
 	msg := []gp.GameSpyKV{
-		gp.Message.Empty("error"),
 		gp.Message.Integer("err", err.ErrorCode),
-		gp.Message.String("errmsg", err.Message),
+		gp.Message.String("errmsg", fmt.Sprintf("%s.", err.Message)), //~ yes, really i'm too lazy to add dots to the error
 	}
 
 	if err.IsFatal {
 		msg = append(msg, gp.Message.Boolean("fatal", true))
 	}
 
-	return g.Send(msg)
+	gci := gp.GameSpyCommandInfo{
+		Command: GPCommand_Error,
+		Data:    msg,
+	}
+
+	return g.Send(gci)
 }

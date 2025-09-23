@@ -35,7 +35,7 @@ func gpcmDelegate(conn *net.TcpConnection, logger *log.Logger) {
 	ctx := &protocol.GamespyContext{
 		Connection: conn,
 		GPCM: protocol.GPCMContext{
-			Nonce:      util.RandomString(0x40),
+			Challenge:  util.RandomString(0x40),
 			SessionKey: rand.IntN(0xFFFFF),
 		},
 		Log: logger.FactoryWithPostfix("GPCM",
