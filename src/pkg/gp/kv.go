@@ -9,7 +9,7 @@ type GameSpyKV struct {
 	value GameSpyData
 }
 
-func (kv GameSpyKV) Serialize() string {
+func (kv GameSpyKV) Depickle() string {
 	return fmt.Sprintf("\\%s\\%s", kv.key, kv.value)
 }
 

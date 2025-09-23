@@ -1,20 +1,18 @@
 package gp
 
-import "iter"
-
 type GameSpyCommandInfo struct {
 	Command    string
 	SubCommand int
-	Data       iter.Seq[GameSpyKV]
+	Data       []GameSpyKV
 }
 
 func (cmdInfo GameSpyCommandInfo) Find(key string) GameSpyKV {
 	return FindFromBundle(key, cmdInfo.Data)
 }
 
-func FindFromBundle(key string, kvs iter.Seq[GameSpyKV]) GameSpyKV {
+func FindFromBundle(key string, kvs []GameSpyKV) GameSpyKV {
 
-	for kv := range kvs {
+	for _, kv := range kvs {
 		if kv.key != key {
 			continue
 		}

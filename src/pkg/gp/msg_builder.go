@@ -2,7 +2,6 @@ package gp
 
 import (
 	"encoding/base64"
-	"slices"
 
 	"github.com/spf13/cast"
 )
@@ -35,7 +34,7 @@ func (GameSpyMessageBuilder) Integer64(key string, value int64) GameSpyKV {
 }
 
 func (GameSpyMessageBuilder) Dictionary(key string, value []GameSpyKV) GameSpyKV {
-	convData := DepickleDictionary(slices.Values(value))
+	convData := DepickleDictionary(value)
 	return GameSpyKV{key: key, value: GameSpyData{data: convData}}
 }
 

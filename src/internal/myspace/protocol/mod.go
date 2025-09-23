@@ -1,8 +1,6 @@
 package protocol
 
 import (
-	"iter"
-
 	"buffersnow.com/spiritonline/pkg/gp"
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/net"
@@ -31,7 +29,7 @@ type MySpaceCallbackInfo struct {
 	CommandFamily  int
 	CommandSubcode int
 	RequestId      int
-	Body           iter.Seq[gp.GameSpyKV]
+	Body           []gp.GameSpyKV
 }
 
 func (cbInfo MySpaceCallbackInfo) Find(key string) gp.GameSpyKV {

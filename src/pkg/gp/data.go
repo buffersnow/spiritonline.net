@@ -2,7 +2,6 @@ package gp
 
 import (
 	"encoding/base64"
-	"iter"
 
 	"github.com/spf13/cast"
 )
@@ -23,7 +22,7 @@ func (g GameSpyData) Integer() (int, error) {
 	return cast.ToIntE(g.data)
 }
 
-func (g GameSpyData) Dictionary() iter.Seq[GameSpyKV] {
+func (g GameSpyData) Dictionary() []GameSpyKV {
 	return PickleDictionary(g.data)
 }
 
