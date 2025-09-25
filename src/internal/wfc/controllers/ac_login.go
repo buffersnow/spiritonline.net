@@ -7,6 +7,7 @@ import (
 
 	"buffersnow.com/spiritonline/internal/wfc/protocol"
 	"buffersnow.com/spiritonline/internal/wfc/repositories"
+	"buffersnow.com/spiritonline/pkg/gp"
 	"buffersnow.com/spiritonline/pkg/util"
 	"buffersnow.com/spiritonline/pkg/web"
 	"github.com/gofiber/fiber/v2"
@@ -58,7 +59,7 @@ func AC_Login(c *fiber.Ctx) error {
 	}
 
 	challenge := util.RandomString(8)
-	token, err := protocol.CreateToken(protocol.AuthToken{
+	token, err := gp.PickleWFCToken(gp.WFCAuthToken{
 		WFCID:      wfcid,
 		GameCode:   c.FormValue("gamecd"),
 		RegionID:   util.HexToByte(c.FormValue("region")),
