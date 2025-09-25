@@ -26,11 +26,14 @@ const (
 
 var (
 	GPError_UnknownError       = &gp.GameSpyError{ErrorCode: 0x0000, Message: "An unknown error has occurred", IsFatal: true}
-	GPError_Parse              = &gp.GameSpyError{ErrorCode: 0x0001, Message: "Failed to processing incoming request", IsFatal: true}
+	GPError_ParseFailure       = &gp.GameSpyError{ErrorCode: 0x0001, Message: "Failed to processing incoming request", IsFatal: true}
 	GPError_UnknownCommand     = &gp.GameSpyError{ErrorCode: 0x0002, Message: "Unknown command sent to GSP backend", IsFatal: true}
 	GPError_NeedsAuthorization = &gp.GameSpyError{ErrorCode: 0x0003, Message: "Please login to make this request", IsFatal: true}
+	GPError_DisallowedCommand  = &gp.GameSpyError{ErrorCode: 0x0004, Message: "A disallowed command was sent to the GSP backend", IsFatal: true}
 )
 
 var (
-	GPLoginError_Unknown = &gp.GameSpyError{ErrorCode: 0x0040, Message: "There was an unknown login error", IsFatal: true}
+	GPLoginError_Unknown      = &gp.GameSpyError{ErrorCode: 0x0040, Message: "There was an unknown login error", IsFatal: true}
+	GPLoginError_Duplicate    = &gp.GameSpyError{ErrorCode: 0x0041, Message: "Client has already been authenticated with GSP backend"}
+	GPLoginError_InvalidToken = &gp.GameSpyError{ErrorCode: 0x0042, Message: "An invalid auth token was sent to GSP backend", IsFatal: true}
 )

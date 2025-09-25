@@ -9,12 +9,13 @@ import (
 	"buffersnow.com/spiritonline/pkg/log"
 )
 
+// (g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error
 type GPHandlerFunc = func(*protocol.GamespyContext, gp.GameSpyCommandInfo) error
 
 var gpcm_routes = map[string]GPHandlerFunc{
-	protocol.GPCommand_KeepAlive:         func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
-	protocol.GPCommand_Error:             func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
-	protocol.GPCMCommand_Login:           func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
+	protocol.GPCommand_KeepAlive:         gp_KeepAlive,
+	protocol.GPCommand_Error:             gp_Error,
+	protocol.GPCMCommand_Login:           cm_Login,
 	protocol.GPCMCommand_Logout:          func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
 	protocol.GPCMCommand_UpdateProfile:   func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
 	protocol.GPCMCommand_UpdateStatus:    func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
@@ -26,8 +27,8 @@ var gpcm_routes = map[string]GPHandlerFunc{
 }
 
 var gpsp_routes = map[string]GPHandlerFunc{
-	protocol.GPCommand_KeepAlive:    func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
-	protocol.GPCommand_Error:        func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
+	protocol.GPCommand_KeepAlive:    gp_KeepAlive,
+	protocol.GPCommand_Error:        gp_Error,
 	protocol.GPSPCommand_OthersList: func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
 	protocol.GPSPCommand_Search:     func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
 }
@@ -76,7 +77,7 @@ func handleClientCommands(g *protocol.GamespyContext, kvs []gp.GameSpyKV) error 
 	if commandPair.Length() != 0 {
 		id, err := commandPair.Value().Integer()
 		if err != nil {
-			return protocol.GPError_Parse
+			return protocol.GPError_ParseFailure
 		}
 
 		subCmdId = id
