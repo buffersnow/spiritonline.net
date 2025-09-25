@@ -89,8 +89,40 @@ func (s SecEncoding) DecodeB32_Wii(data []byte) (outdata []byte, outerr error) {
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("security: encoding: base32:: %w", err)
+		return nil, fmt.Errorf("security: encoding: base32: %w", err)
 	}
 
 	return n, nil
+}
+
+func (s SecEncoding) DecodeB64_Std(data []byte) (outdata []byte, outerr error) {
+	defer func() {
+		if r := recover(); r != nil {
+			outerr = fmt.Errorf("security: encoding: base64: %v", r)
+			outdata = nil
+		}
+	}()
+
+	n, err := base64.StdEncoding.DecodeString(string(data))
+	if len(n) == 0 {
+		return nil, errors.New("security: encoding: base64: length was 0")
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("security: encoding: base64: %w", err)
+	}
+
+	return n, nil
+}
+
+func (s SecEncoding) EncodeB64_Std(data []byte) (outdata []byte, outerr error) {
+	defer func() {
+		if r := recover(); r != nil {
+			outerr = fmt.Errorf("security: encoding: base32: %v", r)
+			outdata = nil
+		}
+	}()
+
+	enc := base64.StdEncoding.EncodeToString(data)
+	return []byte(enc), nil
 }
