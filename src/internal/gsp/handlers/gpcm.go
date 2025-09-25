@@ -50,7 +50,9 @@ func gpcmDelegate(conn *net.TcpConnection, logger *log.Logger) {
 		ctx.Connection.Close()
 	}()
 
-	controllers.StartGPCMAuth(ctx)
+	if err := controllers.StartGPCMAuth(ctx); err != nil {
+
+	}
 
 	for {
 		_, err := conn.ReadText()

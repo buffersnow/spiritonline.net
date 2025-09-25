@@ -8,6 +8,7 @@ const (
 )
 
 const (
+	GPCMCommand_LoginChallenge  = "lc"
 	GPCMCommand_Login           = "login"
 	GPCMCommand_Logout          = "logout"
 	GPCMCommand_UpdateProfile   = "updatepro"
@@ -22,6 +23,11 @@ const (
 const (
 	GPSPCommand_OthersList = "otherslist"
 	GPSPCommand_Search     = "search"
+)
+
+const (
+	GPCMLoginChallenge_Begin   = 1
+	GPCMLoginChallenge_Success = 2
 )
 
 var (

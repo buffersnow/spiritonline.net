@@ -33,11 +33,14 @@ var gpsp_routes = map[string]GPHandlerFunc{
 	protocol.GPSPCommand_Search:     func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
 }
 
-func StartGPCMAuth(g *protocol.GamespyContext) {
-	g.SendRaw([]gp.GameSpyKV{
-		gp.Message.Integer("lc", 1),
-		gp.Message.String("challenge", g.GPCM.Challenge),
-		gp.Message.Integer("id", 1),
+func StartGPCMAuth(g *protocol.GamespyContext) error {
+	return g.Send(gp.GameSpyCommandInfo{
+		Command:    protocol.GPCMCommand_LoginChallenge,
+		SubCommand: protocol.GPCMLoginChallenge_Begin,
+		Data: []gp.GameSpyKV{
+			gp.Message.String("challenge", g.GPCM.Challenge),
+			gp.Message.Integer("id", 1),
+		},
 	})
 }
 
