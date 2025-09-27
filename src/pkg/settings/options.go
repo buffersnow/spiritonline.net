@@ -22,23 +22,30 @@ func (o *Options) loadArgs(ver *version.BuildTag) error {
 	fs = pflag.NewFlagSet("", pflag.ContinueOnError)
 	fs.Usage = func() {
 		fmt.Printf("Usage: ./%s{.exe/.lxb} <... arguments>\n", ver.GetService())
-		o.helpText(reflect.ValueOf(o), "", "")
+		o.helpText()
 		fmt.Printf("\nThis help menu can be brought up again by running \"./%s{.exe/.lxb} help\"\n", ver.GetService())
 		os.Exit(0)
 	}
 
-	if err := o.parseArgs(reflect.ValueOf(o)); err != nil {
+	if err := o.parseOptions(reflect.ValueOf(o), "", ""); err != nil {
 		return fmt.Errorf("settings: parser: %w", err)
 	}
 
-	err := fs.Parse(os.Args[1:])
-	if err != nil && err != pflag.ErrHelp {
-		return fmt.Errorf("settings: %w", err)
-	} else if err == pflag.ErrHelp {
+	if slices.Contains(os.Args[1:], "help") ||
+		slices.Contains(os.Args[1:], "-h") ||
+		slices.Contains(os.Args[1:], "--help") {
+
 		fs.Usage()
 	}
 
-	if slices.Contains(fs.Args(), "help") {
+	filtered := slices.DeleteFunc(os.Args[1:], func(s string) bool {
+		return s == "--help" || s == "-h" || s == "help"
+	})
+
+	err := fs.Parse(filtered)
+	if err != nil && err != pflag.ErrHelp {
+		return fmt.Errorf("settings: %w", err)
+	} else if err == pflag.ErrHelp {
 		fs.Usage()
 	}
 
