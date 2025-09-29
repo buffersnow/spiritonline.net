@@ -27,10 +27,10 @@ func cm_Login(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error {
 	}
 
 	curTime := time.Now()
-	if curTime.After(token.IssueTime.Add(10 * time.Minute)) {
-		expiryTime := curTime.Sub(token.IssueTime) - (10 * time.Minute)
+	if curTime.After(token.IssueTime.Add(1 * time.Minute)) {
+		expiryTime := curTime.Sub(token.IssueTime) - (1 * time.Minute)
 
-		g.Log.Error("Login Error", "AuhtToken issued at %v expired %v ago", token.IssueTime, expiryTime)
+		g.Log.Error("Login Error", "AuthToken issued at %v expired %v ago", token.IssueTime, expiryTime)
 		return protocol.GPLoginError_InvalidToken
 	}
 
