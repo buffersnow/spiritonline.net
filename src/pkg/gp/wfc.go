@@ -11,15 +11,16 @@ import (
 
 /*migrated from json to cbor to make the token smaller*/
 type WFCAuthToken struct {
-	WFCID      int64     `cbor:"wid"`
-	GameCode   string    `cbor:"gcd"`
-	RegionID   byte      `cbor:"rid"`
-	Serial     string    `cbor:"csn"`
-	FriendCode int64     `cbor:"cfc"`
-	MAC        string    `cbor:"mac"`
-	IP         string    `cbor:"ipa"`
-	Challenge  string    `cbor:"chg"`
-	IssueTime  time.Time `cbor:"ite"`
+	WFCID     int64     `cbor:"wid"`
+	GameCode  string    `cbor:"gcd"`
+	RegionID  byte      `cbor:"rid"`
+	Serial    string    `cbor:"csn"`
+	ConsoleFC int64     `cbor:"cfc"`
+	MAC       string    `cbor:"mac"`
+	IP        string    `cbor:"ipa"`
+	Challenge string    `cbor:"chg"`
+	UnitCode  int8      `cbor:"ucd"`
+	IssueTime time.Time `cbor:"ite"`
 }
 
 func PickleWFCToken(params WFCAuthToken) (string, error) {

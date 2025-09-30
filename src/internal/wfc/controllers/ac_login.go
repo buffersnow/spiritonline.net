@@ -60,14 +60,15 @@ func AC_Login(c *fiber.Ctx) error {
 
 	challenge := util.RandomString(8)
 	token, err := gp.PickleWFCToken(gp.WFCAuthToken{
-		WFCID:      wfcid,
-		GameCode:   c.FormValue("gamecd"),
-		RegionID:   util.HexToByte(c.FormValue("region")),
-		Serial:     query.Serial,
-		FriendCode: query.FC,
-		MAC:        query.MAC,
-		IP:         query.IP,
-		Challenge:  challenge,
+		WFCID:     wfcid,
+		GameCode:  c.FormValue("gamecd"),
+		RegionID:  util.HexToByte(c.FormValue("region")),
+		Serial:    query.Serial,
+		ConsoleFC: query.FC,
+		MAC:       query.MAC,
+		IP:        query.IP,
+		Challenge: challenge,
+		UnitCode:  cast.ToInt8(c.FormValue("unitcd")),
 	})
 
 	if err != nil {
