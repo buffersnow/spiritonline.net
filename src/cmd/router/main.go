@@ -1,11 +1,14 @@
 package main
 
 import (
+	"buffersnow.com/spiritonline/pkg/db"
 	"buffersnow.com/spiritonline/pkg/lifecycle"
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/security"
 	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/version"
+
+	"buffersnow.com/spiritonline/internal/router/handlers"
 
 	"github.com/luxploit/red"
 )
@@ -18,6 +21,8 @@ func main() {
 		red.Provide(settings.New),
 		red.Provide(log.New),
 		red.Provide(security.New),
+		red.Provide(db.New),
+		red.Invoke(handlers.ListenService),
 		red.Invoke(lifecycle.Await),
 	)
 
