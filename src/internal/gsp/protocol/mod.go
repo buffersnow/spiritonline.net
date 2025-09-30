@@ -16,5 +16,5 @@ type GPCMContext struct {
 	Challenge  string
 	SessionKey int
 	LoggedIn   bool
-	AuthToken  gp.WFCAuthToken
+	AuthToken  *gp.WFCAuthToken
 }

@@ -10,29 +10,33 @@ import (
 func cm_Login(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error {
 
 	if g.GPCM.LoggedIn {
-		g.Log.Error("Login Error", "Authenticated user %d called login again", g.GPCM.AuthToken.WFCID)
+		g.Log.Error("Login", "Authenticated user %d called login again", g.GPCM.AuthToken.WFCID)
 		return protocol.GPLoginError_Duplicate
 	}
 
 	tokenPair := gci.Find("authtoken")
 	if tokenPair.Length() == 0 {
-		g.Log.Error("Login Error", "Length of authtoken kv was 0")
+		g.Log.Error("Login", "Length of authtoken kv was 0")
 		return protocol.GPLoginError_InvalidToken
 	}
 
 	token, err := gp.DepickleWFCToken(tokenPair.Value().DataBlock())
 	if err != nil {
-		g.Log.Error("Login Error", "AuthToken is not in a valid format")
+		g.Log.Error("Login", "AuthToken is not in a valid format")
 		return protocol.GPLoginError_InvalidToken
 	}
 
 	curTime := time.Now()
-	if curTime.After(token.IssueTime.Add(1 * time.Minute)) {
-		expiryTime := curTime.Sub(token.IssueTime) - (1 * time.Minute)
+	expiryTime := token.IssueTime.Add(1 * time.Minute)
 
-		g.Log.Error("Login Error", "AuthToken issued at %v expired %v ago", token.IssueTime, expiryTime)
+	if curTime.After(expiryTime) {
+		timeSinceExpiry := curTime.Sub(expiryTime)
+
+		g.Log.Error("Login", "AuthToken issued at %v expired %v ago", token.IssueTime, timeSinceExpiry)
 		return protocol.GPLoginError_InvalidToken
 	}
+
+	g.GPCM.AuthToken = token
 
 	return nil
 }
