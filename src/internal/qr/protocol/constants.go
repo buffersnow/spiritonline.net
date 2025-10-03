@@ -15,3 +15,9 @@ const (
 	QR2Command_Available        byte = 0x09
 	QR2Command_ClientRegistered byte = 0x0A
 )
+
+const (
+	QR1Command_Heartbeat = "heartbeat"
+	QR1Command_Validate  = "validate"
+	QR1Command_Echo      = "echo"
+)

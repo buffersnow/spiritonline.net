@@ -10,11 +10,11 @@ import (
 
 func qr2Delegate(conn *net.UdpPacket, logger *log.Logger) {
 
-	ctx := protocol.QR2Context{
+	qci := protocol.QR2CommandInfo{
 		Log: logger.FactoryWithPostfix("QR2",
 			fmt.Sprintf("<IP: %s>", conn.GetRemoteAddress()),
 		),
 	}
 
-	ctx.Log.Info("Handler", "bwaaa")
+	qci.Log.Info("Handler", "bwaaa")
 }
