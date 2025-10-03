@@ -55,12 +55,15 @@ func gpcmDelegate(conn *net.TcpConnection, logger *log.Logger) {
 	}
 
 	for {
-		_, err := conn.ReadText()
+		stream, err := conn.ReadText()
 		if err != nil {
 			ctx.Log.Debug(log.DEBUG_TRAFFIC, "Server", "Traffic read error debug: %v", err)
 			break
 		}
 
+		if err := controllers.HandleIncoming(ctx, stream); err != nil {
+			break
+		}
 	}
 
 }

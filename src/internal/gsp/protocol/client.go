@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"buffersnow.com/spiritonline/pkg/gp"
-	"buffersnow.com/spiritonline/pkg/log"
 )
 
 func (g GamespyContext) Send(gci gp.GameSpyCommandInfo) error {
@@ -48,7 +47,7 @@ func (g GamespyContext) Error(err gp.GameSpyError) error {
 		Data:    msg,
 	}
 
-	g.Log.Trace(log.DEBUG_TRAFFIC, "Error", "%s! (Error Code: 0x%04x, Fatal: %t)", err.Message, err.ErrorCode, err.IsFatal)
+	g.Log.Error("Error", "%s! (Error Code: 0x%04x, Fatal: %t)", err.Message, err.ErrorCode, err.IsFatal)
 
 	return g.Send(gci)
 }
