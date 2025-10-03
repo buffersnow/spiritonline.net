@@ -7,7 +7,7 @@ import (
 	"buffersnow.com/spiritonline/pkg/gp"
 )
 
-func cm_Login(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error {
+func handleCM_Login(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error {
 
 	if g.GPCM.LoggedIn {
 		g.Log.Error("Login", "Authenticated user %d called login again", g.GPCM.AuthToken.WFCID)

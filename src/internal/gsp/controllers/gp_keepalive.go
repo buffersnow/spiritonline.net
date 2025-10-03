@@ -5,6 +5,6 @@ import (
 	"buffersnow.com/spiritonline/pkg/gp"
 )
 
-func gp_KeepAlive(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error {
+func handleGP_KeepAlive(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error {
 	return g.Send(gci) // basically just echo back the ka
 }

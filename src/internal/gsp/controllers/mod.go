@@ -13,9 +13,9 @@ import (
 type GPHandlerFunc = func(*protocol.GamespyContext, gp.GameSpyCommandInfo) error
 
 var gpcm_routes = map[string]GPHandlerFunc{
-	protocol.GPCommand_KeepAlive:         gp_KeepAlive,
-	protocol.GPCommand_Error:             gp_Error,
-	protocol.GPCMCommand_Login:           cm_Login,
+	protocol.GPCommand_KeepAlive:         handleGP_KeepAlive,
+	protocol.GPCommand_Error:             handleGP_Error,
+	protocol.GPCMCommand_Login:           handleCM_Login,
 	protocol.GPCMCommand_Logout:          func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
 	protocol.GPCMCommand_UpdateProfile:   func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
 	protocol.GPCMCommand_UpdateStatus:    func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
@@ -27,8 +27,8 @@ var gpcm_routes = map[string]GPHandlerFunc{
 }
 
 var gpsp_routes = map[string]GPHandlerFunc{
-	protocol.GPCommand_KeepAlive:    gp_KeepAlive,
-	protocol.GPCommand_Error:        gp_Error,
+	protocol.GPCommand_KeepAlive:    handleGP_KeepAlive,
+	protocol.GPCommand_Error:        handleGP_Error,
 	protocol.GPSPCommand_OthersList: func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
 	protocol.GPSPCommand_Search:     func(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error { return nil },
 }

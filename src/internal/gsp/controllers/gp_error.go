@@ -5,6 +5,6 @@ import (
 	"buffersnow.com/spiritonline/pkg/gp"
 )
 
-func gp_Error(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error {
+func handleGP_Error(g *protocol.GamespyContext, gci gp.GameSpyCommandInfo) error {
 	return protocol.GPError_DisallowedCommand
 }
