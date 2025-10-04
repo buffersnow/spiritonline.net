@@ -14,9 +14,10 @@ type Options struct {
 	}
 
 	Development struct {
-		EnableDev   bool `arg:"--devel" help:"Enable development mode"`
-		DisableDB   bool `arg:"--no-database" help:"Run without a database for development"`
-		EnableDebug bool `arg:"-v,--debug" help:"Show all debug/developer log prints"`
+		EnableDev     bool `arg:"--devel" help:"Enable development mode"`
+		DisableDB     bool `arg:"--no-database" help:"Run without a database for development"`
+		EnableVerbose bool `arg:"-v,--verbose" help:"Show trace prints for extended logging"`
+		EnableDebug   bool `arg:"-g,--vdebug" help:"Show all debug/developer log prints"`
 	}
 
 	DeploymentOverride struct {

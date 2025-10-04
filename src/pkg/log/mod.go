@@ -13,6 +13,7 @@ import (
 
 type Logger struct {
 	mu         *sync.Mutex
+	verbose    bool
 	debug      bool
 	fileName   string
 	filePath   string
@@ -29,6 +30,7 @@ func New(ver *version.BuildTag, opt *settings.Options) (*Logger, error) {
 
 	log.fileName = fmt.Sprintf("%s.log", ver.GetService())
 	log.filePath = fmt.Sprintf("logs/%s.log", ver.GetService())
+	log.verbose = opt.Development.EnableVerbose
 	log.debug = opt.Development.EnableDebug
 
 	log.ToFile("bFXServer - Start Up")

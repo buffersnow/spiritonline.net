@@ -65,13 +65,15 @@ func (l *Logger) Fatal(prefix string, format string, err error, a ...any) {
 }
 
 func (l *Logger) Debug(component int, prefix string, format string, a ...any) {
-	if l.debug {
+	if l.verbose && l.debug {
 		l.processLog(debugComponentColors[component], "Debug", prefix, format, a...)
 	}
 }
 
 func (l *Logger) Trace(component int, prefix string, format string, a ...any) {
-	l.processLog(debugComponentColors[component], "Trace", prefix, format, a...)
+	if l.verbose {
+		l.processLog(debugComponentColors[component], "Trace", prefix, format, a...)
+	}
 }
 
 func (l *Logger) Raw(colorCode, format string, a ...any) {
