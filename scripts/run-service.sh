@@ -183,7 +183,7 @@ if [ "$ACTION" == "build_and_run" ]; then
 
   # If dev run (-d), add debug and nologcmpr flags
   if [ "$MODE" == "dev" ]; then
-    RUN_ARGS+=("--devel" "--no-archive" "-v")
+    RUN_ARGS+=("--devel" "-g" "--no-archive" "-v")
   elif [ "$MODE" == "test" ]; then 
     RUN_ARGS+=("--no-archive" "-v")
   fi

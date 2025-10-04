@@ -92,3 +92,17 @@ Table "wfc_suspensions" {
         moderator_id [name: "idx_moderator_id"]
     }
 }
+
+// iwmaster
+
+Table "iwmaster_blocked" {
+    "block_id" bigint [pk, not null]
+    "ip_addr" varchar(16) [not null]
+    "ban_message" longtext
+    "is_active" boolean [not null, default:true]
+    "last_banned_on" datetime(3) [not null]
+
+    Indexes {
+        ip_addr [unique, name: "udx_ip_addr"]
+    }
+}

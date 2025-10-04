@@ -27,6 +27,15 @@
       "program": "${workspaceFolder}/bin/wfc.exe",
       "args": ["-v", "--no-archive", "--devel"],
       "preLaunchTask": "build-wfc"
+    },
+    {
+      "name": "Debug iwmaster",
+      "type": "go",
+      "request": "launch",
+      "mode": "exec",
+      "program": "${workspaceFolder}/bin/iwmaster.exe",
+      "args": ["-v", "-g", "--no-archive", "--devel"],
+      "preLaunchTask": "build-iwmaster"
     }
   ]
 }

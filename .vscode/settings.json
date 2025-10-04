@@ -15,7 +15,8 @@
     { "icon": "certificate", "extensions": ["security"] },
     { "icon": "notification", "extensions": ["lifecycle"] },
     { "icon": "buildkite", "extensions": ["gp"] },
-    { "icon": "component", "extensions": ["dlc"] }
+    { "icon": "component", "extensions": ["dlc"] },
+    { "icon": "client", "extensions": ["list"] }
   ],
   "colorful-comments.tags": [
     {

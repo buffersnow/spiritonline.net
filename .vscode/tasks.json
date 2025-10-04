@@ -33,6 +33,17 @@
         "isDefault": true
       },
       "problemMatcher": []
+    },
+    {
+      "label": "build-iwmaster",
+      "type": "shell",
+      "command": "scripts/run-service.sh",
+      "args": ["-d", "iwmaster"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
     }
   ]
 }
