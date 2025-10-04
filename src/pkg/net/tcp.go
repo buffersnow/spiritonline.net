@@ -104,7 +104,7 @@ func (tcp TcpConnection) WriteText(data string) error {
 		return fmt.Errorf("net: %w", err)
 	}
 
-	tcp.Log.Debug(log.DEBUG_TRAFFIC,
+	tcp.Log.Trace(log.DEBUG_TRAFFIC,
 		"WriteText", "Data Length: %d, Data Stream: %s",
 		len(data), strings.TrimRight(data, "\r\n"),
 	)
@@ -133,7 +133,7 @@ func (tcp TcpConnection) ReadTextEx(timeout time.Time) (data string, err error) 
 	lastData := buf[:n]
 	retstr := strings.TrimRight(string(lastData), "\r\n")
 
-	tcp.Log.Debug(log.DEBUG_TRAFFIC,
+	tcp.Log.Trace(log.DEBUG_TRAFFIC,
 		"ReadText", "Data Length: %d, Data Stream: %s",
 		len(lastData), retstr,
 	)
@@ -150,7 +150,7 @@ func (tcp TcpConnection) WriteBytes(data []byte) error {
 		return fmt.Errorf("net: %w", err)
 	}
 
-	tcp.Log.Debug(log.DEBUG_TRAFFIC,
+	tcp.Log.Trace(log.DEBUG_TRAFFIC,
 		"WriteBytes", "Data Length: %d, Data Stream: %s",
 		len(data), prettyBytes(data),
 	)
@@ -178,7 +178,7 @@ func (tcp TcpConnection) ReadBytesEx(timeout time.Time) (data []byte, err error)
 
 	lastData := buf[:n]
 
-	tcp.Log.Debug(log.DEBUG_TRAFFIC,
+	tcp.Log.Trace(log.DEBUG_TRAFFIC,
 		"ReadBytes", "Data Length: %d, Data Stream: %s",
 		len(lastData), prettyBytes(lastData),
 	)

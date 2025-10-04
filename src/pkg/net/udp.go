@@ -70,7 +70,7 @@ func (udp *UdpServer) ReadBytesEx(timeout time.Time) (*UdpPacket, error) {
 
 	lastData := buf[:n]
 
-	udp.Log.Debug(log.DEBUG_TRAFFIC,
+	udp.Log.Trace(log.DEBUG_TRAFFIC,
 		"ReadBytes", "<IP: %s> Data Length: %d, Data Stream: %s",
 		addr.String(), n, prettyBytes(lastData),
 	)
@@ -91,7 +91,7 @@ func (udp *UdpPacket) WriteBytes(data []byte) error {
 		return fmt.Errorf("net: %w", err)
 	}
 
-	udp.Log.Debug(log.DEBUG_TRAFFIC,
+	udp.Log.Trace(log.DEBUG_TRAFFIC,
 		"WriteBytes", "<IP: %s> Data Length: %d, Data Stream: %s",
 		udp.addr.String(), len(data), prettyBytes(data),
 	)
@@ -119,7 +119,7 @@ func (udp *UdpServer) ReadTextEx(timeout time.Time) (*UdpPacket, error) {
 	lastData := buf[:n]
 	retstr := strings.TrimRight(string(lastData), "\r\n")
 
-	udp.Log.Debug(log.DEBUG_TRAFFIC,
+	udp.Log.Trace(log.DEBUG_TRAFFIC,
 		"ReadText", "<IP: %s> Data Length: %d, Data Stream: %s",
 		addr.String(), n, retstr,
 	)
@@ -141,7 +141,7 @@ func (udp *UdpPacket) WriteText(data string) error {
 		return fmt.Errorf("net: %w", err)
 	}
 
-	udp.Log.Debug(log.DEBUG_TRAFFIC,
+	udp.Log.Trace(log.DEBUG_TRAFFIC,
 		"WriteText", "<IP: %s> Data Length: %d, Data Stream: %s",
 		udp.addr.String(), len(data), strings.TrimRight(data, "\r\n"),
 	)
