@@ -30,7 +30,7 @@ func (g GamespyContext) SendRaw(kvs []gp.GameSpyKV) error {
 	return g.Connection.WriteText(data)
 }
 
-func (g GamespyContext) Error(err gp.GameSpyError) error {
+func (g GamespyContext) Error(err *gp.GameSpyError) error {
 
 	msg := []gp.GameSpyKV{
 		gp.Message.Integer("err", err.ErrorCode),

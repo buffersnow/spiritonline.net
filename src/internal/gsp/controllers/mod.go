@@ -57,7 +57,7 @@ func HandleIncoming(g *protocol.GamespyContext, stream string) error {
 
 		var gpErr *gp.GameSpyError
 		if errors.As(err, &gpErr) {
-			g.Error(*gpErr)
+			g.Error(gpErr)
 			return err
 		}
 
