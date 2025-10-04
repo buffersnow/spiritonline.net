@@ -18,7 +18,7 @@ type UdpServer struct {
 
 type UdpPacket struct {
 	Log  log.LoggingFactory
-	addr *net.UDPAddr
+	Addr *net.UDPAddr
 	conn *net.UDPConn
 	Data []byte
 }
@@ -48,7 +48,7 @@ func (n NetUtils) CreateUdpListener(port int) (*UdpServer, error) {
 }
 
 func (udp UdpPacket) GetRemoteAddress() string {
-	return udp.addr.String()
+	return udp.Addr.String()
 }
 
 func (udp *UdpServer) ReadBytes() (*UdpPacket, error) {
@@ -76,24 +76,26 @@ func (udp *UdpServer) ReadBytesEx(timeout time.Time) (*UdpPacket, error) {
 	)
 
 	return &UdpPacket{
-		addr: addr,
+		Log:  udp.Log,
+		Addr: addr,
+		conn: udp.conn,
 		Data: lastData,
 	}, nil
 }
 
 func (udp *UdpPacket) WriteBytes(data []byte) error {
-	if udp.addr == nil {
+	if udp == nil || udp.conn == nil || udp.Addr == nil {
 		return errors.New("net: invalid UDP connection")
 	}
 
-	_, err := udp.conn.WriteToUDP(data, udp.addr)
+	_, err := udp.conn.WriteToUDP(data, udp.Addr)
 	if err != nil {
 		return fmt.Errorf("net: %w", err)
 	}
 
 	udp.Log.Trace(log.DEBUG_TRAFFIC,
 		"WriteBytes", "<IP: %s> Data Length: %d, Data Stream: %s",
-		udp.addr.String(), len(data), prettyBytes(data),
+		udp.Addr.String(), len(data), prettyBytes(data),
 	)
 
 	return nil
@@ -126,24 +128,25 @@ func (udp *UdpServer) ReadTextEx(timeout time.Time) (*UdpPacket, error) {
 
 	return &UdpPacket{
 		Log:  udp.Log,
-		addr: addr,
+		conn: udp.conn,
+		Addr: addr,
 		Data: []byte(retstr),
 	}, nil
 }
 
 func (udp *UdpPacket) WriteText(data string) error {
-	if udp.addr == nil {
+	if udp == nil || udp.conn == nil || udp.Addr == nil {
 		return errors.New("net: invalid UDP connection")
 	}
 
-	_, err := udp.conn.WriteToUDP([]byte(data), udp.addr)
+	_, err := udp.conn.WriteToUDP([]byte(data), udp.Addr)
 	if err != nil {
 		return fmt.Errorf("net: %w", err)
 	}
 
 	udp.Log.Trace(log.DEBUG_TRAFFIC,
 		"WriteText", "<IP: %s> Data Length: %d, Data Stream: %s",
-		udp.addr.String(), len(data), strings.TrimRight(data, "\r\n"),
+		udp.Addr.String(), len(data), strings.TrimRight(data, "\r\n"),
 	)
 
 	return nil
