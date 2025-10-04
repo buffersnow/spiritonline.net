@@ -78,7 +78,7 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 
 	unitcd := cast.ToInt(c.FormValue("unitcd"))
 
-	logger.Debug(log.DEBUG_TRAFFIC, "WFC NAS Response",
+	logger.Trace(log.DEBUG_SERVICE, "WFC NAS Response",
 		"<IP: %s> %s %s! (ReCD: %03d) Sent with data: %s",
 		c.IP(), GetEndpoint(c), GetReCDMeaning(recdnum, unitcd), recdnum, logResp,
 	)
