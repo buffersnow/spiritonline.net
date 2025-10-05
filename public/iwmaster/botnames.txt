@@ -16,7 +16,7 @@ Bernie Sanders
 Angela Merkel
 h2m-mod-mod
 gsc-tool
-send bool true information
+bool true information
 idapro
 1-game-test.pdb
 unk_XUIDCheck1
@@ -24,7 +24,7 @@ LUI_BeginCRMTable
 Furries
 demonware
 is the iw8 mod
-2-game_wegame_dx12_fast_server
+2-game_dx12_fast_server
 mp_escape3
 mp_don4_pm
 is iw8 6.0 good
@@ -33,3 +33,51 @@ Non-binary Jesus
 nta
 FourDeltaOne
 AlterIWnet
+bobsponge
+charlesmethlord
+jonathan is typing...
+luiv
+lifix
+luxploit
+purrpleeW
+jarvis
+iw8-sex-mod
+jonothan
+ZeroMods
+Laura Streisky
+Kechioma
+swarce_
+DIY HRT
+Lesbian
+DEVELOPERS
+Osama Bin Laden
+cudi
+MORON MOD
+Laura
+EgenLeaks
+fixing
+.r4v3n
+dw isn't real
+BO7Sucks
+CurseForge Installer
+milkcarton
+mordenwarfare.xex
+NX1
+Powershot300
+uncrash
+oncelxv
+AceAdz
+atuburapaler
+xaratti
+UD for 5 Cycles
+UD. UltraDetected.
+oatch3
+revolution of the burger
+NiggaChain AI Layer 2
+Overheating CPU
+KeBugCheckEx()
+Goonen
+version.dll
+discord_game_sdk.dll
+maza_cheating.mov
+iw9-mod
