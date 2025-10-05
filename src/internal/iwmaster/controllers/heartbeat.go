@@ -5,7 +5,6 @@ import (
 
 	"buffersnow.com/spiritonline/internal/iwmaster/list"
 	"buffersnow.com/spiritonline/internal/iwmaster/protocol"
-	"buffersnow.com/spiritonline/pkg/log"
 
 	"github.com/luxploit/red"
 )
@@ -26,10 +25,8 @@ func handleHeartbeat(i *protocol.IWContext) error {
 	challenge := i.CommandInfo.Data[1]
 
 	err = lst.Access(game, challenge, func(s *list.Server) error {
-		lst.Lock(func() {
-			s.State = list.ServerState_Refreshing
-			s.LastPing = time.Now()
-		})
+		s.State = list.ServerState_Refreshing
+		s.LastPing = time.Now()
 
 		return nil
 	})
@@ -43,7 +40,14 @@ func handleHeartbeat(i *protocol.IWContext) error {
 		})
 	}
 
-	i.Log.Trace(log.DEBUG_SERVICE, "Heartbeat", "Recieved heartbeat for server game type %s", game)
+	i.Log.Info("Heartbeat", "Recieved heartbeat for server game type %s", game)
+
+	i.Send(protocol.IWCommandInfo{
+		Command: protocol.IWCommand_GetInfo,
+		Data: []string{
+			challenge,
+		},
+	})
 
 	return nil
 }

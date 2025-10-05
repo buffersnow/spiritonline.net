@@ -58,14 +58,12 @@ func handleInfoResponse(i *protocol.IWContext) error {
 			return protocol.IWError_ValidationError
 		}
 
-		lst.Lock(func() {
-			s.Protocol = proto
-			s.State = list.ServerState_Idle
-			s.Players = all_players - bot_players
-			s.MaxPlayers = max_players
-			s.Name = hostname
-			s.LastPing = time.Now()
-		})
+		s.Protocol = proto
+		s.State = list.ServerState_Idle
+		s.Players = all_players - bot_players
+		s.MaxPlayers = max_players
+		s.Name = hostname
+		s.LastPing = time.Now()
 
 		i.Log.Info("Server List", "Successfully registered server %s for game %s", hostname, game)
 		return nil

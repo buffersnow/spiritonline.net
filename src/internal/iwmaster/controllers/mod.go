@@ -12,6 +12,11 @@ import (
 	"buffersnow.com/spiritonline/internal/iwmaster/protocol"
 )
 
+type iwRemovalList struct {
+	game   string
+	server *list.Server
+}
+
 // (i *protocol.IWMasterContext) error
 type IWHandlerFunc = func(*protocol.IWContext) error
 
@@ -54,33 +59,38 @@ func HandleIWMasterIncoming(conn *net.UdpPacket, logger *log.Logger) {
 
 func HandleIWMasterQueryServerInfo(lst *list.ServerList) {
 	for {
-		lst.Iterate(func(game string, s *list.Server) {
+		var removeList []iwRemovalList
+		var changeList []*list.Server
+
+		lst.IterateRead(func(game string, s *list.Server) {
 			curTime := time.Now()
 
-			if s.State == list.ServerState_Idle && curTime.After(s.LastPing.Add(15*time.Minute)) ||
-				s.State == list.ServerState_Looking && curTime.After(s.LastPing.Add(2*time.Minute)) {
-
-				lst.Remove(game, s)
+			if (s.State == list.ServerState_Idle && curTime.After(s.LastPing.Add(16*time.Minute))) ||
+				(s.State == list.ServerState_Looking && curTime.After(s.LastPing.Add(2*time.Minute))) {
+				removeList = append(removeList, iwRemovalList{game: game, server: s})
 				return
 			}
 
-			if s.State != list.ServerState_Refreshing {
-				return
+			if s.State == list.ServerState_Refreshing {
+				changeList = append(changeList, s)
 			}
-
-			lst.Lock(func() {
-				s.LastPing = curTime
-				s.State = list.ServerState_Looking
-
-				s.Context.Send(protocol.IWCommandInfo{
-					Command: protocol.IWCommand_GetInfo,
-					Data: []string{
-						s.Challenge,
-					},
-				})
-			})
 		})
 
-		time.Sleep(100 * time.Millisecond)
+		for _, r := range removeList {
+			lst.Remove(r.game, r.server)
+		}
+
+		for _, s := range changeList {
+			lst.Lock(func() {
+				s.LastPing = time.Now()
+				s.State = list.ServerState_Looking
+				s.Context.Send(protocol.IWCommandInfo{
+					Command: protocol.IWCommand_GetInfo,
+					Data:    []string{s.Challenge},
+				})
+			})
+		}
+
+		time.Sleep(2 * time.Minute)
 	}
 }
