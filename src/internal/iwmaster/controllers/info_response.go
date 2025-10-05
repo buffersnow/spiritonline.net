@@ -40,22 +40,22 @@ func handleInfoResponse(i *protocol.IWContext) error {
 
 		all_players, err := gp.FindFromBundle("clients", kvs).Value().Integer()
 		if err != nil {
-			return protocol.IWError_InvalidCommand
+			return protocol.IWError_ValidationError
 		}
 
 		bot_players, err := gp.FindFromBundle("bots", kvs).Value().Integer()
 		if err != nil {
-			return protocol.IWError_InvalidCommand
+			return protocol.IWError_ValidationError
 		}
 
 		hostname := gp.FindFromBundle("hostname", kvs).Value().String()
 		if len(hostname) == 0 {
-			return protocol.IWError_InvalidCommand
+			return protocol.IWError_ValidationError
 		}
 
 		max_players, err := gp.FindFromBundle("sv_maxplayers", kvs).Value().Integer()
 		if err != nil {
-			return protocol.IWError_InvalidCommand
+			return protocol.IWError_ValidationError
 		}
 
 		lst.Lock(func() {
@@ -71,9 +71,5 @@ func handleInfoResponse(i *protocol.IWContext) error {
 		return nil
 	})
 
-	if err != nil {
-		return protocol.IWError_InvalidCommand
-	}
-
-	return nil
+	return err
 }

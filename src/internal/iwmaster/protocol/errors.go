@@ -22,4 +22,7 @@ var (
 	IWError_InvalidProtocol   = &IWError{ErrorCode: "BULLRUN", Message: "Invalid protocol version sent to iwmaster backend."}
 	IWError_InvalidCommand    = &IWError{ErrorCode: "PINWALE", Message: "Invalid command or invalid command format was sent to iwmaster backend."}
 	IWError_ChallengeMismatch = &IWError{ErrorCode: "MAINWAY", Message: "Challenge mismatched between iwmaster backend and server."}
+	IWError_ValidationError   = &IWError{ErrorCode: "SPECTRA", Message: "Data sent to iwmaster backend failed validation."}
+	IWError_InvalidBotsFile   = &IWError{ErrorCode: "CIVINTL", Message: "Botnames could not be loaded by the server."}
+	IWError_Reserved          = &IWError{ErrorCode: "SPYCORE", Message: "Reserved"}
 )

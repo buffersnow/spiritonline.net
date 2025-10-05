@@ -42,6 +42,9 @@ func New() (*ServerList, error) {
 }
 
 func (s *ServerList) Add(game string, server *Server) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	s.lists[game] = append(s.lists[game], server)
 }
 
@@ -55,8 +58,11 @@ func (s *ServerList) Remove(game string, server *Server) {
 }
 
 func (s *ServerList) Access(game, challenge string, fn func(s *Server) error) error {
+	s.mu.Lock()
+
 	servers, exists := s.lists[game]
 	if !exists {
+		s.mu.Unlock()
 		return fmt.Errorf("list: game is not registered")
 	}
 
@@ -65,6 +71,7 @@ func (s *ServerList) Access(game, challenge string, fn func(s *Server) error) er
 	})
 
 	if idx == -1 {
+		s.mu.Unlock()
 		return fmt.Errorf("list: index of slice was invalid")
 	}
 
