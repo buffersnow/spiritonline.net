@@ -4,6 +4,8 @@ github.com/Masterminds/squirrel v1.5.4 h1:uUcX/aBc8O7Fg9kaISIUsHXdKuqehiXAMQTYX8
 github.com/Masterminds/squirrel v1.5.4/go.mod h1:NNaOrjSoIDfDA40n7sr2tPNZRfjzjA400rg+riTZj10=
 github.com/TwiN/go-away v1.7.0 h1:wcl31tutjMXm2b+Q2x1Tzr+8Glp715owPgTW2sEdiww=
 github.com/TwiN/go-away v1.7.0/go.mod h1:oapSYK35g454jKMCguLcaWPYFKEGYEO/qjBTUKFua8A=
+github.com/TwiN/go-away v1.8.0 h1:9eNCSlbVe9vjrBCC69afH/XR0lfKQL27IDzUlqoPEmQ=
+github.com/TwiN/go-away v1.8.0/go.mod h1:FEnYVbC7/xfbBDN4iQ2W/ZQ6+UvnyUBYUk7cZgHocWs=
 github.com/andybalholm/brotli v1.2.0 h1:ukwgCxwYrmACq68yiUqwIWnGY0cTPox/M94sVwToPjQ=
 github.com/andybalholm/brotli v1.2.0/go.mod h1:rzTDkvFWvIrjDXZHkuS16NPggd91W3kUSvPlQ1pLaKY=
 github.com/caarlos0/env/v11 v11.3.1 h1:cArPWC15hWmEt+gWk7YBi7lEXTXCvpaSdCiZE2X5mCA=

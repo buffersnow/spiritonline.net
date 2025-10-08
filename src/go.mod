@@ -4,7 +4,7 @@ go 1.25.0
 
 require (
 	github.com/Masterminds/squirrel v1.5.4
-	github.com/TwiN/go-away v1.7.0
+	github.com/TwiN/go-away v1.8.0
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/fxamacker/cbor/v2 v2.9.0
 	github.com/go-sql-driver/mysql v1.9.3
