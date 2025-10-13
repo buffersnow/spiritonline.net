@@ -8,8 +8,8 @@ when squashing commits, use `git rebase -i HEAD~n` where n is the number of comm
 
 ## project gen
 
-use tools/gen-project.sh to create new boilerplate
+use scripts/gen-project.sh to create new boilerplate
 
 ## build system
 
-run tools/run-service.sh to run go services
+run scripts/run-service.sh to run go services
