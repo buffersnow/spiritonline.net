@@ -78,7 +78,7 @@ func HandleIWMasterWatchdog(logger *log.Logger, lst *list.ServerList) {
 
 		for _, r := range removeList {
 			lst.Remove(r.game, r.server)
-			logger.Action("Watchdog", "<IP: %s> Removing server for game type %s for inactivity",
+			logger.Action("IWMaster Watchdog", "<IP: %s> Removing server for game type %s for inactivity",
 				r.server.Context.Connection.GetRemoteAddress(), r.game,
 			)
 		}
@@ -93,7 +93,7 @@ func HandleIWMasterWatchdog(logger *log.Logger, lst *list.ServerList) {
 				})
 			})
 
-			logger.Event("Watchdog", "<IP: %s> Pinging idle server",
+			logger.Event("IWMaster Watchdog", "<IP: %s> Pinging idle server",
 				s.Context.Connection.GetRemoteAddress(),
 			)
 		}
