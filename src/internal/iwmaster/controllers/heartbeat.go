@@ -24,6 +24,23 @@ func handleHeartbeat(i *protocol.IWContext) error {
 	game := i.CommandInfo.Data[0]
 	challenge := i.CommandInfo.Data[1]
 
+	lst.Iterate(func(g string, s *list.Server) {
+		if g != game {
+			return
+		}
+
+		if s.Context == nil || s.Context.Connection == nil || s.Context.Connection.Addr == nil {
+			return
+		}
+
+		if s.Context.Connection.GetRemoteAddress() != i.Connection.GetRemoteAddress() {
+			return
+		}
+
+		s.Challenge = challenge
+		i.Log.Event("Heartbeat", "Updated challenge for server game type %s", game)
+	})
+
 	err = lst.Access(game, challenge, func(s *list.Server) error {
 		s.State = list.ServerState_Refreshing
 		s.LastPing = time.Now()

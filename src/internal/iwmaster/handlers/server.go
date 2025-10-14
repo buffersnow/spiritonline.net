@@ -18,7 +18,7 @@ func ListenService(opt *settings.Options, log *log.Logger, net *net.NetUtils, ls
 		return fmt.Errorf("qr: iw: %w", err)
 	}
 
-	go controllers.HandleIWMasterQueryServerInfo(lst)
+	go controllers.HandleIWMasterWatchdog(log, lst)
 
 	for {
 		udp, err := srv.ReadBytes()

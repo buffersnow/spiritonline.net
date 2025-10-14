@@ -79,25 +79,10 @@ func (s *ServerList) Lock(fn func()) {
 	fn()
 }
 
-func (s *ServerList) IterateRead(fn func(game string, s *Server)) {
+func (s *ServerList) Iterate(fn func(game string, s *Server)) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	for game, servers := range s.lists {
-		for _, server := range servers {
-			fn(game, server)
-		}
-	}
-}
-
-func (s *ServerList) IterateMutable(fn func(game string, s *Server)) {
-	s.mu.RLock()
-	copy := make(map[string][]*Server, len(s.lists))
-	for k, v := range s.lists {
-		copy[k] = append([]*Server(nil), v...)
-	}
-	s.mu.RUnlock()
-
-	for game, servers := range copy {
 		for _, server := range servers {
 			fn(game, server)
 		}

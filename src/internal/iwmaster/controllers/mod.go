@@ -57,12 +57,12 @@ func HandleIWMasterIncoming(conn *net.UdpPacket, logger *log.Logger) {
 	}
 }
 
-func HandleIWMasterQueryServerInfo(lst *list.ServerList) {
+func HandleIWMasterWatchdog(logger *log.Logger, lst *list.ServerList) {
 	for {
 		var removeList []iwRemovalList
 		var changeList []*list.Server
 
-		lst.IterateRead(func(game string, s *list.Server) {
+		lst.Iterate(func(game string, s *list.Server) {
 			curTime := time.Now()
 
 			if (s.State == list.ServerState_Idle && curTime.After(s.LastPing.Add(16*time.Minute))) ||
@@ -78,6 +78,9 @@ func HandleIWMasterQueryServerInfo(lst *list.ServerList) {
 
 		for _, r := range removeList {
 			lst.Remove(r.game, r.server)
+			logger.Action("Watchdog", "<IP: %s> Removing server for game type %s for inactivity",
+				r.server.Context.Connection.GetRemoteAddress(), r.game,
+			)
 		}
 
 		for _, s := range changeList {
@@ -89,6 +92,10 @@ func HandleIWMasterQueryServerInfo(lst *list.ServerList) {
 					Data:    []string{s.Challenge},
 				})
 			})
+
+			logger.Event("Watchdog", "<IP: %s> Pinging idle server",
+				s.Context.Connection.GetRemoteAddress(),
+			)
 		}
 
 		time.Sleep(2 * time.Minute)

@@ -49,8 +49,8 @@ func handleGetServers(i *protocol.IWContext) error {
 	showEmpty := getFilter(i.CommandInfo.Data, "empty")
 
 	filteredSrvs := []*list.Server{}
-	lst.IterateRead(func(g string, s *list.Server) {
-		if game != g || s.Protocol != proto {
+	lst.Iterate(func(g string, s *list.Server) {
+		if game != g && s.Protocol != proto {
 			return
 		}
 

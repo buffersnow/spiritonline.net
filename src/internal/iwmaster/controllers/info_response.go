@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"strings"
 	"time"
 
 	"buffersnow.com/spiritonline/internal/iwmaster/list"
@@ -16,8 +17,12 @@ func handleInfoResponse(i *protocol.IWContext) error {
 		return protocol.IWError_InvalidLocation
 	}
 
-	if len(i.CommandInfo.Data) != 1 {
+	if len(i.CommandInfo.Data) < 1 {
 		return protocol.IWError_InvalidCommand
+	}
+
+	if len(i.CommandInfo.Data) > 1 {
+		i.CommandInfo.Data[0] = strings.Join(i.CommandInfo.Data, " ")
 	}
 
 	kvs := gp.PickleMessage(i.CommandInfo.Data[0])
