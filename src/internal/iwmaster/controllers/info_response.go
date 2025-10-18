@@ -39,7 +39,7 @@ func handleInfoResponse(i *protocol.IWContext) error {
 			return protocol.IWError_InvalidProtocol
 		}
 
-		if s.Protocol != 0 && s.Protocol != proto {
+		if proto == 0 {
 			return protocol.IWError_InvalidProtocol
 		}
 
