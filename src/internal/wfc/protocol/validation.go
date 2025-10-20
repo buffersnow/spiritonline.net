@@ -50,27 +50,30 @@ func ValidateRequest() fiber.Handler {
 		}
 
 		str_userid := c.FormValue("userid")
-		if len(str_userid) == 0 {
+		is_acctcreate := c.FormValue("action") == "acctcreate"
+		if len(str_userid) == 0 && !is_acctcreate {
 			return web.BadRequestError(c, &web.Details{
 				Message: "invalid userid",
 				Err:     fmt.Errorf("wfc: protocol: length of userid is 0"),
 			})
 		}
 
-		i64_userid, err := cast.ToInt64E(str_userid)
-		if err != nil {
-			return web.BadRequestError(c, &web.Details{
-				Message: "invalid userid",
-				Err:     fmt.Errorf("wfc: protocol: cast: %w", err),
-			})
-		}
+		if !is_acctcreate {
+			i64_userid, err := cast.ToInt64E(str_userid)
+			if err != nil {
+				return web.BadRequestError(c, &web.Details{
+					Message: "invalid userid",
+					Err:     fmt.Errorf("wfc: protocol: cast: %w", err),
+				})
+			}
 
-		//$ https://github.com/Retro-Rewind-Team/wfc-server/blob/main/nas/auth.go#L210
-		if i64_userid >= 0x80000000000 {
-			return web.BadRequestError(c, &web.Details{
-				Message: "invalid userid size",
-				Err:     fmt.Errorf("wfc: protocol: size of userid exceeded maximum"),
-			})
+			//$ https://github.com/Retro-Rewind-Team/wfc-server/blob/main/nas/auth.go#L210
+			if i64_userid >= 0x80000000000 {
+				return web.BadRequestError(c, &web.Details{
+					Message: "invalid userid size",
+					Err:     fmt.Errorf("wfc: protocol: size of userid exceeded maximum"),
+				})
+			}
 		}
 
 		str_sdkver := c.FormValue("sdkver")
