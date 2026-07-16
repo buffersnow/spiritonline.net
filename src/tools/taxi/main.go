@@ -45,7 +45,7 @@ func runService(name, command string, args ...string) {
 		for scanner.Scan() {
 			txt := scanner.Text()
 			if strings.HasPrefix(txt, "\033[38;5;61m") {
-				continue // skip version text
+				continue //! HACK: skip version text
 			}
 
 			color, ok := colorsList[gname]
@@ -54,6 +54,10 @@ func runService(name, command string, args ...string) {
 			}
 
 			fmt.Printf("%s%+*s | %s\n", color, longestName, gname, txt)
+		}
+
+		if err := scanner.Err(); err != nil {
+			fmt.Printf("%s scanner error: %v\n", gname, err)
 		}
 	}(name, stdout)
 
