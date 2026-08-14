@@ -7,11 +7,10 @@ import (
 	"buffersnow.com/spiritonline/internal/wfc/protocol"
 
 	"buffersnow.com/spiritonline/pkg/log"
-	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/web"
 )
 
-func ListenNASDS(web *web.HttpUtils, opt *settings.Options, logger *log.Logger) error {
+func ListenNASDS(web *web.HttpUtils, logger *log.Logger) error {
 
 	app, err := web.NewFiber()
 	if err != nil {
@@ -29,7 +28,7 @@ func ListenNASDS(web *web.HttpUtils, opt *settings.Options, logger *log.Logger) 
 	app.Post("/ac", controllers.AccountDS)
 	app.Post("/pr", controllers.Profanity)
 
-	err = web.StartFiber(app, opt.Service.Ports["wfcds"])
+	err = web.StartFiber(app, 5603) //@ TODO: FIX ME!
 	if err != nil {
 		return fmt.Errorf("wfc: nas-ds: %w", err)
 	}

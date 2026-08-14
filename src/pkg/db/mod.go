@@ -16,10 +16,24 @@ type SQL struct {
 	f log.LoggingFactory
 }
 
-func New(log *log.Logger, opt *settings.Options) (*SQL, error) {
+type SQLSettings struct {
+	Enabled  bool `arg:"--no-database" default:"true" options:"negated"`
+	Username string
+	Password string
+	Host     string
+	Port     int
+	Database string
+}
+
+func Options(p *settings.Parser) (*SQLSettings, error) {
+	s := &SQLSettings{}
+	return s, p.RegisterModule("config", "Database", s)
+}
+
+func New(log *log.Logger, o *SQLSettings) (*SQL, error) {
 	sql := &SQL{}
 
-	if opt.Development.EnableDev && opt.Development.DisableDB {
+	if !o.Enabled {
 		log.Warning("Database", "Connection to DB disabled for development purposes!")
 		return sql, nil
 	}
@@ -28,7 +42,7 @@ func New(log *log.Logger, opt *settings.Options) (*SQL, error) {
 
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		opt.MySQL.Username, opt.MySQL.Password, opt.MySQL.Host, opt.MySQL.Port, opt.MySQL.Database,
+		o.Username, o.Password, o.Host, o.Port, o.Database,
 	)
 
 	engine, err := sqlx.Connect("mysql", dsn)

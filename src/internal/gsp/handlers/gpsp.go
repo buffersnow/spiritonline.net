@@ -6,11 +6,10 @@ import (
 	"buffersnow.com/spiritonline/internal/gsp/protocol"
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/net"
-	"buffersnow.com/spiritonline/pkg/settings"
 )
 
-func ListenGPSP(opt *settings.Options, net *net.NetUtils, log *log.Logger) error {
-	srv, err := net.CreateTcpListener(opt.Service.Ports["gpsp"])
+func ListenGPSP(net *net.NetUtils, log *log.Logger) error {
+	srv, err := net.CreateTcpListener(29901) //@ TODO: FIX ME!
 	if err != nil {
 		return fmt.Errorf("gsp: gpsp: %w", err)
 	}

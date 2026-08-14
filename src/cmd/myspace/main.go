@@ -18,6 +18,8 @@ func main() {
 	app.Use(
 		red.Provide(version.New),
 		red.Provide(settings.New),
+		red.Provide(log.Options),
+		red.Prepare(settings.ParseSettings),
 		red.Provide(log.New),
 		red.Provide(security.New),
 		red.Provide(net.New),

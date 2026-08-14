@@ -9,12 +9,11 @@ import (
 
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/net"
-	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/util"
 )
 
-func ListenGPCM(opt *settings.Options, net *net.NetUtils, log *log.Logger) error {
-	srv, err := net.CreateTcpListener(opt.Service.Ports["gpcm"])
+func ListenGPCM(net *net.NetUtils, log *log.Logger) error {
+	srv, err := net.CreateTcpListener(29900) //@ TODO: FIX ME!
 	if err != nil {
 		return fmt.Errorf("gsp: gpcm: %w", err)
 	}

@@ -8,7 +8,6 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
-	"regexp"
 	"strings"
 	"time"
 
@@ -49,22 +48,6 @@ func Batch(funcs []func() error) error {
 			return err
 		}
 	}
-	return nil
-}
-
-func CleanEnv(env string) error {
-	//& cleanup newlines and tabs from environments variables
-	re, err := regexp.Compile(`\s+`)
-	if err != nil {
-		return fmt.Errorf("regexp: %w", err)
-	}
-
-	osenv := os.Getenv(env)
-	osenv = re.ReplaceAllString(osenv, "")
-	if err := os.Setenv(env, osenv); err != nil {
-		return fmt.Errorf("os: %w", err)
-	}
-
 	return nil
 }
 
@@ -195,6 +178,33 @@ func SafeFileRead(baseDir, filename string) ([]byte, error) {
 	}
 
 	return data, nil
+}
+
+func ParseHelpRequest() (isHelp bool, topic string) {
+	helpFlags := map[string]bool{
+		"-h":     true,
+		"--help": true,
+		"help":   true,
+	}
+
+	for i, arg := range os.Args[1:] {
+		if helpFlags[strings.ToLower(arg)] {
+			isHelp = true
+			// look for a non-flag topic elsewhere in the args
+			for j, other := range os.Args[1:] {
+				if j == i || strings.Contains(other, "-") {
+					continue
+				}
+				if !helpFlags[strings.ToLower(other)] {
+					topic = other
+					break
+				}
+			}
+			return isHelp, topic
+		}
+	}
+
+	return false, ""
 }
 
 /// Comment Colors - Please actually use these

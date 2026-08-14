@@ -6,15 +6,14 @@ import (
 
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/net"
-	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/util"
 
 	"buffersnow.com/spiritonline/internal/myspace/protocol"
 )
 
-func ListenService(opt *settings.Options, log *log.Logger, net *net.NetUtils) error {
+func ListenService(log *log.Logger, net *net.NetUtils) error {
 
-	srv, err := net.CreateTcpListener(opt.Service.Ports["myspace"])
+	srv, err := net.CreateTcpListener(1863) //@ TODO: FIX ME!
 	if err != nil {
 		return fmt.Errorf("msim: %w", err)
 	}

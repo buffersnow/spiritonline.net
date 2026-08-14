@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"buffersnow.com/spiritonline/pkg/log"
-	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/version"
 
 	"github.com/gofiber/fiber/v2"
@@ -45,17 +44,18 @@ func XPoweredBy() fiber.Handler {
 			return BadLocateError(c, fmt.Errorf("web: %w", err))
 		}
 
-		opt, err := red.Locate[settings.Options]()
-		if err != nil {
-			return BadLocateError(c, fmt.Errorf("web: %w", err))
-		}
+		//@ TODO: Fix me later
+		// opt, err := red.Locate[settings.Options]()
+		// if err != nil {
+		// 	return BadLocateError(c, fmt.Errorf("web: %w", err))
+		// }
 
 		c.Set("X-Powered-By", "buffersnow.com")
 
 		c.Set("X-Web-Proxy", c.Get("X-Web-Proxy"))
 		c.Set("X-Proxy-Tag", c.Get("X-Proxy-Tag"))
 
-		c.Set("X-Service-Tag", opt.Spirit.ServiceTag)
+		// c.Set("X-Service-Tag", opt.Spirit.ServiceTag)
 		c.Set("Server", fmt.Sprintf(
 			"SpiritOnline/%s/%s (%s)", bld.GetVersion(), bld.GetService(), bld.GetConfig(),
 		))

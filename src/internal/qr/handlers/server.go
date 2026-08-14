@@ -5,12 +5,11 @@ import (
 
 	"buffersnow.com/spiritonline/pkg/log"
 	"buffersnow.com/spiritonline/pkg/net"
-	"buffersnow.com/spiritonline/pkg/settings"
 )
 
-func ListenService(opt *settings.Options, log *log.Logger, net *net.NetUtils) error {
+func ListenService(log *log.Logger, net *net.NetUtils) error {
 
-	srv, err := net.CreateUdpListener(opt.Service.Ports["qr"])
+	srv, err := net.CreateUdpListener(27900) //@ TODO: FIX ME!
 	if err != nil {
 		return fmt.Errorf("qr: %w", err)
 	}

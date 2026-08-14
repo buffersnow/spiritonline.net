@@ -8,11 +8,10 @@ import (
 	"buffersnow.com/spiritonline/internal/wfc/repositories"
 
 	"buffersnow.com/spiritonline/pkg/log"
-	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/web"
 )
 
-func ListenNASWii(web *web.HttpUtils, repo *repositories.WFCRepo, opt *settings.Options, logger *log.Logger) error {
+func ListenNASWii(web *web.HttpUtils, repo *repositories.WFCRepo, logger *log.Logger) error {
 
 	app, err := web.NewFiber()
 	if err != nil {
@@ -31,7 +30,7 @@ func ListenNASWii(web *web.HttpUtils, repo *repositories.WFCRepo, opt *settings.
 	app.Post("/ac", controllers.AccountWii)
 	app.Post("/pr", controllers.Profanity)
 
-	err = web.StartFiber(app, opt.Service.Ports["wfcwii"])
+	err = web.StartFiber(app, 5600) //@ TODO: FIX ME!
 	if err != nil {
 		return fmt.Errorf("wfc: nas-wii: %w", err)
 	}

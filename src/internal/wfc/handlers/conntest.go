@@ -7,11 +7,10 @@ import (
 	"buffersnow.com/spiritonline/internal/wfc/protocol"
 
 	"buffersnow.com/spiritonline/pkg/log"
-	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/web"
 )
 
-func ListenConntest(web *web.HttpUtils, opt *settings.Options, logger *log.Logger) error {
+func ListenConntest(web *web.HttpUtils, logger *log.Logger) error {
 
 	app, err := web.NewFiber()
 	if err != nil {
@@ -23,7 +22,7 @@ func ListenConntest(web *web.HttpUtils, opt *settings.Options, logger *log.Logge
 	app.Get("/", controllers.Test)
 	app.Get("/nastest.jsp", controllers.Test) //? WiiLink puts this here so god knows
 
-	err = web.StartFiber(app, opt.Service.Ports["wfctest"])
+	err = web.StartFiber(app, 5601) //@ TODO: FIX ME!
 	if err != nil {
 		return fmt.Errorf("wfc: conntest: %w", err)
 	}

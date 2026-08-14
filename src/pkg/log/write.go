@@ -40,15 +40,21 @@ func (l *Logger) reconsileLogs() {
 }
 
 func (l *Logger) Info(prefix string, format string, a ...any) {
-	l.processLog(levelComponentColors[intlLevel_Info], "Info", prefix, format, a...)
+	if l.settings.Verbosity >= LoggerVerbosity_Info {
+		l.processLog(levelComponentColors[intlLevel_Info], "Info", prefix, format, a...)
+	}
 }
 
 func (l *Logger) Action(prefix string, format string, a ...any) {
-	l.processLog(levelComponentColors[intlLevel_Action], "Action", prefix, format, a...)
+	if l.settings.Verbosity >= LoggerVerbosity_Info {
+		l.processLog(levelComponentColors[intlLevel_Action], "Action", prefix, format, a...)
+	}
 }
 
 func (l *Logger) Event(prefix string, format string, a ...any) {
-	l.processLog(levelComponentColors[intlLevel_Event], "Event", prefix, format, a...)
+	if l.settings.Verbosity >= LoggerVerbosity_Info {
+		l.processLog(levelComponentColors[intlLevel_Event], "Event", prefix, format, a...)
+	}
 }
 
 func (l *Logger) Warning(prefix string, format string, a ...any) {
@@ -65,13 +71,13 @@ func (l *Logger) Fatal(prefix string, format string, err error, a ...any) {
 }
 
 func (l *Logger) Debug(component int, prefix string, format string, a ...any) {
-	if l.verbose && l.debug {
+	if l.settings.Verbosity >= LoggerVerbosity_Debug {
 		l.processLog(debugComponentColors[component], "Debug", prefix, format, a...)
 	}
 }
 
 func (l *Logger) Trace(component int, prefix string, format string, a ...any) {
-	if l.verbose {
+	if l.settings.Verbosity >= LoggerVerbosity_Trace {
 		l.processLog(debugComponentColors[component], "Trace", prefix, format, a...)
 	}
 }

@@ -18,7 +18,7 @@
     { "icon": "component", "extensions": ["dlc"] },
     { "icon": "client", "extensions": ["list"] }
   ],
-  "colorful-comments.tags": [
+  "colorful-comments-refreshed.tags": [
     {
       "tag": "!",
       "color": "#FF2D00",

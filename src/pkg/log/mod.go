@@ -9,38 +9,56 @@ import (
 	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/util"
 	"buffersnow.com/spiritonline/pkg/version"
+	"github.com/luxploit/red"
 )
 
 type Logger struct {
 	mu         *sync.Mutex
-	verbose    bool
-	debug      bool
 	fileName   string
 	filePath   string
 	fileHandle *os.File
 	unwritten  []string
+	settings   *LoggerSettings
+}
+
+type LoggerVerbosity int
+
+const (
+	LoggerVerbosity_Standard LoggerVerbosity = iota
+	LoggerVerbosity_Info
+	LoggerVerbosity_Trace
+	LoggerVerbosity_Debug
+)
+
+type LoggerSettings struct {
+	Verbosity   LoggerVerbosity `arg:"-v" default:"0" options:"level,maxlevel=3"`
+	LogArchival bool            `arg:"--no-archives" default:"true" options:"negated"`
 }
 
 var instance = &Logger{mu: &sync.Mutex{}}
 
-func New(ver *version.BuildTag, opt *settings.Options) (*Logger, error) {
+func Options(p *settings.Parser) (*LoggerSettings, error) {
+	s := &LoggerSettings{}
+	return s, p.RegisterModule("config", "Logging", s)
+}
+
+func New(r *red.Context, ver *version.BuildTag, o *LoggerSettings) (*Logger, error) {
 	log := instance //& this is only a pointer for convinence
+	log.settings = o
 
 	tasks := []func() error{}
 
 	log.fileName = fmt.Sprintf("%s.log", ver.GetService())
 	log.filePath = fmt.Sprintf("logs/%s.log", ver.GetService())
-	log.verbose = opt.Development.EnableVerbose
-	log.debug = opt.Development.EnableDebug
 
 	log.ToFile("bFXServer - Start Up")
 	log.ToFile("SpiritOnline! Build Tag: %s", ver.GetFullTag())
-	log.ToFile("Runtime Options: %+v", opt.Runtime)
+	log.ToFile("Runtime Options: %+v", os.Args[1:])
 	log.ToFile("CI by Build Slave: %s", ver.GetCISlave())
 	log.ToFile("Start Time: %v", time.Now())
 
 	tasks = append(tasks, log.createLogsFolder)
-	if opt.Runtime.LogArchival {
+	if log.settings.LogArchival {
 		tasks = append(tasks, log.archiveLog)
 	} else {
 		log.Warning("Log Provider", "Logfile archival disabled!")
@@ -53,7 +71,7 @@ func New(ver *version.BuildTag, opt *settings.Options) (*Logger, error) {
 
 	log.reconsileLogs()
 
-	if opt.Runtime.LogArchival {
+	if log.settings.LogArchival {
 		go log.archiveLogJob()
 	}
 

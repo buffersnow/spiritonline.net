@@ -5,7 +5,6 @@ import (
 	"encoding/base32"
 	"encoding/base64"
 
-	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/util"
 	"buffersnow.com/spiritonline/pkg/version"
 )
@@ -30,7 +29,7 @@ type SecEncoding struct {
 	b32wii *base32.Encoding
 }
 
-func New(bld *version.BuildTag, opt *settings.Options) (*Security, error) {
+func New(bld *version.BuildTag) (*Security, error) {
 	sec := &Security{}
 
 	//@ Unused for now

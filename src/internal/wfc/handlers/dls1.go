@@ -7,11 +7,10 @@ import (
 	"buffersnow.com/spiritonline/internal/wfc/protocol"
 
 	"buffersnow.com/spiritonline/pkg/log"
-	"buffersnow.com/spiritonline/pkg/settings"
 	"buffersnow.com/spiritonline/pkg/web"
 )
 
-func ListenDls1(web *web.HttpUtils, opt *settings.Options, logger *log.Logger) error {
+func ListenDls1(web *web.HttpUtils, logger *log.Logger) error {
 
 	app, err := web.NewFiber()
 	if err != nil {
@@ -27,7 +26,7 @@ func ListenDls1(web *web.HttpUtils, opt *settings.Options, logger *log.Logger) e
 
 	app.Get("/download", controllers.Download)
 
-	err = web.StartFiber(app, opt.Service.Ports["wfcdls1"])
+	err = web.StartFiber(app, 5602) //@ TODO: FIX ME!
 	if err != nil {
 		return fmt.Errorf("wfc: dls1: %w", err)
 	}
