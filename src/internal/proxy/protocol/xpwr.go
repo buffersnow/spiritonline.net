@@ -13,7 +13,7 @@ func XPoweredBy() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		bld, err := red.Locate[version.BuildTag]()
 		if err != nil {
-			return web.BadLocateError(c, fmt.Errorf("proxy: protocol: %w", err))
+			return web.BadLocateError(fmt.Errorf("proxy: protocol: %w", err))
 		}
 
 		c.Request().Header.Set("X-Web-Proxy", fmt.Sprintf(

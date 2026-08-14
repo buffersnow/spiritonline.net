@@ -19,12 +19,12 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 
 	sec, err := red.Locate[security.Security]()
 	if err != nil {
-		return web.BadLocateError(c, fmt.Errorf("wfc: protocol: %w", err))
+		return web.BadLocateError(fmt.Errorf("wfc: protocol: %w", err))
 	}
 
 	logger, err := red.Locate[log.Logger]()
 	if err != nil {
-		return web.BadLocateError(c, fmt.Errorf("wfc: protcol: %w", err))
+		return web.BadLocateError(fmt.Errorf("wfc: protcol: %w", err))
 	}
 
 	{ // these values are always present in responses (or should be!)
@@ -40,7 +40,7 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 
 		str, err := cast.ToStringE(v)
 		if err != nil {
-			return web.InternalServerError(c, &web.Details{
+			return web.InternalServerError(&web.Details{
 				Message: "bad response string",
 				Err:     fmt.Errorf("wfc: protocol: %w", err),
 			})
@@ -50,7 +50,7 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 		if k == "returncd" {
 			recdnum, err = cast.ToIntE(str)
 			if err != nil {
-				return web.InternalServerError(c, &web.Details{
+				return web.InternalServerError(&web.Details{
 					Message: "bad returncd value",
 					Err:     fmt.Errorf("wfc: protocol: %w", err),
 				})
@@ -60,7 +60,7 @@ func NASReply(c *fiber.Ctx, params fiber.Map) error {
 
 		b64, err := sec.Encoding.EncodeB64_Wii([]byte(str))
 		if err != nil {
-			return web.InternalServerError(c, &web.Details{
+			return web.InternalServerError(&web.Details{
 				Message: "bad b64_wii encoding",
 				Err:     fmt.Errorf("wfc: protocol: %w", err),
 			})

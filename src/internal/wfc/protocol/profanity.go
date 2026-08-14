@@ -15,7 +15,7 @@ func ProfanityFilter() fiber.Handler {
 
 		ingamesn := c.FormValue("ingamesn")
 		if len(ingamesn) == 0 && unitcd == UnitCD_NintendoWii {
-			return web.BadRequestError(c, &web.Details{
+			return web.BadRequestError(&web.Details{
 				Message: "invalid ingamesn",
 				Err:     fmt.Errorf("wfc: protocol: legnth of ingamesn was 0"),
 			})
@@ -29,7 +29,7 @@ func ProfanityFilter() fiber.Handler {
 
 		devname := c.FormValue("devname")
 		if len(devname) == 0 && unitcd == UnitCD_NintendoDS {
-			return web.BadRequestError(c, &web.Details{
+			return web.BadRequestError(&web.Details{
 				Message: "invalid ingamesn",
 				Err:     fmt.Errorf("wfc: protocol: legnth of devname was 0"),
 			})

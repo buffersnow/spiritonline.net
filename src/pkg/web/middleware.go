@@ -17,7 +17,7 @@ func RequestLogging() fiber.Handler {
 
 		logger, err := red.Locate[log.Logger]()
 		if err != nil {
-			return BadLocateError(c, fmt.Errorf("web: %w", err))
+			return BadLocateError(fmt.Errorf("web: %w", err))
 		}
 
 		err = c.Next()
@@ -41,7 +41,7 @@ func XPoweredBy() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		bld, err := red.Locate[version.BuildTag]()
 		if err != nil {
-			return BadLocateError(c, fmt.Errorf("web: %w", err))
+			return BadLocateError(fmt.Errorf("web: %w", err))
 		}
 
 		//@ TODO: Fix me later

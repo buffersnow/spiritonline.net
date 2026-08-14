@@ -20,7 +20,7 @@ func AC_ServiceLocate(c *fiber.Ctx) error {
 	if len(svc) != 0 {
 		_, err := cast.ToIntE(svc)
 		if err != nil {
-			return web.BadRequestError(c, &web.Details{
+			return web.BadRequestError(&web.Details{
 				Message: "invalid svc",
 				Err:     fmt.Errorf("wfc: protocol: cast: %w", err),
 			})
@@ -29,7 +29,7 @@ func AC_ServiceLocate(c *fiber.Ctx) error {
 
 	repo, err := red.Locate[repositories.WFCRepo]()
 	if err != nil {
-		return web.BadLocateError(c, fmt.Errorf("wfc: controllers: %w", err))
+		return web.BadLocateError(fmt.Errorf("wfc: controllers: %w", err))
 	}
 
 	query := repositories.WFCAccountQuery{
@@ -41,7 +41,7 @@ func AC_ServiceLocate(c *fiber.Ctx) error {
 
 	wfcid, err := protocol.GetWFCAccountID(repo, query)
 	if err != nil {
-		return web.InternalServerError(c, &web.Details{
+		return web.InternalServerError(&web.Details{
 			Message: "bad db query",
 			Err:     fmt.Errorf("wfc: controllers: %w", err),
 		})
@@ -61,7 +61,7 @@ func AC_ServiceLocate(c *fiber.Ctx) error {
 	})
 
 	if err != nil {
-		return web.InternalServerError(c, &web.Details{
+		return web.InternalServerError(&web.Details{
 			Message: "bad token generation",
 			Err:     fmt.Errorf("wfc: controllers: %w", err),
 		})

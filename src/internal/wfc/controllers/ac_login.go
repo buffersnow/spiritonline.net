@@ -21,7 +21,7 @@ func AC_Login(c *fiber.Ctx) error {
 
 	repo, err := red.Locate[repositories.WFCRepo]()
 	if err != nil {
-		return web.BadLocateError(c, fmt.Errorf("wfc: controllers: %w", err))
+		return web.BadLocateError(fmt.Errorf("wfc: controllers: %w", err))
 	}
 
 	query := repositories.WFCAccountQuery{
@@ -33,7 +33,7 @@ func AC_Login(c *fiber.Ctx) error {
 
 	wfcid, err := protocol.GetWFCAccountID(repo, query)
 	if err != nil {
-		return web.InternalServerError(c, &web.Details{
+		return web.InternalServerError(&web.Details{
 			Message: "bad db query",
 			Err:     fmt.Errorf("wfc: controllers: %w", err),
 		})
@@ -41,7 +41,7 @@ func AC_Login(c *fiber.Ctx) error {
 
 	suspension, err := repo.Suspension.Get(wfcid)
 	if err != nil && err != sql.ErrNoRows {
-		return web.InternalServerError(c, &web.Details{
+		return web.InternalServerError(&web.Details{
 			Message: "bad db query",
 			Err:     fmt.Errorf("wfc: controllers: %w", err),
 		})
@@ -72,7 +72,7 @@ func AC_Login(c *fiber.Ctx) error {
 	})
 
 	if err != nil {
-		return web.InternalServerError(c, &web.Details{
+		return web.InternalServerError(&web.Details{
 			Message: "bad token generation",
 			Err:     fmt.Errorf("wfc: controllers: %w", err),
 		})

@@ -64,11 +64,11 @@ func (h HttpUtils) StartFiber(app *fiber.App, port int) (outerr error) {
 	}()
 
 	app.Use(func(c *fiber.Ctx) error {
-		return NotFoundError(c, &Details{
+		return NotFoundError(&Details{
 			Message: "seems like you took a wrong turn",
 			Err:     errors.New("invalid resource"),
-			Context: fiber.Map{
-				"method": c.Method(),
+			Context: Context{
+				"Method": c.Method(),
 			},
 		})
 	})

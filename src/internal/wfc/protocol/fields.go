@@ -24,17 +24,17 @@ func FieldsDecoder() fiber.Handler {
 
 		sec, err := red.Locate[security.Security]()
 		if err != nil {
-			return web.BadLocateError(c, fmt.Errorf("wfc: protocol: %w", err))
+			return web.BadLocateError(fmt.Errorf("wfc: protocol: %w", err))
 		}
 
 		logger, err := red.Locate[log.Logger]()
 		if err != nil {
-			return web.BadLocateError(c, fmt.Errorf("wfc: protocol: %w", err))
+			return web.BadLocateError(fmt.Errorf("wfc: protocol: %w", err))
 		}
 
 		formVals, err := url.ParseQuery(string(c.Body()))
 		if err != nil {
-			return web.BadRequestError(c, &web.Details{
+			return web.BadRequestError(&web.Details{
 				Message: "invalid form encoding",
 				Err:     fmt.Errorf("wfc: protocol: %w", err),
 			})
@@ -47,7 +47,7 @@ func FieldsDecoder() fiber.Handler {
 				if !strings.HasPrefix(key, "_") { //$ https://github.com/WiiLink24/wfc-server/blob/main/nas/auth.go#L80
 					decoded, err := sec.Encoding.DecodeB64_Wii([]byte(v))
 					if err != nil {
-						return web.BadRequestError(c, &web.Details{
+						return web.BadRequestError(&web.Details{
 							Message: "invalid base64 for field",
 							Err:     fmt.Errorf("wfc: protocol: %w", err),
 						})

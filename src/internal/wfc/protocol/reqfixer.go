@@ -18,7 +18,7 @@ func RequestFixup() fiber.Handler {
 
 		str_lang := c.FormValue("lang", "FE")
 		if u8_lang := util.HexToByte(str_lang); u8_lang == 0xFF {
-			return web.BadRequestError(c, &web.Details{
+			return web.BadRequestError(&web.Details{
 				Message: "invalid lang",
 				Err:     fmt.Errorf("wfc: protocol: lang was outside of boundaries"),
 			})
@@ -28,7 +28,7 @@ func RequestFixup() fiber.Handler {
 			//$ https://github.com/Retro-Rewind-Team/wfc-server/blob/main/nas/auth.go#L318
 			str_region := c.FormValue("region", "FE")
 			if u8_region := util.HexToByte(str_region); u8_region == 0xFF {
-				return web.BadRequestError(c, &web.Details{
+				return web.BadRequestError(&web.Details{
 					Message: "invalid region",
 					Err:     fmt.Errorf("wfc: protocol: region was outside of boundaries"),
 				})
@@ -37,7 +37,7 @@ func RequestFixup() fiber.Handler {
 
 		str_gamecd := c.FormValue("gamecd")
 		if len(str_gamecd) != 4 {
-			return web.BadRequestError(c, &web.Details{
+			return web.BadRequestError(&web.Details{
 				Message: "invalid gamecd",
 				Err:     fmt.Errorf("wfc: protocol: length was less then or greater then 4"),
 			})
@@ -46,7 +46,7 @@ func RequestFixup() fiber.Handler {
 		//$ https://github.com/Retro-Rewind-Team/wfc-server/blob/main/nas/auth.go#L223
 		str_gsbrcd := c.FormValue("gsbrcd")
 		if len(str_gsbrcd) < 4 {
-			return web.BadRequestError(c, &web.Details{
+			return web.BadRequestError(&web.Details{
 				Message: "invalid gsbrcd",
 				Err:     fmt.Errorf("wfc: protocol: length of gsbrcd less then the required minimum"),
 			})
@@ -60,7 +60,7 @@ func RequestFixup() fiber.Handler {
 			str_gsbrcd += util.RandomString(8)
 			c.Request().PostArgs().Set("gsbrcd", str_gsbrcd)
 		} else if str_gsbrcd[:3] != str_gamecd[:3] {
-			return web.BadRequestError(c, &web.Details{
+			return web.BadRequestError(&web.Details{
 				Message: "invalid gsbrcd",
 				Err:     fmt.Errorf("wfc: protocol: mismatch between gsbrcd and gamecd"),
 			})
@@ -77,7 +77,7 @@ func RequestFixup() fiber.Handler {
 			endian = unicode.LittleEndian
 
 			if len(devname) == 0 {
-				return web.BadRequestError(c, &web.Details{
+				return web.BadRequestError(&web.Details{
 					Message: "invalid devname",
 					Err:     fmt.Errorf("wfc: protocol: length of devname is 0"),
 				})
@@ -85,7 +85,7 @@ func RequestFixup() fiber.Handler {
 
 			utf, err := util.FromUTF16(unicode.LittleEndian, []byte(devname))
 			if err != nil {
-				return web.BadRequestError(c, &web.Details{
+				return web.BadRequestError(&web.Details{
 					Message: "invalid devname",
 					Err:     fmt.Errorf("wfc: protocol: %w", err),
 				})
@@ -95,7 +95,7 @@ func RequestFixup() fiber.Handler {
 		}
 
 		if len(ingamesn) == 0 && i64_unitcd == UnitCD_NintendoWii {
-			return web.BadRequestError(c, &web.Details{
+			return web.BadRequestError(&web.Details{
 				Message: "invalid ingamesn",
 				Err:     fmt.Errorf("wfc: protocol: length of ingamesn is 0"),
 			})
@@ -104,7 +104,7 @@ func RequestFixup() fiber.Handler {
 		if len(ingamesn) != 0 { //& ingamesn is not required on DS
 			utf, err := util.FromUTF16(endian, []byte(ingamesn))
 			if err != nil {
-				return web.BadRequestError(c, &web.Details{
+				return web.BadRequestError(&web.Details{
 					Message: "invalid ingamesn",
 					Err:     fmt.Errorf("wfc: protocol: %w", err),
 				})
@@ -116,7 +116,7 @@ func RequestFixup() fiber.Handler {
 		if len(words) != 0 {
 			utf, err := util.FromUTF16(endian, []byte(words))
 			if err != nil {
-				return web.BadRequestError(c, &web.Details{
+				return web.BadRequestError(&web.Details{
 					Message: "invalid profanity words",
 					Err:     fmt.Errorf("wfc: protocol: %w", err),
 				})
