@@ -118,7 +118,7 @@ func (s SecEncoding) DecodeB64_Std(data []byte) (outdata []byte, outerr error) {
 func (s SecEncoding) EncodeB64_Std(data []byte) (outdata []byte, outerr error) {
 	defer func() {
 		if r := recover(); r != nil {
-			outerr = fmt.Errorf("security: encoding: base32: %v", r)
+			outerr = fmt.Errorf("security: encoding: base64: %v", r)
 			outdata = nil
 		}
 	}()

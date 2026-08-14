@@ -2,7 +2,7 @@ package protocol
 
 import "strings"
 
-func IdentifyProtocolRevision(ver int) string {
+func GetRevision(ver int) string {
 
 	if ver < 253 {
 		return "v0 (Alpha)"
@@ -31,7 +31,7 @@ func EscapeString(data string) string {
 	return res
 }
 
-func UnEscapeString(data string) string {
+func UnescapeString(data string) string {
 	res := strings.ReplaceAll(data, "/1", "/")
 	res = strings.ReplaceAll(res, "\\2", "\\")
 	return res
